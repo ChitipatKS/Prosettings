@@ -1,0 +1,159 @@
+
+=========================================
+COLLECTION: Collection 1 (ID: 3834badc-5d57-8075-8a80-000b8970c603)
+SCHEMA: Not found
+ROWS:
+  Row 1:
+    ;viz: รหัสอ้างอิงผู้เล่น (เช่น 001)
+    YWAB: player_idc
+    myEN: ID
+    title: player_idc
+  Row 2:
+    ;viz: ชื่อในเกม หรือฉายา (เช่น TenZ)
+    YWAB: usernamec
+    myEN: Text
+    title: usernamec
+  Row 3:
+    ;viz: ชื่อ-นามสกุลจริง
+    YWAB: real_namec
+    myEN: Text
+    title: real_namec
+  Row 4:
+    ;viz: สังกัดทีม
+    YWAB: team_namec
+    myEN: Text
+    title: team_namec
+  Row 5:
+    ;viz: ลิงก์รูปภาพโปรไฟล์ผู้เล่น
+    YWAB: profile_img_urlc
+    myEN: URL
+    title: profile_img_urlc
+  Row 6:
+    ;viz: รายชื่อเกมที่โปรคนนั้นเล่น (เช่น โลโก้ Valorant หรือ CS2) ไว้ตรงมุมรูปภาพ  เพื่อให้ระบบรู้ว่าต้องโชว์ปุ่มสลับเกมไหนบ้าง
+    YWAB: active_gamesc
+    myEN: Array
+    title: active_gamesc
+Total Rows Found: 6
+
+=========================================
+COLLECTION: Collection 2 (ID: 3834badc-5d57-809f-b769-000b2213ee0a)
+SCHEMA: Not found
+ROWS:
+  Row 1:
+    ESkC: ID
+    bBTd: เชื่อมไปที่ฐานข้อมูลสินค้ารุ่นเมาส์ (เช่น G Pro X Superlight)
+    ttfp: mouse_idc
+    title: mouse_idc
+  Row 2:
+    ESkC: ID
+    bBTd: เชื่อมไปที่รุ่นคีย์บอร์ด
+    ttfp: keyboard_idc
+    title: keyboard_idc
+  Row 3:
+    ESkC: ID
+    bBTd: เชื่อมไปที่รุ่นแผ่นรองเมาส์
+    ttfp: mousepad_idc
+    title: mousepad_idc
+  Row 4:
+    ESkC: ID
+    bBTd: เชื่อมไปที่รุ่นหูฟัง
+    ttfp: headset_idc
+    title: headset_idc
+  Row 5:
+    ESkC: ID
+    bBTd: เชื่อมไปที่รุ่นจอภาพ
+    ttfp: monitor_idc
+    title: monitor_idc
+  Row 6:
+    ESkC: Text
+    bBTd: รุ่น CPU
+    ttfp: pc_cpuc
+    title: pc_cpuc
+  Row 7:
+    ESkC: Text
+    bBTd: รุ่นการ์ดจอ
+    ttfp: pc_gpuc
+    title: pc_gpuc
+Total Rows Found: 7
+
+=========================================
+COLLECTION: Collection 3 (ID: 3834badc-5d57-8066-b888-000bde70e70f)
+SCHEMA: Not found
+ROWS:
+  Row 1:
+    QtGw: dpic
+    mIin: ค่า DPI
+    y=tx: Number
+    title: dpic
+  Row 2:
+    QtGw: hzc
+    mIin: ค่า Hz หรือ Polling Rate (เช่น 1000, 4000)
+    y=tx: Number
+    title: hzc
+  Row 3:
+    QtGw: sensc
+    mIin: ค่า Sens ภายในเกม
+    y=tx: Number
+    title: sensc
+  Row 4:
+    QtGw: edpic
+    mIin: ค่า eDPI  (อาจจะตั้งให้ระบบคูณเลขเองจาก DPI x Sens)
+    y=tx: Number
+    title: edpic
+  Row 5:
+    QtGw: scope_sensc
+    mIin: ค่า Scope  (ความไวตอนซูม)
+    y=tx: Number
+    title: scope_sensc
+  Row 6:
+    QtGw: windows_sensc
+    mIin: ค่า Window sens
+    y=tx: Number
+    title: windows_sensc
+Total Rows Found: 6
+
+=========================================
+COLLECTION: Collection 4 (ID: 3834badc-5d57-80db-a19f-000b212a4a48)
+SCHEMA: Not found
+ROWS:
+  Row 1:
+    AEIK: resolutionc
+    O]vg: Text
+    rxOE: ความละเอียดภาพ เช่น Resolution  (เช่น 1920x1080)
+    title: resolutionc
+  Row 2:
+    AEIK: aspect_ratioc
+    O]vg: Text
+    rxOE: อัตราส่วนภาพ (เช่น 16:9, 4:3)
+    title: aspect_ratioc
+  Row 3:
+    AEIK: scaling_modec
+    O]vg: Text
+    rxOE: โหมดการแสดงผล (เช่น Stretched, Black Bars)
+    title: scaling_modec
+  Row 4:
+    AEIK: refresh_ratec
+    O]vg: Number
+    rxOE: ค่า Refresh Rate  (เช่น 240, 360)
+    title: refresh_ratec
+  Row 5:
+    AEIK: graphics_qualityc
+    O]vg: Text
+    rxOE: คุณภาพกราฟิก เช่น Graphics Quality  (Low, High)
+    title: graphics_qualityc
+  Row 6:
+    AEIK: crosshair_codec
+    O]vg: Text
+    rxOE: โค้ด Crosshair พร้อมปุ่มกดก๊อปปี้คลิกเดียว
+    title: crosshair_codec
+  Row 7:
+    AEIK: viewmodel_codec
+    O]vg: Text
+    rxOE: โค้ด Viewmodel  (หากเกมนั้นรองรับ เช่น CS2)
+    title: viewmodel_codec
+  Row 8:
+    AEIK: config_urlc
+    O]vg: URL
+    rxOE: ตาราง Config (CFG)  สำหรับให้ดาวน์โหลดไฟล์การตั้งค่า
+    title: config_urlc
+Total Rows Found: 8

@@ -1,0 +1,2266 @@
+{
+  "cursor": {
+    "stack": []
+  },
+  "recordMap": {
+    "__version__": 3,
+    "block": {
+      "3824badc-5d57-80a2-bb77-c04f521cc746": {
+        "spaceId": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+        "value": {
+          "value": {
+            "id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "version": 198,
+            "type": "page",
+            "properties": {
+              "title": [
+                [
+                  "Prosettings project"
+                ]
+              ]
+            },
+            "content": [
+              "3824badc-5d57-80f2-8a96-eec0e4015274",
+              "3824badc-5d57-80f9-870d-c2659eed565f",
+              "3834badc-5d57-809d-8853-e292066de2f1",
+              "3834badc-5d57-8042-b075-c5cc02294363",
+              "3834badc-5d57-8075-8a91-d265cb932d6e",
+              "3834badc-5d57-8094-82f5-f33fb5de3908",
+              "3824badc-5d57-80be-8f9a-df220d6cf18f",
+              "3824badc-5d57-80dc-ba13-ea9c46f264a6",
+              "3824badc-5d57-80ed-b57a-efabf4270b4e",
+              "3834badc-5d57-8080-a8e6-c954624e9218",
+              "3834badc-5d57-803e-b2d5-e4d5da8a2abe",
+              "3834badc-5d57-8073-be90-ec9e12c94c42",
+              "3824badc-5d57-8042-8d6a-da689fb00c51",
+              "3824badc-5d57-8086-b51e-fa83c45a42ce"
+            ],
+            "format": {
+              "page_icon": "🌠",
+              "page_cover": "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+              "page_cover_position": 0.5
+            },
+            "permissions": [
+              {
+                "role": "editor",
+                "type": "user_permission",
+                "user_id": "302d872b-594c-819a-9dab-000217df7134"
+              },
+              {
+                "role": "reader",
+                "type": "public_permission",
+                "added_timestamp": 1782203330195,
+                "is_public_share_link": true
+              }
+            ],
+            "created_time": 1781680403389,
+            "last_edited_time": 1782203330378,
+            "parent_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "parent_table": "space",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "IYe8E_wVSzDidX-OLEmEQQ,\"start\",\"end\"",
+                "n": {
+                  "IYe8E_wVSzDidX-OLEmEQQ,\"start\",\"end\"": {
+                    "s": {
+                      "x": "IYe8E_wVSzDidX-OLEmEQQ",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "yy7TzPqVvjhF",
+                            1
+                          ],
+                          "o": "start",
+                          "l": 19,
+                          "c": "Prosettings project"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3824badc-5d57-80f2-8a96-eec0e4015274": {
+        "value": {
+          "value": {
+            "id": "3824badc-5d57-80f2-8a96-eec0e4015274",
+            "version": 10,
+            "type": "sub_header",
+            "properties": {
+              "title": [
+                [
+                  "Project Wiki & Docs",
+                  [
+                    [
+                      "b"
+                    ]
+                  ]
+                ]
+              ]
+            },
+            "created_time": 1781680423371,
+            "last_edited_time": 1781719710835,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "PMGgcrI-M2T1WrQ6KWRllg,\"start\",\"end\"",
+                "n": {
+                  "PMGgcrI-M2T1WrQ6KWRllg,\"start\",\"end\"": {
+                    "s": {
+                      "x": "PMGgcrI-M2T1WrQ6KWRllg",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "yy7TzPqVvjhF",
+                            1
+                          ],
+                          "o": "start",
+                          "l": 19,
+                          "c": "Project Wiki & Docs",
+                          "b": [
+                            {
+                              "t": "a",
+                              "x": "PMGgcrI-M2T1WrQ6KWRllg",
+                              "l": "",
+                              "i": [
+                                "vAUCBoebLpQC",
+                                20
+                              ],
+                              "s": {
+                                "i": [
+                                  "yy7TzPqVvjhF",
+                                  1
+                                ],
+                                "a": "b"
+                              },
+                              "e": {
+                                "i": "end",
+                                "a": "b"
+                              },
+                              "a": [
+                                "b"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "t": "e",
+                          "b": []
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": [
+                      "2UMhsmrcpODgm-zyn2Jz8g,[\"yy7TzPqVvjhF\",21],\"end\""
+                    ]
+                  },
+                  "2UMhsmrcpODgm-zyn2Jz8g,[\"yy7TzPqVvjhF\",21],\"end\"": {
+                    "s": {
+                      "x": "2UMhsmrcpODgm-zyn2Jz8g",
+                      "i": [
+                        {
+                          "t": "p",
+                          "i": [
+                            "yy7TzPqVvjhF",
+                            21
+                          ],
+                          "o": "start"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": "l"
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3824badc-5d57-80f9-870d-c2659eed565f": {
+        "value": {
+          "value": {
+            "id": "3824badc-5d57-80f9-870d-c2659eed565f",
+            "version": 7,
+            "type": "text",
+            "properties": {
+              "title": [
+                [
+                  "ส่วนนี้มีไว้สำหรับจดบันทึกรายละเอียด ฟีเจอร์ และวิธีคิดของระบบ เพื่อไม่ให้ไอเดียตกหล่นและเอาไว้คุยกับทีมงานหรือโปรแกรมเมอร์ในอนาคต"
+                ]
+              ]
+            },
+            "created_time": 1781719718629,
+            "last_edited_time": 1781719754836,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "J9EFeUHyqhotpERAwfEQng,\"start\",\"end\"",
+                "n": {
+                  "J9EFeUHyqhotpERAwfEQng,\"start\",\"end\"": {
+                    "s": {
+                      "x": "J9EFeUHyqhotpERAwfEQng",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            1
+                          ],
+                          "o": "start",
+                          "l": 130,
+                          "c": "ส่วนนี้มีไว้สำหรับจดบันทึกรายละเอียด ฟีเจอร์ และวิธีคิดของระบบ เพื่อไม่ให้ไอเดียตกหล่นและเอาไว้คุยกับทีมงานหรือโปรแกรมเมอร์ในอนาคต"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": [
+                      "b35xJRuVZR-v0k4HsWlhrQ,[\"vAUCBoebLpQC\",21],\"end\""
+                    ]
+                  },
+                  "b35xJRuVZR-v0k4HsWlhrQ,[\"vAUCBoebLpQC\",21],\"end\"": {
+                    "s": {
+                      "x": "b35xJRuVZR-v0k4HsWlhrQ",
+                      "i": [
+                        {
+                          "t": "p",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            21
+                          ],
+                          "o": "start"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": "l"
+                    },
+                    "c": [
+                      "gXdFY4hEKkIAmj-hFbMFFw,[\"6hwJ6VzykWpM\",21],\"end\""
+                    ]
+                  },
+                  "gXdFY4hEKkIAmj-hFbMFFw,[\"6hwJ6VzykWpM\",21],\"end\"": {
+                    "s": {
+                      "x": "gXdFY4hEKkIAmj-hFbMFFw",
+                      "i": [
+                        {
+                          "t": "p",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            21
+                          ],
+                          "o": "start"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": "l"
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3834badc-5d57-809d-8853-e292066de2f1": {
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-809d-8853-e292066de2f1",
+            "version": 96,
+            "type": "collection_view",
+            "view_ids": [
+              "3834badc-5d57-80bd-902c-000c41622ad9",
+              "3834badc-5d57-80b2-a3da-000c34d61722"
+            ],
+            "collection_id": "3834badc-5d57-8050-934e-000bcad1d13b",
+            "format": {
+              "collection_pointer": {
+                "id": "3834badc-5d57-8050-934e-000bcad1d13b",
+                "table": "collection",
+                "spaceId": "cf64badc-5d57-8161-b0b4-00034a8a7f7b"
+              },
+              "collection_pointers": [
+                {
+                  "id": "3834badc-5d57-8050-934e-000bcad1d13b",
+                  "table": "collection",
+                  "spaceId": "cf64badc-5d57-8161-b0b4-00034a8a7f7b"
+                }
+              ]
+            },
+            "created_time": 1781769316741,
+            "last_edited_time": 1782038543609,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "qWTnsolHBOTwtziMRPiOUA,\"start\",\"end\"",
+                "n": {
+                  "qWTnsolHBOTwtziMRPiOUA,\"start\",\"end\"": {
+                    "s": {
+                      "x": "qWTnsolHBOTwtziMRPiOUA",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3834badc-5d57-8042-b075-c5cc02294363": {
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-8042-b075-c5cc02294363",
+            "version": 47,
+            "type": "sub_sub_header",
+            "properties": {
+              "title": [
+                [
+                  "Web Design & UX/UI"
+                ]
+              ]
+            },
+            "created_time": 1781771787954,
+            "last_edited_time": 1781771801978,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "cw7S90DLzRhzrH6We1OECg,\"start\",\"end\"",
+                "n": {
+                  "cw7S90DLzRhzrH6We1OECg,\"start\",\"end\"": {
+                    "s": {
+                      "x": "cw7S90DLzRhzrH6We1OECg",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            3
+                          ],
+                          "o": "start",
+                          "l": 18,
+                          "c": "Web Design & UX/UI"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            2
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            1
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3834badc-5d57-8075-8a91-d265cb932d6e": {
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-8075-8a91-d265cb932d6e",
+            "version": 324,
+            "type": "bulleted_list",
+            "properties": {
+              "title": [
+                [
+                  "Ref Sites : "
+                ],
+                [
+                  "Prosettings.net",
+                  [
+                    [
+                      "a",
+                      "http://Prosettings.net"
+                    ]
+                  ]
+                ],
+                [
+                  " , Mouse converter , "
+                ],
+                [
+                  "VLR.GG",
+                  [
+                    [
+                      "a",
+                      "http://VLR.GG"
+                    ]
+                  ]
+                ],
+                [
+                  " ,  "
+                ],
+                [
+                  "Liquipedia.net",
+                  [
+                    [
+                      "a",
+                      "https://liquipedia.net/"
+                    ]
+                  ]
+                ]
+              ]
+            },
+            "created_time": 1781771820796,
+            "last_edited_time": 1781771958963,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "bHlWGwvU3_6jeGFNGQghFg,\"start\",\"end\"",
+                "n": {
+                  "bHlWGwvU3_6jeGFNGQghFg,\"start\",\"end\"": {
+                    "s": {
+                      "x": "bHlWGwvU3_6jeGFNGQghFg",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            2
+                          ],
+                          "o": "start",
+                          "l": 12,
+                          "c": "Ref Sites : "
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            14
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            13
+                          ],
+                          "l": 15,
+                          "c": "Prosettings.net",
+                          "b": [
+                            {
+                              "t": "a",
+                              "x": "bHlWGwvU3_6jeGFNGQghFg",
+                              "l": "",
+                              "i": [
+                                "6hwJ6VzykWpM",
+                                30
+                              ],
+                              "s": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  14
+                                ],
+                                "a": "b"
+                              },
+                              "e": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  28
+                                ],
+                                "a": "a"
+                              },
+                              "a": [
+                                "a",
+                                "http://Prosettings.net"
+                              ]
+                            }
+                          ],
+                          "a": []
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            31
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            28
+                          ],
+                          "l": 3,
+                          "c": " , "
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            41
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            33
+                          ],
+                          "l": 18,
+                          "c": "Mouse converter , "
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            60
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            58
+                          ],
+                          "l": 6,
+                          "c": "VLR.GG",
+                          "b": [
+                            {
+                              "t": "a",
+                              "x": "bHlWGwvU3_6jeGFNGQghFg",
+                              "l": "",
+                              "i": [
+                                "6hwJ6VzykWpM",
+                                67
+                              ],
+                              "s": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  60
+                                ],
+                                "a": "b"
+                              },
+                              "e": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  65
+                                ],
+                                "a": "a"
+                              },
+                              "a": [
+                                "a",
+                                "http://VLR.GG"
+                              ]
+                            }
+                          ],
+                          "a": []
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            69
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            65
+                          ],
+                          "l": 1,
+                          "c": " "
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            72
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            69
+                          ],
+                          "l": 1,
+                          "c": ","
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            74
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            72
+                          ],
+                          "l": 1,
+                          "c": " "
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            76
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            74
+                          ],
+                          "l": -15,
+                          "b": [
+                            {
+                              "t": "a",
+                              "x": "bHlWGwvU3_6jeGFNGQghFg",
+                              "l": "",
+                              "i": [
+                                "6hwJ6VzykWpM",
+                                92
+                              ],
+                              "s": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  76
+                                ],
+                                "a": "b"
+                              },
+                              "e": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  90
+                                ],
+                                "a": "a"
+                              },
+                              "a": [
+                                "a",
+                                "http://Liquidpedia.com"
+                              ]
+                            }
+                          ],
+                          "a": []
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            117
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            90
+                          ],
+                          "l": 1,
+                          "c": " ",
+                          "a": [
+                            {
+                              "t": "r",
+                              "x": "bHlWGwvU3_6jeGFNGQghFg",
+                              "l": "",
+                              "i": [
+                                "6hwJ6VzykWpM",
+                                118
+                              ],
+                              "s": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  117
+                                ],
+                                "a": "a"
+                              },
+                              "e": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  105
+                                ],
+                                "a": "b"
+                              },
+                              "k": "a"
+                            }
+                          ]
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            97
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            90
+                          ],
+                          "l": 3,
+                          "c": "Liq",
+                          "b": [
+                            {
+                              "t": "r",
+                              "x": "bHlWGwvU3_6jeGFNGQghFg",
+                              "l": "",
+                              "i": [
+                                "6hwJ6VzykWpM",
+                                118
+                              ],
+                              "s": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  117
+                                ],
+                                "a": "a"
+                              },
+                              "e": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  105
+                                ],
+                                "a": "b"
+                              },
+                              "k": "a"
+                            },
+                            {
+                              "t": "a",
+                              "x": "bHlWGwvU3_6jeGFNGQghFg",
+                              "l": "",
+                              "i": [
+                                "6hwJ6VzykWpM",
+                                119
+                              ],
+                              "s": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  97
+                                ],
+                                "a": "b"
+                              },
+                              "e": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  114
+                                ],
+                                "a": "a"
+                              },
+                              "a": [
+                                "a",
+                                "https://liquipedia.net/"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            115
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            99
+                          ],
+                          "l": 2,
+                          "c": "ui"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            100
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            99
+                          ],
+                          "l": -3
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            103
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            102
+                          ],
+                          "l": 2,
+                          "c": "pe"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            108
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            104
+                          ],
+                          "l": 7,
+                          "c": "dia.net",
+                          "a": [
+                            {
+                              "t": "r",
+                              "x": "bHlWGwvU3_6jeGFNGQghFg",
+                              "l": "",
+                              "i": [
+                                "6hwJ6VzykWpM",
+                                118
+                              ],
+                              "s": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  117
+                                ],
+                                "a": "a"
+                              },
+                              "e": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  105
+                                ],
+                                "a": "b"
+                              },
+                              "k": "a"
+                            }
+                          ]
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            105
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            104
+                          ],
+                          "l": -3,
+                          "b": []
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            93
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            90
+                          ],
+                          "l": -4
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            91
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            90
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            75
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            74
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            73
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            72
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            70
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            69
+                          ],
+                          "l": -2
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            68
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            65
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            66
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            65
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            59
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            58
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            40
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            33
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            39
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            33
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            38
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            33
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            37
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            33
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            34
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            33
+                          ],
+                          "l": -3
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            29
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            28
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            1
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3834badc-5d57-8094-82f5-f33fb5de3908": {
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-8094-82f5-f33fb5de3908",
+            "version": 39,
+            "type": "bulleted_list",
+            "properties": {
+              "title": [
+                [
+                  "Text Wireframes "
+                ]
+              ]
+            },
+            "created_time": 1781771980542,
+            "last_edited_time": 1781772013700,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "UGN22A33a3Sjyv6M0j5alQ,\"start\",\"end\"",
+                "n": {
+                  "UGN22A33a3Sjyv6M0j5alQ,\"start\",\"end\"": {
+                    "s": {
+                      "x": "UGN22A33a3Sjyv6M0j5alQ",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            1
+                          ],
+                          "o": "start",
+                          "l": -10,
+                          "b": [
+                            {
+                              "t": "a",
+                              "x": "UGN22A33a3Sjyv6M0j5alQ",
+                              "l": "",
+                              "i": [
+                                "6hwJ6VzykWpM",
+                                11
+                              ],
+                              "s": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  1
+                                ],
+                                "a": "b"
+                              },
+                              "e": {
+                                "i": [
+                                  "6hwJ6VzykWpM",
+                                  10
+                                ],
+                                "a": "a"
+                              },
+                              "a": [
+                                "a",
+                                "https://liquipedia.net/"
+                              ]
+                            }
+                          ],
+                          "a": []
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            12
+                          ],
+                          "o": [
+                            "6hwJ6VzykWpM",
+                            10
+                          ],
+                          "l": 16,
+                          "c": "Text Wireframes "
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3824badc-5d57-80be-8f9a-df220d6cf18f": {
+        "value": {
+          "value": {
+            "id": "3824badc-5d57-80be-8f9a-df220d6cf18f",
+            "version": 18,
+            "type": "sub_header",
+            "properties": {
+              "title": [
+                [
+                  "Tasks"
+                ]
+              ]
+            },
+            "created_time": 1781721744647,
+            "last_edited_time": 1781721747740,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "oF6HAZYnOKd_dMID5Xw4bA,\"start\",\"end\"",
+                "n": {
+                  "oF6HAZYnOKd_dMID5Xw4bA,\"start\",\"end\"": {
+                    "s": {
+                      "x": "oF6HAZYnOKd_dMID5Xw4bA",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            2
+                          ],
+                          "o": "start",
+                          "l": 5,
+                          "c": "Tasks"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            1
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": [
+                      "fBg5b6qrsxcqcugi_j8buA,[\"vAUCBoebLpQC\",21],\"end\""
+                    ]
+                  },
+                  "fBg5b6qrsxcqcugi_j8buA,[\"vAUCBoebLpQC\",21],\"end\"": {
+                    "s": {
+                      "x": "fBg5b6qrsxcqcugi_j8buA",
+                      "i": [
+                        {
+                          "t": "p",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            21
+                          ],
+                          "o": "start"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": "l"
+                    },
+                    "c": [
+                      "3MOwax_FMRoEKhTJFJzVRQ,[\"vAUCBoebLpQC\",21],\"end\""
+                    ]
+                  },
+                  "3MOwax_FMRoEKhTJFJzVRQ,[\"vAUCBoebLpQC\",21],\"end\"": {
+                    "s": {
+                      "x": "3MOwax_FMRoEKhTJFJzVRQ",
+                      "i": [
+                        {
+                          "t": "p",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            21
+                          ],
+                          "o": "start"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": "l"
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3824badc-5d57-80dc-ba13-ea9c46f264a6": {
+        "value": {
+          "value": {
+            "id": "3824badc-5d57-80dc-ba13-ea9c46f264a6",
+            "version": 71,
+            "type": "to_do",
+            "properties": {
+              "title": [
+                [
+                  "Think about Tech Stack"
+                ]
+              ]
+            },
+            "created_time": 1781721755983,
+            "last_edited_time": 1781721768947,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "lDNQZhi36A2q52iSs5Q1Kg,\"start\",\"end\"",
+                "n": {
+                  "lDNQZhi36A2q52iSs5Q1Kg,\"start\",\"end\"": {
+                    "s": {
+                      "x": "lDNQZhi36A2q52iSs5Q1Kg",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            6
+                          ],
+                          "o": "start",
+                          "l": 14,
+                          "c": "Think about Te"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            21
+                          ],
+                          "o": [
+                            "vAUCBoebLpQC",
+                            19
+                          ],
+                          "l": 8,
+                          "c": "ch Stack"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            20
+                          ],
+                          "o": [
+                            "vAUCBoebLpQC",
+                            19
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            5
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            4
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            3
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            2
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            1
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3824badc-5d57-80ed-b57a-efabf4270b4e": {
+        "value": {
+          "value": {
+            "id": "3824badc-5d57-80ed-b57a-efabf4270b4e",
+            "version": 65,
+            "type": "to_do",
+            "properties": {
+              "title": [
+                [
+                  "Design Database"
+                ]
+              ]
+            },
+            "created_time": 1781721769566,
+            "last_edited_time": 1781721790814,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "CUdbGm6BNUp7Syoz3EUWgw,\"start\",\"end\"",
+                "n": {
+                  "CUdbGm6BNUp7Syoz3EUWgw,\"start\",\"end\"": {
+                    "s": {
+                      "x": "CUdbGm6BNUp7Syoz3EUWgw",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            9
+                          ],
+                          "o": "start",
+                          "l": 15,
+                          "c": "Design Database"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            6
+                          ],
+                          "o": "start",
+                          "l": -3
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            5
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            4
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            3
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            2
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "vAUCBoebLpQC",
+                            1
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3834badc-5d57-8080-a8e6-c954624e9218": {
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-8080-a8e6-c954624e9218",
+            "version": 27,
+            "type": "to_do",
+            "properties": {
+              "title": [
+                [
+                  "UX/UI Design"
+                ]
+              ]
+            },
+            "created_time": 1781770897643,
+            "last_edited_time": 1781770905081,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "aQZcyGtyVeCRYtmazPLHxQ,\"start\",\"end\"",
+                "n": {
+                  "aQZcyGtyVeCRYtmazPLHxQ,\"start\",\"end\"": {
+                    "s": {
+                      "x": "aQZcyGtyVeCRYtmazPLHxQ",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            1
+                          ],
+                          "o": "start",
+                          "l": 12,
+                          "c": "UX/UI Design"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3834badc-5d57-803e-b2d5-e4d5da8a2abe": {
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-803e-b2d5-e4d5da8a2abe",
+            "version": 5,
+            "type": "to_do",
+            "properties": {
+              "title": [
+                [
+                  "สมัครระบบ Affiliate ของ Shopee / Lazada"
+                ]
+              ]
+            },
+            "created_time": 1781772063277,
+            "last_edited_time": 1781772064118,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "11Wxly0jycJHhfReFIcr8w,\"start\",\"end\"",
+                "n": {
+                  "11Wxly0jycJHhfReFIcr8w,\"start\",\"end\"": {
+                    "s": {
+                      "x": "11Wxly0jycJHhfReFIcr8w",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "6hwJ6VzykWpM",
+                            1
+                          ],
+                          "o": "start",
+                          "l": 39,
+                          "c": "สมัครระบบ Affiliate ของ Shopee / Lazada"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3834badc-5d57-8073-be90-ec9e12c94c42": {
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-8073-be90-ec9e12c94c42",
+            "version": 82,
+            "type": "page",
+            "properties": {
+              "title": [
+                [
+                  "Database Schema"
+                ]
+              ]
+            },
+            "content": [
+              "3834badc-5d57-8085-a6e5-db4e7ccbc274",
+              "3834badc-5d57-800f-b03a-cc2f8d5e752a",
+              "3834badc-5d57-8040-8617-dd3eec0e7d7f",
+              "3834badc-5d57-8097-907e-d37aa783f576",
+              "3834badc-5d57-80b2-8191-f701fee1fe3c",
+              "3864badc-5d57-8020-b88a-d0e76107cc47"
+            ],
+            "created_time": 1781785337103,
+            "last_edited_time": 1782037463828,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "TUg_sc7ZV5dXvY58HnM3jA,\"start\",\"end\"",
+                "n": {
+                  "TUg_sc7ZV5dXvY58HnM3jA,\"start\",\"end\"": {
+                    "s": {
+                      "x": "TUg_sc7ZV5dXvY58HnM3jA",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            3
+                          ],
+                          "o": "start",
+                          "l": 2,
+                          "c": "Da"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            7
+                          ],
+                          "o": [
+                            "VtQDqTqC9fMC",
+                            4
+                          ],
+                          "l": 1,
+                          "c": "t"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            9
+                          ],
+                          "o": [
+                            "VtQDqTqC9fMC",
+                            7
+                          ],
+                          "l": 12,
+                          "c": "abase Schema"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            8
+                          ],
+                          "o": [
+                            "VtQDqTqC9fMC",
+                            7
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            5
+                          ],
+                          "o": [
+                            "VtQDqTqC9fMC",
+                            4
+                          ],
+                          "l": -2
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            2
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            1
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": [
+                      "s8EGPIiXLtNfPci5XkYhcQ,[\"VtQDqTqC9fMC\",30],\"end\""
+                    ]
+                  },
+                  "s8EGPIiXLtNfPci5XkYhcQ,[\"VtQDqTqC9fMC\",30],\"end\"": {
+                    "s": {
+                      "x": "s8EGPIiXLtNfPci5XkYhcQ",
+                      "i": [
+                        {
+                          "t": "p",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            30
+                          ],
+                          "o": "start"
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            3
+                          ],
+                          "o": "start",
+                          "l": -2
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            6
+                          ],
+                          "o": [
+                            "VtQDqTqC9fMC",
+                            4
+                          ],
+                          "l": -4
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            5
+                          ],
+                          "o": [
+                            "VtQDqTqC9fMC",
+                            4
+                          ],
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            2
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "t",
+                          "i": [
+                            "VtQDqTqC9fMC",
+                            1
+                          ],
+                          "o": "start",
+                          "l": -1
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": "l"
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3824badc-5d57-8042-8d6a-da689fb00c51": {
+        "value": {
+          "value": {
+            "id": "3824badc-5d57-8042-8d6a-da689fb00c51",
+            "version": 3,
+            "type": "text",
+            "created_time": 1781721002191,
+            "last_edited_time": 1781721002193,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "tRjoXN89LgxddPnb875Mmg,\"start\",\"end\"",
+                "n": {
+                  "tRjoXN89LgxddPnb875Mmg,\"start\",\"end\"": {
+                    "s": {
+                      "x": "tRjoXN89LgxddPnb875Mmg",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      },
+      "3824badc-5d57-8086-b51e-fa83c45a42ce": {
+        "value": {
+          "value": {
+            "id": "3824badc-5d57-8086-b51e-fa83c45a42ce",
+            "version": 3,
+            "type": "text",
+            "created_time": 1781680539819,
+            "last_edited_time": 1781680539822,
+            "parent_id": "3824badc-5d57-80a2-bb77-c04f521cc746",
+            "parent_table": "block",
+            "alive": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "crdt_format_version": 1,
+            "crdt_data": {
+              "title": {
+                "r": "707_aECfaGXXSqYvsalKGA,\"start\",\"end\"",
+                "n": {
+                  "707_aECfaGXXSqYvsalKGA,\"start\",\"end\"": {
+                    "s": {
+                      "x": "707_aECfaGXXSqYvsalKGA",
+                      "i": [
+                        {
+                          "t": "s"
+                        },
+                        {
+                          "t": "e"
+                        }
+                      ],
+                      "l": ""
+                    },
+                    "c": []
+                  }
+                }
+              }
+            }
+          },
+          "role": "reader"
+        }
+      }
+    },
+    "collection_view": {
+      "3834badc-5d57-80bd-902c-000c41622ad9": {
+        "spaceId": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-80bd-902c-000c41622ad9",
+            "version": 75,
+            "type": "table",
+            "format": {
+              "table_wrap": true,
+              "chart_config": {
+                "type": "column",
+                "dataConfig": {
+                  "type": "groups_reducer",
+                  "groupBy": {
+                    "sort": {
+                      "type": "ascending"
+                    },
+                    "type": "status",
+                    "groupBy": "option",
+                    "property": "f\\E;",
+                    "hideEmptyGroups": false
+                  },
+                  "aggregationConfig": {
+                    "aggregation": {
+                      "aggregator": "count"
+                    },
+                    "seriesFormat": {
+                      "displayType": "column"
+                    }
+                  }
+                },
+                "chartFormat": {
+                  "mainSort": "x-ascending",
+                  "axisHideEmptyGroups": false
+                }
+              },
+              "table_properties": [
+                {
+                  "width": 280,
+                  "visible": true,
+                  "property": "title"
+                },
+                {
+                  "width": 200,
+                  "visible": true,
+                  "property": "oE>a"
+                },
+                {
+                  "width": 200,
+                  "visible": true,
+                  "property": "tg\\M"
+                },
+                {
+                  "width": 200,
+                  "visible": true,
+                  "property": "f\\E;"
+                }
+              ],
+              "collection_pointer": {
+                "id": "3834badc-5d57-8050-934e-000bcad1d13b",
+                "table": "collection",
+                "spaceId": "cf64badc-5d57-8161-b0b4-00034a8a7f7b"
+              },
+              "subitem_display_mode": "flattened",
+              "subitem_filter_scope": "parents_and_subitems",
+              "table_frozen_column_index": -1
+            },
+            "parent_id": "3834badc-5d57-809d-8853-e292066de2f1",
+            "parent_table": "block",
+            "alive": true,
+            "page_sort": [
+              "3834badc-5d57-8010-9024-e27b4839e32e",
+              "3834badc-5d57-80c7-9e3f-dbfefb4f076f",
+              "3824badc-5d57-80a6-b6dd-c1bac82b89b2",
+              "3834badc-5d57-80e4-9a28-f50efa4ad08c",
+              "3834badc-5d57-8043-a2e5-e948756c138b",
+              "3864badc-5d57-8027-8f6e-e063b01294b9",
+              "3834badc-5d57-804d-92c5-eb9014cc67bf",
+              "3834badc-5d57-8096-bba7-e3b236ceb64f",
+              "3834badc-5d57-8034-aa9f-d0c2080bcba0",
+              "3834badc-5d57-802c-80c1-d278fbe4c788",
+              "3834badc-5d57-8004-badd-c19de1b87b49"
+            ],
+            "query2": {
+              "calendar_by": "oE>a",
+              "timeline_by": "oE>a"
+            },
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "created_time": 1781769316743,
+            "last_edited_time": 1782038543609,
+            "created_by_table": "notion_user",
+            "created_by_id": "302d872b-594c-819a-9dab-000217df7134",
+            "last_edited_by_table": "notion_user",
+            "last_edited_by_id": "302d872b-594c-819a-9dab-000217df7134"
+          },
+          "role": "reader"
+        }
+      },
+      "3834badc-5d57-80b2-a3da-000c34d61722": {
+        "spaceId": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-80b2-a3da-000c34d61722",
+            "version": 3,
+            "type": "calendar",
+            "format": {
+              "collection_pointer": {
+                "id": "3834badc-5d57-8050-934e-000bcad1d13b",
+                "table": "collection",
+                "spaceId": "cf64badc-5d57-8161-b0b4-00034a8a7f7b"
+              },
+              "table_subitem_toggle_column": "title"
+            },
+            "parent_id": "3834badc-5d57-809d-8853-e292066de2f1",
+            "parent_table": "block",
+            "alive": true,
+            "query2": {
+              "calendar_by": "oE>a"
+            },
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "created_time": 1781773234244,
+            "last_edited_time": 1781773234244,
+            "created_by_table": "notion_user",
+            "created_by_id": "302d872b-594c-819a-9dab-000217df7134"
+          },
+          "role": "reader"
+        }
+      }
+    },
+    "collection": {
+      "3834badc-5d57-8050-934e-000bcad1d13b": {
+        "spaceId": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+        "value": {
+          "value": {
+            "id": "3834badc-5d57-8050-934e-000bcad1d13b",
+            "version": 184,
+            "name": [
+              [
+                "Project infomation"
+              ]
+            ],
+            "schema": {
+              "f\\E;": {
+                "name": "Status",
+                "type": "status",
+                "groups": [
+                  {
+                    "id": "b8de715f-dcfa-440d-b6d4-395cfe9524d4",
+                    "name": "To-do",
+                    "color": "gray",
+                    "optionIds": [
+                      "5c35f7ff-c8a6-43dc-a993-e8e51487ccd0"
+                    ]
+                  },
+                  {
+                    "id": "a0caec62-8f2d-428b-a026-7e0bd235be9c",
+                    "name": "In progress",
+                    "color": "blue",
+                    "optionIds": [
+                      "8d552ad2-2fdc-461c-93e4-752fa852adb1"
+                    ]
+                  },
+                  {
+                    "id": "5ec27500-eef4-4e53-96f5-864e1cdef88d",
+                    "name": "Complete",
+                    "color": "green",
+                    "optionIds": [
+                      "16f2bb59-0654-4a71-934c-811cae9ef3f6"
+                    ]
+                  }
+                ],
+                "options": [
+                  {
+                    "id": "5c35f7ff-c8a6-43dc-a993-e8e51487ccd0",
+                    "value": "Not started"
+                  },
+                  {
+                    "id": "8d552ad2-2fdc-461c-93e4-752fa852adb1",
+                    "color": "blue",
+                    "value": "In progress"
+                  },
+                  {
+                    "id": "16f2bb59-0654-4a71-934c-811cae9ef3f6",
+                    "color": "green",
+                    "value": "Done"
+                  }
+                ],
+                "defaultOption": "Not started"
+              },
+              "oE>a": {
+                "name": "StartDate",
+                "type": "date"
+              },
+              "tg\\M": {
+                "name": "EndDate",
+                "type": "date"
+              },
+              "title": {
+                "name": "Name",
+                "type": "title"
+              }
+            },
+            "format": {
+              "ai_suggested_properties": [
+                {
+                  "name": "Project Status",
+                  "type": "select",
+                  "options": [
+                    {
+                      "id": "BL>@",
+                      "color": "green",
+                      "value": "Not Started"
+                    },
+                    {
+                      "id": "PNBB",
+                      "color": "default",
+                      "value": "In Progress"
+                    },
+                    {
+                      "id": "jpeB",
+                      "color": "red",
+                      "value": "Completed"
+                    },
+                    {
+                      "id": "Ve\\o",
+                      "color": "orange",
+                      "value": "On Hold"
+                    }
+                  ]
+                },
+                {
+                  "name": "Assigned To",
+                  "type": "person"
+                },
+                {
+                  "name": "Due Date",
+                  "type": "date"
+                },
+                {
+                  "name": "Priority Level",
+                  "type": "select",
+                  "options": [
+                    {
+                      "id": "AEL:",
+                      "color": "blue",
+                      "value": "Low"
+                    },
+                    {
+                      "id": "W_bC",
+                      "color": "green",
+                      "value": "Medium"
+                    },
+                    {
+                      "id": "RajA",
+                      "color": "gray",
+                      "value": "High"
+                    },
+                    {
+                      "id": "A=g_",
+                      "color": "yellow",
+                      "value": "Urgent"
+                    }
+                  ]
+                }
+              ]
+            },
+            "parent_id": "3834badc-5d57-809d-8853-e292066de2f1",
+            "parent_table": "block",
+            "alive": true,
+            "migrated": true,
+            "space_id": "cf64badc-5d57-8161-b0b4-00034a8a7f7b",
+            "deleted_schema": {
+              "Tpde": {
+                "name": "Status",
+                "type": "status",
+                "groups": [
+                  {
+                    "id": "b67f15de-7fc5-4f40-8e8c-6f08228891a2",
+                    "name": "To-do",
+                    "color": "gray",
+                    "optionIds": [
+                      "c888b52c-333d-475c-9b12-dc4329db1a67"
+                    ]
+                  },
+                  {
+                    "id": "d87dc32c-9613-404b-81f0-91937541af36",
+                    "name": "In progress",
+                    "color": "blue",
+                    "optionIds": [
+                      "e338c923-5d24-4ba9-8f53-dbdf049702c2"
+                    ]
+                  },
+                  {
+                    "id": "707e6a37-a556-46fc-a58d-a4450c9c5fbc",
+                    "name": "Complete",
+                    "color": "green",
+                    "optionIds": [
+                      "d0cbc60d-b76e-4665-bbb6-1f0f9895ddda"
+                    ]
+                  }
+                ],
+                "options": [
+                  {
+                    "id": "c888b52c-333d-475c-9b12-dc4329db1a67",
+                    "value": "Not started"
+                  },
+                  {
+                    "id": "e338c923-5d24-4ba9-8f53-dbdf049702c2",
+                    "color": "blue",
+                    "value": "In progress"
+                  },
+                  {
+                    "id": "d0cbc60d-b76e-4665-bbb6-1f0f9895ddda",
+                    "color": "green",
+                    "value": "Done"
+                  }
+                ],
+                "defaultOption": "Not started"
+              }
+            },
+            "created_time": 1781769316745,
+            "last_edited_time": 1781773220906,
+            "created_by_table": "notion_user",
+            "created_by_id": "302d872b-594c-819a-9dab-000217df7134",
+            "last_edited_by_table": "notion_user",
+            "last_edited_by_id": "302d872b-594c-819a-9dab-000217df7134"
+          },
+          "role": "reader"
+        }
+      }
+    }
+  }
+}
