@@ -106,7 +106,7 @@ export default function SensConverter() {
               <select
                 value={fromGame}
                 onChange={(e) => setFromGame(e.target.value as Game)}
-                className="w-full h-12 bg-black/40 border border-border-custom rounded-lg px-4 text-xs font-bold text-white focus:outline-none focus:border-accent/60 transition-all duration-200 cursor-pointer"
+                className="w-full h-12 bg-black/40 border border-border-custom rounded-xl px-4 text-xs font-bold text-white focus:outline-none focus:border-accent/60 transition-all duration-200 cursor-pointer"
               >
                 {Object.entries(GAME_NAMES).map(([key, name]) => (
                   <option key={key} value={key} className="bg-[#12121A] text-white">
@@ -127,7 +127,7 @@ export default function SensConverter() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Enter sensitivity..."
-                className="w-full h-12 bg-black/40 border border-border-custom rounded-lg px-4 text-sm text-white focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/15 transition-all duration-200"
+                className="w-full h-12 bg-black/40 border border-border-custom rounded-xl px-4 text-sm text-white focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/15 transition-all duration-200"
               />
             </div>
 
@@ -142,12 +142,12 @@ export default function SensConverter() {
                 value={dpi}
                 onChange={(e) => setDpi(e.target.value)}
                 placeholder="e.g. 800"
-                className="w-full h-12 bg-black/40 border border-border-custom rounded-lg px-4 text-sm text-white focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/15 transition-all duration-200"
+                className="w-full h-12 bg-black/40 border border-border-custom rounded-xl px-4 text-sm text-white focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/15 transition-all duration-200"
               />
             </div>
 
             {calculateEdpi() !== null && (
-              <div className="bg-[#12121A]/80 border border-border-custom/50 rounded-lg p-3 text-center">
+              <div className="bg-[#12121A]/80 border border-border-custom/50 rounded-xl p-3 text-center">
                 <span className="text-[10px] text-zinc-500 font-mono block">SOURCE eDPI</span>
                 <span className="text-sm font-bold text-zinc-300 font-display">{calculateEdpi()}</span>
               </div>
@@ -170,7 +170,7 @@ export default function SensConverter() {
               <select
                 value={toGame}
                 onChange={(e) => setToGame(e.target.value as Game)}
-                className="w-full h-12 bg-black/40 border border-border-custom rounded-lg px-4 text-xs font-bold text-white focus:outline-none focus:border-accent/60 transition-all duration-200 cursor-pointer"
+                className="w-full h-12 bg-black/40 border border-border-custom rounded-xl px-4 text-xs font-bold text-white focus:outline-none focus:border-accent/60 transition-all duration-200 cursor-pointer"
               >
                 {Object.entries(GAME_NAMES).map(([key, name]) => (
                   <option key={key} value={key} className="bg-[#12121A] text-white">
@@ -193,7 +193,7 @@ export default function SensConverter() {
                   
                   <button
                     onClick={handleCopy}
-                    className={`h-8 px-4 rounded-lg text-[10px] font-bold uppercase font-mono tracking-wider flex items-center gap-1.5 transition-all duration-200 ${
+                    className={`h-8 px-4 rounded-xl text-[10px] font-bold uppercase font-mono tracking-wider flex items-center gap-1.5 transition-all duration-200 ${
                       copied 
                         ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
                         : 'bg-white/5 hover:bg-white/10 text-[#FAFAFA] border border-white/5 hover:border-white/10'
@@ -224,7 +224,7 @@ export default function SensConverter() {
             </div>
 
             {calculateTargetEdpi() !== null && (
-              <div className="bg-[#12121A]/80 border border-border-custom/50 rounded-lg p-3 text-center">
+              <div className="bg-[#12121A]/80 border border-border-custom/50 rounded-xl p-3 text-center">
                 <span className="text-[10px] text-zinc-500 font-mono block">TARGET eDPI</span>
                 <span className="text-sm font-bold text-zinc-300 font-display">{calculateTargetEdpi()}</span>
               </div>

@@ -245,7 +245,7 @@ export default function Home() {
               Optimize Your Setup. <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.25)]">Elevate Your Game.</span>
             </h1>
             <div className="flex justify-center">
-              <p className="text-sm sm:text-base text-zinc-400 font-medium">
+              <p className="text-sm sm:text-base text-zinc-400 font-normal">
                 Explore mouse sensitivity, gear setups, and hardware configurations used by elite professional players.
               </p>
             </div>
@@ -278,7 +278,7 @@ export default function Home() {
 
                 {/* Smart Search Dropdown List (Aligned with input) */}
                 {globalFocused && globalSearch.trim().length >= 2 && (
-                  <div className="absolute left-0 right-0 mt-2 rounded-lg bg-[#12121A] border border-border-custom shadow-2xl z-50 overflow-hidden py-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <div className="absolute left-0 right-0 mt-2 rounded-2xl bg-[#12121A] border border-border-custom shadow-2xl z-50 overflow-hidden py-1 animate-in fade-in slide-in-from-top-1 duration-200">
                     {globalResults.length === 0 ? (
                       <div className="text-center py-6 text-zinc-500 text-xs font-mono">
                         {globalLoading ? 'Searching...' : 'No players found'}
@@ -319,7 +319,7 @@ export default function Home() {
               <div className="shrink-0">
                 <button
                   type="submit"
-                  className="h-14 px-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 hover:scale-[1.02] active:scale-[0.98] text-[#0A0A0F] text-xs font-extrabold transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_35px_rgba(245,158,11,0.55)] border border-amber-400/20 flex items-center justify-center gap-2 cursor-pointer font-mono uppercase tracking-wider"
+                  className="h-14 px-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 hover:scale-[1.02] active:scale-[0.98] text-[#0A0A0F] text-xs font-bold transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_35px_rgba(245,158,11,0.55)] border border-amber-400/20 flex items-center justify-center gap-2 cursor-pointer font-mono uppercase tracking-wider"
                 >
                   <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -344,9 +344,9 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
             {/* CARD 1: CS2 */}
-            <div className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-lg flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group">
+            <div className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group">
               <div className="space-y-6">
-                <div className="relative h-44 rounded-lg bg-gradient-to-tr from-amber-950 via-zinc-900 to-amber-600 bg-[length:20px_20px] bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] flex items-center justify-center border border-white/5 overflow-hidden">
+                <div className="relative h-44 rounded-2xl bg-gradient-to-tr from-amber-950 via-zinc-900 to-amber-600 bg-[length:20px_20px] bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] flex items-center justify-center border border-white/5 overflow-hidden">
                   <span className="text-2xl font-black tracking-widest text-[#FAFAFA] uppercase font-display group-hover:scale-110 transition-transform duration-300">CS2</span>
                   <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white font-mono backdrop-blur-md">1</div>
                 </div>
@@ -396,9 +396,9 @@ export default function Home() {
             </div>
 
             {/* CARD 2: Valorant */}
-            <div className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-lg flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group">
+            <div className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group">
               <div className="space-y-6">
-                <div className="relative h-44 rounded-lg bg-gradient-to-tr from-rose-950 via-zinc-900 to-red-600 bg-[length:20px_20px] bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] flex items-center justify-center border border-white/5 overflow-hidden">
+                <div className="relative h-44 rounded-2xl bg-gradient-to-tr from-rose-950 via-zinc-900 to-red-600 bg-[length:20px_20px] bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] flex items-center justify-center border border-white/5 overflow-hidden">
                   <span className="text-2xl font-black tracking-widest text-[#FAFAFA] uppercase font-display group-hover:scale-110 transition-transform duration-300">VALORANT</span>
                   <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white font-mono backdrop-blur-md">2</div>
                 </div>
@@ -449,8 +449,8 @@ export default function Home() {
             </div>
 
             {/* CARD 3: Empty Placeholder */}
-            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-lg flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
-              <div className="relative h-44 rounded-lg bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
+            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
+              <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
                 <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-mono">TBD</span>
                 <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-mono">3</div>
               </div>
@@ -464,8 +464,8 @@ export default function Home() {
             </div>
 
             {/* CARD 4: Empty Placeholder */}
-            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-lg flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
-              <div className="relative h-44 rounded-lg bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
+            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
+              <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
                 <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-mono">TBD</span>
                 <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-mono">4</div>
               </div>
@@ -479,8 +479,8 @@ export default function Home() {
             </div>
 
             {/* CARD 5: Empty Placeholder */}
-            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-lg flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
-              <div className="relative h-44 rounded-lg bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
+            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
+              <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
                 <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-mono">TBD</span>
                 <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-mono">5</div>
               </div>
@@ -494,8 +494,8 @@ export default function Home() {
             </div>
 
             {/* CARD 6: Empty Placeholder */}
-            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-lg flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
-              <div className="relative h-44 rounded-lg bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
+            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
+              <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
                 <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-mono">TBD</span>
                 <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-mono">6</div>
               </div>
@@ -538,7 +538,7 @@ export default function Home() {
             <div className="relative">
               <button
                 onClick={() => setGameDropdownOpen(!gameDropdownOpen)}
-                className="h-11 w-full sm:w-56 flex items-center justify-between gap-2 px-4 rounded-lg bg-black/40 border border-border-custom text-xs font-bold text-[#FAFAFA] hover:border-border-hover transition-all duration-300"
+                className="h-11 w-full sm:w-56 flex items-center justify-between gap-2 px-4 rounded-xl bg-black/40 border border-border-custom text-xs font-bold text-[#FAFAFA] hover:border-border-hover transition-all duration-300"
               >
                 <span className="flex items-center gap-2">
                   {selectedGame === 'valorant' && (
@@ -560,7 +560,7 @@ export default function Home() {
               {gameDropdownOpen && (
                 <>
                   <div className="fixed inset-0 z-20" onClick={() => setGameDropdownOpen(false)}></div>
-                  <ul className="absolute right-0 mt-2 w-full sm:w-56 rounded-lg bg-[#12121A] border border-border-custom shadow-xl z-30 py-1.5">
+                  <ul className="absolute right-0 mt-2 w-full sm:w-56 rounded-xl bg-[#12121A] border border-border-custom shadow-xl z-30 py-1.5">
                     <li>
                       <button
                         onClick={() => {
@@ -605,7 +605,7 @@ export default function Home() {
           </div>
 
           {/* Search Controls */}
-          <div className="bg-background-alt border border-border-custom p-4 sm:p-5 rounded-lg flex items-center justify-between gap-4 overflow-visible relative z-20">
+          <div className="bg-background-alt border border-border-custom p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 overflow-visible relative z-20">
             <div className="relative flex-1">
               <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-500">
                 <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -617,7 +617,7 @@ export default function Home() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search pro players, real names, or teams..."
-                className="w-full h-11 bg-black/40 border border-border-custom rounded-lg py-2.5 pl-10 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:shadow-[0_0_20px_rgba(245,158,11,0.1)] focus:bg-black/60 transition-all duration-300"
+                className="w-full h-11 bg-black/40 border border-border-custom rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:shadow-[0_0_20px_rgba(245,158,11,0.1)] focus:bg-black/60 transition-all duration-300"
               />
             </div>
           </div>
@@ -627,11 +627,11 @@ export default function Home() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
                 {[...Array(8)].map((_, idx) => (
-                  <div key={idx} className="bg-card border border-border-custom h-48 rounded-lg"></div>
+                  <div key={idx} className="bg-card border border-border-custom h-48 rounded-2xl"></div>
                 ))}
               </div>
             ) : players.length === 0 ? (
-              <div className="text-center py-20 bg-card border border-border-custom rounded-lg">
+              <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
                 <h3 className="text-sm font-bold text-white mt-4 font-display">No pro players found</h3>
                 <p className="text-zinc-500 text-xs mt-1 font-mono">Try another search term or change the game filter.</p>
               </div>
@@ -641,7 +641,7 @@ export default function Home() {
                   <Link
                     key={player.settings_id}
                     href={`/players/${player.username}`}
-                    className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-lg flex flex-col justify-between hover:border-border-hover hover:bg-[#1A1A24]/40 hover:scale-[1.02] transition-all duration-300 group"
+                    className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl flex flex-col justify-between hover:border-border-hover hover:bg-[#1A1A24]/40 hover:scale-[1.02] transition-all duration-300 group"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
@@ -762,11 +762,11 @@ export default function Home() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
                 {[...Array(8)].map((_, idx) => (
-                  <div key={idx} className="bg-card border border-border-custom h-48 rounded-lg"></div>
+                  <div key={idx} className="bg-card border border-border-custom h-48 rounded-2xl"></div>
                 ))}
               </div>
             ) : players.length === 0 ? (
-              <div className="text-center py-20 bg-card border border-border-custom rounded-lg">
+              <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
                 <h3 className="text-sm font-bold text-white mt-4 font-display">No pro players found</h3>
                 <p className="text-zinc-500 text-xs mt-1 font-mono">Try another search term or change the filter settings.</p>
               </div>
@@ -776,7 +776,7 @@ export default function Home() {
                   <Link
                     key={player.settings_id}
                     href={`/players/${player.username}`}
-                    className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-lg flex flex-col justify-between hover:border-border-hover hover:bg-[#1A1A24]/40 hover:scale-[1.02] transition-all duration-300 group"
+                    className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl flex flex-col justify-between hover:border-border-hover hover:bg-[#1A1A24]/40 hover:scale-[1.02] transition-all duration-300 group"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">

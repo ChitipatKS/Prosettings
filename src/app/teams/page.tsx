@@ -124,7 +124,7 @@ function TeamsContent() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search team names..."
-              className="w-full h-10 bg-black/40 border border-border-custom rounded-lg pl-9 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-accent/50"
+              className="w-full h-10 bg-black/40 border border-border-custom rounded-xl pl-9 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-accent/50"
             />
           </div>
 
@@ -178,7 +178,7 @@ function TeamsContent() {
                 {loadingPlayers ? (
                   <div className="space-y-4 py-8">
                     {[...Array(3)].map((_, idx) => (
-                      <div key={idx} className="h-16 bg-white/5 rounded-lg animate-pulse border border-border-custom"></div>
+                      <div key={idx} className="h-16 bg-white/5 rounded-2xl animate-pulse border border-border-custom"></div>
                     ))}
                   </div>
                 ) : teamPlayers.length === 0 ? (
@@ -191,7 +191,7 @@ function TeamsContent() {
                       <Link
                         key={player.settings_id}
                         href={`/players/${player.username}`}
-                        className="bg-black/20 border border-border-custom p-4 rounded-lg flex items-center justify-between hover:border-accent/40 hover:bg-[#1A1A24]/30 hover:scale-[1.01] transition-all duration-300 group"
+                        className="bg-black/20 border border-border-custom p-4 rounded-2xl flex items-center justify-between hover:border-accent/40 hover:bg-[#1A1A24]/30 hover:scale-[1.01] transition-all duration-300 group"
                       >
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">

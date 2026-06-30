@@ -36,6 +36,227 @@ type Pagination = {
   pages: number;
 };
 
+function TeamSearchSelect({
+  options,
+  selectedValue,
+  onChange,
+  placeholder = "Search team..."
+}: {
+  options: string[];
+  selectedValue: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    if (selectedValue && selectedValue !== 'all') {
+      setSearchQuery(selectedValue);
+    } else {
+      setSearchQuery('');
+    }
+  }, [selectedValue]);
+
+  const filteredOptions = searchQuery.trim().length > 0
+    ? options.filter(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
+    : [];
+
+  return (
+    <div className="relative w-full sm:w-[200px]">
+      <div className="relative">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setIsOpen(true);
+            if (e.target.value === '') {
+              onChange('all');
+            }
+          }}
+          onFocus={() => {
+            setIsOpen(true);
+          }}
+          onBlur={() => {
+            setTimeout(() => setIsOpen(false), 200);
+          }}
+          placeholder={selectedValue === 'all' || !selectedValue ? "All Teams" : selectedValue}
+          className="w-full h-11 bg-black/40 border border-border-custom rounded-xl px-4 pr-10 text-xs font-bold text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/15 transition-all font-mono"
+        />
+        
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+          {selectedValue && selectedValue !== 'all' && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onChange('all');
+                setSearchQuery('');
+              }}
+              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+              title="Clear selection"
+            >
+              ×
+            </button>
+          )}
+          <span 
+            className="text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
+            style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          >
+            ▼
+          </span>
+        </div>
+
+        {isOpen && searchQuery.trim().length > 0 && (
+          <div className="absolute z-50 w-full mt-1.5 max-h-60 overflow-y-auto bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-800">
+            {filteredOptions.length === 0 ? (
+              <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
+                No matching teams found
+              </div>
+            ) : (
+              filteredOptions.map((team) => {
+                const isSelected = team === selectedValue;
+                return (
+                  <div
+                    key={team}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onChange(team);
+                      setSearchQuery(team);
+                      setIsOpen(false);
+                    }}
+                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${
+                      isSelected 
+                        ? 'bg-accent/15 text-accent font-bold' 
+                        : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
+                    }`}
+                  >
+                    {team}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CountrySearchSelect({
+  options,
+  selectedValue,
+  onChange,
+  placeholder = "Search country..."
+}: {
+  options: { code: string; name: string }[];
+  selectedValue: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const selectedCountry = options.find(c => c.code === selectedValue);
+
+  useEffect(() => {
+    if (selectedCountry) {
+      setSearchQuery(`${selectedCountry.name} (${selectedCountry.code})`);
+    } else {
+      setSearchQuery('');
+    }
+  }, [selectedCountry]);
+
+  const filteredOptions = searchQuery.trim().length > 0
+    ? options.filter(c =>
+        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.code.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
+  return (
+    <div className="relative w-full sm:w-[200px]">
+      <div className="relative">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setIsOpen(true);
+            if (e.target.value === '') {
+              onChange('all');
+            }
+          }}
+          onFocus={() => {
+            setIsOpen(true);
+          }}
+          onBlur={() => {
+            setTimeout(() => setIsOpen(false), 200);
+          }}
+          placeholder={selectedValue === 'all' || !selectedCountry ? "All Nations" : `${selectedCountry.name} (${selectedCountry.code})`}
+          className="w-full h-11 bg-black/40 border border-border-custom rounded-xl px-4 pr-10 text-xs font-bold text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/15 transition-all font-mono"
+        />
+        
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+          {selectedValue && selectedValue !== 'all' && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onChange('all');
+                setSearchQuery('');
+              }}
+              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+              title="Clear selection"
+            >
+              ×
+            </button>
+          )}
+          <span 
+            className="text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
+            style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          >
+            ▼
+          </span>
+        </div>
+
+        {isOpen && searchQuery.trim().length > 0 && (
+          <div className="absolute z-50 w-full mt-1.5 max-h-60 overflow-y-auto bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-800">
+            {filteredOptions.length === 0 ? (
+              <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
+                No matching nations found
+              </div>
+            ) : (
+              filteredOptions.map((country) => {
+                const isSelected = country.code === selectedValue;
+                return (
+                  <div
+                    key={country.code}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onChange(country.code);
+                      setSearchQuery(`${country.name} (${country.code})`);
+                      setIsOpen(false);
+                    }}
+                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${
+                      isSelected 
+                        ? 'bg-accent/15 text-accent font-bold' 
+                        : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
+                    }`}
+                  >
+                    {country.name} ({country.code})
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function PlayersDirectory() {
   const router = useRouter();
   const [players, setPlayers] = useState<Player[]>([]);
@@ -225,42 +446,18 @@ export default function PlayersDirectory() {
           </div>
 
           {/* Team Dropdown */}
-          <div className="relative">
-            <select
-              value={selectedTeam}
-              onChange={(e) => setSelectedTeam(e.target.value)}
-              className="h-11 bg-black/40 border border-border-custom rounded-xl pl-4 pr-10 text-xs font-bold text-zinc-300 focus:outline-none focus:border-accent/50 transition-all cursor-pointer min-w-[150px] appearance-none"
-            >
-              <option value="all" className="bg-[#12121A]">All Teams</option>
-              {teamsList.map(t => (
-                <option key={t} value={t} className="bg-[#12121A]">{t}</option>
-              ))}
-            </select>
-            <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-zinc-500">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-              </svg>
-            </span>
-          </div>
+          <TeamSearchSelect
+            options={teamsList}
+            selectedValue={selectedTeam}
+            onChange={setSelectedTeam}
+          />
 
           {/* Country Dropdown */}
-          <div className="relative">
-            <select
-              value={selectedCountry}
-              onChange={(e) => setSelectedCountry(e.target.value)}
-              className="h-11 bg-black/40 border border-border-custom rounded-xl pl-4 pr-10 text-xs font-bold text-zinc-300 focus:outline-none focus:border-accent/50 transition-all cursor-pointer min-w-[150px] appearance-none"
-            >
-              <option value="all" className="bg-[#12121A]">All Nations</option>
-              {countriesList.map(c => (
-                <option key={c.code} value={c.code} className="bg-[#12121A]">{c.name}</option>
-              ))}
-            </select>
-            <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-zinc-500">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-              </svg>
-            </span>
-          </div>
+          <CountrySearchSelect
+            options={countriesList}
+            selectedValue={selectedCountry}
+            onChange={setSelectedCountry}
+          />
         </div>
       </div>
 
@@ -314,12 +511,8 @@ export default function PlayersDirectory() {
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-1">
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-extrabold text-[#FAFAFA] text-lg font-display group-hover:text-accent transition-colors duration-300 line-clamp-1 flex items-center gap-1.5">
+                      <h3 className="font-extrabold text-[#FAFAFA] text-lg font-display group-hover:text-accent transition-colors duration-300 line-clamp-1">
                         {player.username}
-                        <svg className="h-4 w-4 text-accent fill-accent/10 flex-shrink-0" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                          <title>Verified Pro Player</title>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-                        </svg>
                       </h3>
                       {player.country_code && (
                         <span className="text-[10px] text-zinc-500 font-bold font-mono tracking-wider" title={player.nationality || ''}>

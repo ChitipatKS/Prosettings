@@ -112,17 +112,17 @@ export default function CommentSection({ username }: CommentSectionProps) {
         </h3>
 
         {/* Comment Form */}
-        <form onSubmit={handleSubmit} className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-lg space-y-4 mb-8">
+        <form onSubmit={handleSubmit} className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl space-y-4 mb-8">
           <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400 font-mono">Leave a Comment</h4>
           
           {error && (
-            <div className="text-xs bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg font-mono">
+            <div className="text-xs bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl font-mono">
               Error: {error}
             </div>
           )}
 
           {success && (
-            <div className="text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-3 rounded-lg font-mono">
+            <div className="text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-3 rounded-xl font-mono">
               Comment submitted successfully!
             </div>
           )}
@@ -137,7 +137,7 @@ export default function CommentSection({ username }: CommentSectionProps) {
               placeholder="Nickname / Alias"
               maxLength={50}
               required
-              className="h-11 bg-black/40 border border-border-custom rounded-lg py-2 px-3 text-sm text-[#FAFAFA] placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:shadow-[0_0_20px_rgba(245,158,11,0.1)] focus:bg-black/60 transition-all duration-200"
+              className="h-11 bg-black/40 border border-border-custom rounded-xl py-2 px-3 text-sm text-[#FAFAFA] placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:shadow-[0_0_20px_rgba(245,158,11,0.1)] focus:bg-black/60 transition-all duration-200"
             />
           </div>
 
@@ -151,7 +151,7 @@ export default function CommentSection({ username }: CommentSectionProps) {
               rows={4}
               maxLength={1000}
               required
-              className="bg-black/40 border border-border-custom rounded-lg py-3 px-3 text-sm text-[#FAFAFA] placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:shadow-[0_0_20px_rgba(245,158,11,0.1)] focus:bg-black/60 transition-all duration-200 resize-none"
+              className="bg-black/40 border border-border-custom rounded-xl py-3 px-3 text-sm text-[#FAFAFA] placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:shadow-[0_0_20px_rgba(245,158,11,0.1)] focus:bg-black/60 transition-all duration-200 resize-none"
             />
           </div>
 
@@ -159,7 +159,7 @@ export default function CommentSection({ username }: CommentSectionProps) {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-accent text-accent-fg font-display font-bold text-xs py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-accent text-accent-fg font-display font-semibold text-xs py-3 px-6 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:scale-[1.02] active:scale-[0.98]"
             >
               {submitting ? 'Sending...' : 'Submit Comment'}
             </button>
@@ -173,14 +173,14 @@ export default function CommentSection({ username }: CommentSectionProps) {
               Loading comments...
             </div>
           ) : comments.length === 0 ? (
-            <div className="text-center py-12 border border-dashed border-border-custom rounded-lg text-zinc-500 text-xs font-mono">
+            <div className="text-center py-12 border border-dashed border-border-custom rounded-2xl text-zinc-500 text-xs font-mono">
               No comments yet. Be the first to share your thoughts!
             </div>
           ) : (
             comments.map((comment) => (
               <div 
                 key={comment.id} 
-                className="bg-[#12121A]/30 border border-border-custom p-5 rounded-lg space-y-2 hover:border-border-hover transition-all duration-200"
+                className="bg-[#12121A]/30 border border-border-custom p-5 rounded-2xl space-y-2 hover:border-border-hover transition-all duration-200"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2">
                   <div className="flex items-center gap-2">
