@@ -320,7 +320,6 @@ export default function ProfilePage() {
   const [valScopedSens, setValScopedSens] = useState('1.0');
   const [valRes, setValRes] = useState('1920x1080');
   const [valAspect, setValAspect] = useState('16:9');
-  const [valRefresh, setValRefresh] = useState('240');
   const [valEnemyHighlight, setValEnemyHighlight] = useState('Red (Default)');
 
   // CS2 settings
@@ -330,7 +329,6 @@ export default function ProfilePage() {
   const [csZoomSens, setCsZoomSens] = useState('1.0');
   const [csRes, setCsRes] = useState('1280x960');
   const [csAspect, setCsAspect] = useState('4:3');
-  const [csRefresh, setCsRefresh] = useState('240');
 
   // Gear dropdown states
   const [gearOptions, setGearOptions] = useState<{
@@ -439,7 +437,6 @@ export default function ProfilePage() {
             setValScopedSens(settings.valorant.scoped_sens?.toString() || '1.0');
             setValRes(settings.valorant.resolution || '1920x1080');
             setValAspect(settings.valorant.aspect_ratio || '16:9');
-            setValRefresh(settings.valorant.refresh_rate?.toString() || '240');
             setValEnemyHighlight(settings.valorant.settings_data?.enemy_highlight_color || 'Red (Default)');
           }
 
@@ -451,7 +448,6 @@ export default function ProfilePage() {
             setCsZoomSens(settings.cs2.zoom_sens?.toString() || '1.0');
             setCsRes(settings.cs2.resolution || '1280x960');
             setCsAspect(settings.cs2.aspect_ratio || '4:3');
-            setCsRefresh(settings.cs2.refresh_rate?.toString() || '240');
           }
 
           // Set active gear dropdowns
@@ -544,7 +540,7 @@ export default function ProfilePage() {
         scoped_sens: parseFloat(valScopedSens) || 1.0,
         resolution: valRes || '1920x1080',
         aspect_ratio: valAspect || '16:9',
-        refresh_rate: parseInt(valRefresh, 10) || 240,
+        refresh_rate: null,
         settings_data: {
           enemy_highlight_color: valEnemyHighlight
         }
@@ -558,7 +554,7 @@ export default function ProfilePage() {
         zoom_sens: parseFloat(csZoomSens) || 1.0,
         resolution: csRes || '1280x960',
         aspect_ratio: csAspect || '4:3',
-        refresh_rate: parseInt(csRefresh, 10) || 240
+        refresh_rate: null
       };
     }
 
@@ -828,7 +824,7 @@ export default function ProfilePage() {
                       <input type="number" value={valHz} onChange={e => setValHz(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Resolution</label>
                       <input type="text" value={valRes} onChange={e => setValRes(e.target.value)} placeholder="e.g. 1920x1080" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
@@ -836,10 +832,6 @@ export default function ProfilePage() {
                     <div className="space-y-1.5">
                       <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Aspect Ratio</label>
                       <input type="text" value={valAspect} onChange={e => setValAspect(e.target.value)} placeholder="e.g. 16:9" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Refresh Rate (Hz)</label>
-                      <input type="number" value={valRefresh} onChange={e => setValRefresh(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -884,7 +876,7 @@ export default function ProfilePage() {
                       <input type="number" value={csHz} onChange={e => setCsHz(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Resolution</label>
                       <input type="text" value={csRes} onChange={e => setCsRes(e.target.value)} placeholder="e.g. 1280x960" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
@@ -892,10 +884,6 @@ export default function ProfilePage() {
                     <div className="space-y-1.5">
                       <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Aspect Ratio</label>
                       <input type="text" value={csAspect} onChange={e => setCsAspect(e.target.value)} placeholder="e.g. 4:3" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Refresh Rate (Hz)</label>
-                      <input type="number" value={csRefresh} onChange={e => setCsRefresh(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
                     </div>
                   </div>
                   <div className="text-[10px] text-zinc-500 font-mono">
@@ -1059,7 +1047,7 @@ export default function ProfilePage() {
                         {username}
                       </h3>
                       {selectedCountryCode && (
-                        <span className="text-[10px] text-zinc-500 font-bold font-mono tracking-wider">
+                        <span className="text-[10px] text-zinc-500 font-bold font-sans tracking-wider">
                           {selectedCountryCode}
                         </span>
                       )}
@@ -1067,7 +1055,7 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="pt-2">
-                    <span className="block text-center text-[10px] font-bold uppercase tracking-wider px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-mono w-full">
+                    <span className="block text-center text-[10px] font-bold uppercase tracking-wider px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-sans w-full">
                       {team || 'Community Member'}
                     </span>
                   </div>
@@ -1076,41 +1064,41 @@ export default function ProfilePage() {
 
               {/* Social Media Link Buttons */}
               <div className="w-full max-w-[280px] bg-card border border-zinc-800 p-5 rounded-2xl space-y-3">
-                <h4 className="text-[9px] font-bold uppercase tracking-wider text-zinc-500 font-mono">Social Networks</h4>
+                <h4 className="text-[9px] font-bold uppercase tracking-wider text-zinc-500 font-sans">Social Networks</h4>
                 <div className="flex flex-col gap-2">
                   {discord && (
-                    <div className="flex items-center gap-3 p-2 bg-black/35 rounded-xl text-xs font-mono border border-zinc-900">
+                    <div className="flex items-center gap-3 p-2 bg-black/35 rounded-xl text-xs font-sans border border-zinc-900">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#5865F2]"></span>
                       <span className="text-zinc-500 text-[10px]">Discord</span>
                       <span className="text-white font-bold">{discord}</span>
                     </div>
                   )}
                   {facebook && (
-                    <a href={facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-mono border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
+                    <a href={facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-sans border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#1877F2]"></span>
                       <span className="text-zinc-500 text-[10px]">Facebook</span>
                     </a>
                   )}
                   {instagram && (
-                    <a href={instagram} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-mono border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
+                    <a href={instagram} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-sans border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#E1306C]"></span>
                       <span className="text-zinc-500 text-[10px]">Instagram</span>
                     </a>
                   )}
                   {twitch && (
-                    <a href={twitch} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-mono border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
+                    <a href={twitch} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-sans border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#9146FF]"></span>
                       <span className="text-zinc-500 text-[10px]">Twitch</span>
                     </a>
                   )}
                   {youtube && (
-                    <a href={youtube} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-mono border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
+                    <a href={youtube} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-sans border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#FF0000]"></span>
                       <span className="text-zinc-500 text-[10px]">YouTube</span>
                     </a>
                   )}
                   {!discord && !facebook && !instagram && !twitch && !youtube && (
-                    <span className="text-[10px] text-zinc-600 font-mono italic">No social links added</span>
+                    <span className="text-[10px] text-zinc-600 font-sans italic">No social links added</span>
                   )}
                 </div>
               </div>
@@ -1129,7 +1117,7 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-6">
                     {/* Mouse Settings Block */}
                     <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-mono uppercase tracking-wider border-l-2 border-accent pl-2.5">
+                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
                         <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742c.089-.22.22-.43.39-.61l2.828-2.829a2.5 2.5 0 013.536 3.536l-2.828 2.828a2.5 2.5 0 01-3.536 0l-.39-.39m-.828-2.828l.39-.39a2.5 2.5 0 013.536 0l2.828 2.829a2.5 2.5 0 01-3.536 3.536l-2.828-2.828a2.5 2.5 0 010-3.536Z" />
                         </svg>
@@ -1154,7 +1142,7 @@ export default function ProfilePage() {
                             )}
                             <div className="flex flex-col">
                               <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-mono">
+                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-sans">
                                   {playerMouse.name.split(' ')[0]}
                                 </span>
                                 <span className="text-sm font-bold text-white font-display leading-tight">
@@ -1162,7 +1150,7 @@ export default function ProfilePage() {
                                 </span>
                               </div>
                               {playerMouse.estimated_price_thb && (
-                                <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
+                                <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
                                   Est. Price: ฿{Number(playerMouse.estimated_price_thb).toLocaleString()}
                                 </span>
                               )}
@@ -1170,17 +1158,17 @@ export default function ProfilePage() {
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             {playerMouse.shopee_url && (
-                              <a href={playerMouse.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-mono">
+                              <a href={playerMouse.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-sans">
                                 Shopee
                               </a>
                             )}
                             {playerMouse.lazada_url && (
-                              <a href={playerMouse.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-mono">
+                              <a href={playerMouse.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-sans">
                                 Lazada
                               </a>
                             )}
                             {playerMouse.amazon_url && (
-                              <a href={playerMouse.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-mono">
+                              <a href={playerMouse.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-sans">
                                 Amazon
                               </a>
                             )}
@@ -1191,39 +1179,39 @@ export default function ProfilePage() {
                       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 pt-1">
                         {/* DPI Highlight Card */}
                         <div className="bg-accent/[0.04] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-mono block">DPI</span>
-                          <span className="text-base font-extrabold text-accent font-display mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans block">DPI</span>
+                          <span className="text-base font-medium text-accent font-mono mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
                             {valDpi || <span className="text-zinc-700 font-mono">—</span>}
                           </span>
                         </div>
 
                         {/* Sensitivity Highlight Card */}
                         <div className="bg-accent/[0.04] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-mono block">Sensitivity</span>
-                          <span className="text-base font-extrabold text-accent font-display mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans block">Sensitivity</span>
+                          <span className="text-base font-medium text-accent font-mono mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
                             {valSens !== null && valSens !== '' ? parseFloat(valSens).toFixed(3) : <span className="text-zinc-700 font-mono">—</span>}
                           </span>
                         </div>
 
                         {/* eDPI Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">eDPI</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">eDPI</span>
+                          <span className="text-base font-medium text-white font-mono mt-0.5">
                             {((parseFloat(valDpi) || 0) * (parseFloat(valSens) || 0)).toFixed(2)}
                           </span>
                         </div>
 
                         {/* Hz Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Hz</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">{valHz ? `${valHz} Hz` : <span className="text-zinc-700 font-mono">—</span>}</span>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Hz</span>
+                          <span className="text-base font-medium text-white font-mono mt-0.5">{valHz ? `${valHz} Hz` : <span className="text-zinc-700 font-mono">—</span>}</span>
                         </div>
 
                         {/* Scoped Sensitivity Card */}
                         {valScopedSens && (
                           <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Scoped Sens</span>
-                            <span className="text-base font-bold text-white font-display mt-0.5">{valScopedSens}</span>
+                            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Scoped Sens</span>
+                            <span className="text-base font-medium text-white font-mono mt-0.5">{valScopedSens}</span>
                           </div>
                         )}
                       </div>
@@ -1231,39 +1219,31 @@ export default function ProfilePage() {
 
                     {/* Video Settings Block */}
                     <div className="space-y-4 border-t border-white/5 pt-4">
-                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-mono uppercase tracking-wider border-l-2 border-accent pl-2.5">
+                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
                         <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                         <span>Video Configuration</span>
                       </div>
 
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
                         {/* Resolution Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Resolution</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">{valRes || <span className="text-zinc-700 font-mono">—</span>}</span>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Resolution</span>
+                          <span className="text-base font-medium text-white font-mono mt-0.5">{valRes || <span className="text-zinc-700 font-mono">—</span>}</span>
                         </div>
 
                         {/* Aspect Ratio Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Aspect Ratio</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">{valAspect || <span className="text-zinc-700 font-mono">—</span>}</span>
-                        </div>
-
-                        {/* Refresh Rate Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Refresh Rate</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">
-                            {valRefresh ? `${valRefresh} Hz` : <span className="text-zinc-700 font-mono">—</span>}
-                          </span>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Aspect Ratio</span>
+                          <span className="text-base font-medium text-white font-mono mt-0.5">{valAspect || <span className="text-zinc-700 font-mono">—</span>}</span>
                         </div>
 
                         {/* Enemy Highlight Color Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Enemy Highlight Color</span>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Enemy Highlight Color</span>
                           <span className="text-base font-bold text-white font-display mt-0.5">
-                            {valEnemyHighlight || <span className="text-zinc-700 font-mono">—</span>}
+                            {valEnemyHighlight || <span className="text-zinc-700 font-sans">—</span>}
                           </span>
                         </div>
                       </div>
@@ -1272,7 +1252,7 @@ export default function ProfilePage() {
                     {/* Keyboard Configuration */}
                     {playerKeyboard && hasAnyKeyboardSettings && (
                       <div className="border-t border-white/5 pt-4 space-y-4">
-                        <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-mono uppercase tracking-wider border-l-2 border-accent pl-2.5">
+                        <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
                           <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M11 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z" />
                           </svg>
@@ -1296,7 +1276,7 @@ export default function ProfilePage() {
                             )}
                             <div className="flex flex-col">
                               <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-mono">
+                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-sans">
                                   {playerKeyboard.name.split(' ')[0]}
                                 </span>
                                 <span className="text-sm font-bold text-white font-display leading-tight">
@@ -1304,7 +1284,7 @@ export default function ProfilePage() {
                                 </span>
                               </div>
                               {playerKeyboard.estimated_price_thb && (
-                                <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
+                                <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
                                   Est. Price: ฿{Number(playerKeyboard.estimated_price_thb).toLocaleString()}
                                 </span>
                               )}
@@ -1312,17 +1292,17 @@ export default function ProfilePage() {
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             {playerKeyboard.shopee_url && (
-                              <a href={playerKeyboard.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-mono">
+                              <a href={playerKeyboard.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-sans">
                                 Shopee
                               </a>
                             )}
                             {playerKeyboard.lazada_url && (
-                              <a href={playerKeyboard.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-mono">
+                              <a href={playerKeyboard.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-sans">
                                 Lazada
                               </a>
                             )}
                             {playerKeyboard.amazon_url && (
-                              <a href={playerKeyboard.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-mono">
+                              <a href={playerKeyboard.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-sans">
                                 Amazon
                               </a>
                             )}
@@ -1343,7 +1323,7 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-6">
                     {/* Mouse Settings Block */}
                     <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-mono uppercase tracking-wider border-l-2 border-accent pl-2.5">
+                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
                         <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742c.089-.22.22-.43.39-.61l2.828-2.829a2.5 2.5 0 013.536 3.536l-2.828 2.828a2.5 2.5 0 01-3.536 0l-.39-.39m-.828-2.828l.39-.39a2.5 2.5 0 013.536 0l2.828 2.829a2.5 2.5 0 01-3.536 3.536l-2.828-2.828a2.5 2.5 0 010-3.536Z" />
                         </svg>
@@ -1368,7 +1348,7 @@ export default function ProfilePage() {
                             )}
                             <div className="flex flex-col">
                               <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-mono">
+                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-sans">
                                   {playerMouse.name.split(' ')[0]}
                                 </span>
                                 <span className="text-sm font-bold text-white font-display leading-tight">
@@ -1376,7 +1356,7 @@ export default function ProfilePage() {
                                 </span>
                               </div>
                               {playerMouse.estimated_price_thb && (
-                                <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
+                                <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
                                   Est. Price: ฿{Number(playerMouse.estimated_price_thb).toLocaleString()}
                                 </span>
                               )}
@@ -1384,17 +1364,17 @@ export default function ProfilePage() {
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             {playerMouse.shopee_url && (
-                              <a href={playerMouse.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-mono">
+                              <a href={playerMouse.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-sans">
                                 Shopee
                               </a>
                             )}
                             {playerMouse.lazada_url && (
-                              <a href={playerMouse.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-mono">
+                              <a href={playerMouse.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-sans">
                                 Lazada
                               </a>
                             )}
                             {playerMouse.amazon_url && (
-                              <a href={playerMouse.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-mono">
+                              <a href={playerMouse.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-sans">
                                 Amazon
                               </a>
                             )}
@@ -1405,39 +1385,39 @@ export default function ProfilePage() {
                       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 pt-1">
                         {/* DPI Highlight Card */}
                         <div className="bg-accent/[0.04] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-mono block">DPI</span>
-                          <span className="text-base font-extrabold text-accent font-display mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans block">DPI</span>
+                          <span className="text-base font-medium text-accent font-mono mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
                             {csDpi || <span className="text-zinc-700 font-mono">—</span>}
                           </span>
                         </div>
 
                         {/* Sensitivity Highlight Card */}
                         <div className="bg-accent/[0.04] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-mono block">Sensitivity</span>
-                          <span className="text-base font-extrabold text-accent font-display mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans block">Sensitivity</span>
+                          <span className="text-base font-medium text-accent font-mono mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
                             {csSens !== null && csSens !== '' ? parseFloat(csSens).toFixed(3) : <span className="text-zinc-700 font-mono">—</span>}
                           </span>
                         </div>
 
                         {/* eDPI Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">eDPI</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">eDPI</span>
+                          <span className="text-base font-medium text-white font-mono mt-0.5">
                             {((parseFloat(csDpi) || 0) * (parseFloat(csSens) || 0)).toFixed(2)}
                           </span>
                         </div>
 
                         {/* Hz Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Hz</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">{csHz || <span className="text-zinc-700 font-mono">—</span>}</span>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Hz</span>
+                          <span className="text-base font-medium text-white font-mono mt-0.5">{csHz || <span className="text-zinc-700 font-mono">—</span>}</span>
                         </div>
 
                         {/* Zoom Sensitivity Card */}
                         {csZoomSens && (
                           <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Zoom Sens</span>
-                            <span className="text-base font-bold text-white font-display mt-0.5">{csZoomSens}</span>
+                            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Zoom Sens</span>
+                            <span className="text-base font-medium text-white font-mono mt-0.5">{csZoomSens}</span>
                           </div>
                         )}
                       </div>
@@ -1445,32 +1425,24 @@ export default function ProfilePage() {
 
                     {/* Video Settings Block */}
                     <div className="space-y-4 border-t border-white/5 pt-4">
-                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-mono uppercase tracking-wider border-l-2 border-accent pl-2.5">
+                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
                         <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                         <span>Video Configuration</span>
                       </div>
 
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+                      <div className="grid grid-cols-2 gap-3 pt-1">
                         {/* Resolution Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Resolution</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">{csRes || <span className="text-zinc-700 font-mono">—</span>}</span>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Resolution</span>
+                          <span className="text-base font-medium text-white font-mono mt-0.5">{csRes || <span className="text-zinc-700 font-mono">—</span>}</span>
                         </div>
 
                         {/* Aspect Ratio Card */}
                         <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Aspect Ratio</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">{csAspect || <span className="text-zinc-700 font-mono">—</span>}</span>
-                        </div>
-
-                        {/* Refresh Rate Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono block group-hover/card:text-zinc-400 transition-colors">Refresh Rate</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">
-                            {csRefresh ? `${csRefresh} Hz` : <span className="text-zinc-700 font-mono">—</span>}
-                          </span>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Aspect Ratio</span>
+                          <span className="text-base font-medium text-white font-mono mt-0.5">{csAspect || <span className="text-zinc-700 font-mono">—</span>}</span>
                         </div>
                       </div>
                     </div>
@@ -1478,7 +1450,7 @@ export default function ProfilePage() {
                     {/* Keyboard Configuration */}
                     {playerKeyboard && hasAnyKeyboardSettings && (
                       <div className="border-t border-white/5 pt-4 space-y-4">
-                        <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-mono uppercase tracking-wider border-l-2 border-accent pl-2.5">
+                        <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
                           <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M11 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z" />
                           </svg>
@@ -1502,7 +1474,7 @@ export default function ProfilePage() {
                             )}
                             <div className="flex flex-col">
                               <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-mono">
+                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-sans">
                                   {playerKeyboard.name.split(' ')[0]}
                                 </span>
                                 <span className="text-sm font-bold text-white font-display leading-tight">
@@ -1510,7 +1482,7 @@ export default function ProfilePage() {
                                 </span>
                               </div>
                               {playerKeyboard.estimated_price_thb && (
-                                <span className="text-[10px] text-zinc-500 font-mono mt-0.5">
+                                <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
                                   Est. Price: ฿{Number(playerKeyboard.estimated_price_thb).toLocaleString()}
                                 </span>
                               )}
@@ -1518,17 +1490,17 @@ export default function ProfilePage() {
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             {playerKeyboard.shopee_url && (
-                              <a href={playerKeyboard.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-mono">
+                              <a href={playerKeyboard.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-sans">
                                 Shopee
                               </a>
                             )}
                             {playerKeyboard.lazada_url && (
-                              <a href={playerKeyboard.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-mono">
+                              <a href={playerKeyboard.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-sans">
                                 Lazada
                               </a>
                             )}
                             {playerKeyboard.amazon_url && (
-                              <a href={playerKeyboard.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-mono">
+                              <a href={playerKeyboard.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-sans">
                                 Amazon
                               </a>
                             )}
@@ -1566,18 +1538,18 @@ export default function ProfilePage() {
             <div className="bg-[#12121A]/50 border border-zinc-800 p-6 rounded-2xl space-y-6">
               <div className="flex items-center justify-between border-b border-zinc-800/80 pb-4">
                 <div>
-                  <span className="text-[10px] font-bold text-accent font-mono uppercase tracking-widest">Bookmarks</span>
+                  <span className="text-[10px] font-bold text-accent font-sans uppercase tracking-widest">Bookmarks</span>
                   <h2 className="text-xl font-extrabold text-white font-display mt-1">My Favorite Players</h2>
                 </div>
-                <span className="text-xs text-zinc-500 font-mono font-semibold">
-                  {favorites.length} {favorites.length === 1 ? 'Player' : 'Players'} saved
+                <span className="text-xs text-zinc-500 font-sans font-semibold">
+                  <span className="font-mono">{favorites.length}</span> {favorites.length === 1 ? 'Player' : 'Players'} saved
                 </span>
               </div>
 
               {favorites.length === 0 ? (
                 <div className="text-center py-10 bg-black/10 border border-dashed border-zinc-800/80 rounded-xl flex flex-col items-center justify-center space-y-3">
-                  <p className="text-xs font-bold text-zinc-500 font-mono italic">No bookmarked players yet.</p>
-                  <Link href="/players" className="px-4 py-2 bg-accent/5 hover:bg-accent/10 text-accent border border-accent/15 rounded-lg text-[9px] font-bold font-mono uppercase tracking-wider transition-colors duration-200">
+                  <p className="text-xs font-bold text-zinc-500 font-sans italic">No bookmarked players yet.</p>
+                  <Link href="/players" className="px-4 py-2 bg-accent/5 hover:bg-accent/10 text-accent border border-accent/15 rounded-lg text-[9px] font-bold font-sans uppercase tracking-wider transition-colors duration-200">
                     Browse Players
                   </Link>
                 </div>
@@ -1625,12 +1597,12 @@ export default function ProfilePage() {
                                 {player.username}
                               </span>
                               {player.country_code && (
-                                <span className="text-[8px] text-zinc-500 font-mono font-semibold">
+                                <span className="text-[8px] text-zinc-500 font-sans font-semibold">
                                   {player.country_code}
                                 </span>
                               )}
                             </div>
-                            <div className="text-[10px] text-zinc-500 font-mono line-clamp-1">
+                            <div className="text-[10px] text-zinc-500 font-sans line-clamp-1">
                               {player.team || 'Free Agent'}
                             </div>
                           </div>

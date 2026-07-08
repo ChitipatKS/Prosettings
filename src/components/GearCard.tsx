@@ -104,7 +104,7 @@ export default function GearCard({ product }: GearCardProps) {
           getCategorySvg(product.category)
         )}
         {/* Category badge */}
-        <span className="absolute top-2 left-2 text-[8px] font-bold uppercase tracking-wider text-zinc-500 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded font-mono border border-white/5">
+        <span className="absolute top-2.5 left-2.5 text-[9px] font-extrabold uppercase tracking-widest text-accent bg-accent/15 backdrop-blur-md px-2.5 py-0.5 rounded-md font-mono border border-accent/25 shadow-sm">
           {categoryLabel}
         </span>
       </div>

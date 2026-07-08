@@ -1,6 +1,14 @@
-import Link from 'next/link';
+'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+ 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
   return (
     <footer className="w-full bg-[#0A0A0F]/90 border-t border-t-zinc-800/40 relative overflow-hidden">
       {/* Subtle ambient glow inside footer */}

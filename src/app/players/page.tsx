@@ -483,22 +483,32 @@ export default function PlayersDirectory() {
                 className="bg-card backdrop-blur-[8px] border border-border-custom rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group overflow-hidden cursor-pointer"
               >
                 {/* 1. Portrait Section with Glow */}
-                <div className="relative h-44 bg-[#0F0F15] flex items-center justify-center border-b border-white/5 overflow-hidden">
+                <div className="relative h-44 bg-[#0D0D13] flex items-center justify-center border-b border-white/5 overflow-hidden">
                   
-                  {/* Subtle background glow */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-accent/5 blur-2xl group-hover:bg-accent/15 transition-all duration-300"></div>
+                  {/* Decorative background */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 pointer-events-none" />
 
                   {player.profile_img_url ? (
-                    <img 
-                      src={player.profile_img_url} 
-                      alt={player.username} 
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    <>
+                      <img 
+                        src={player.profile_img_url} 
+                        alt={player.username} 
+                        className="h-full w-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </>
                   ) : (
-                    <span className="text-5xl font-black text-white/10 group-hover:text-accent/20 transition-colors duration-300 font-display">
-                      {player.username[0].toUpperCase()}
-                    </span>
+                    <>
+                      {/* Decorative grid */}
+                      <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
+                      {/* Glow blob */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-accent/10 blur-3xl group-hover:bg-accent/20 transition-all duration-500" />
+                      {/* Avatar circle */}
+                      <div className="relative z-20 w-20 h-20 rounded-full border-2 border-white/10 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center shadow-xl group-hover:border-accent/30 transition-all duration-300">
+                        <span className="text-3xl font-black text-zinc-300 group-hover:text-accent transition-colors duration-300 font-display leading-none">
+                          {player.username[0].toUpperCase()}
+                        </span>
+                      </div>
+                    </>
                   )}
 
                   {/* Corner Game Badge */}

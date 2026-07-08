@@ -6,6 +6,7 @@ import CommentSection from '@/components/CommentSection';
 import FavoriteButton from '@/components/FavoriteButton';
 import ProfileSidebar from '@/components/ProfileSidebar';
 import CopyButton from '@/components/CopyButton';
+import CopyProfileUrlButton from '@/components/CopyProfileUrlButton';
 
 type PageProps = {
   params: Promise<{ username: string }> | { username: string };
@@ -55,11 +56,17 @@ function formatBirthDate(dateStr: string | null) {
 }
 
 // --- Reusable inline components ---
+const isNumeric = (val: string | number) => {
+  if (typeof val === 'number') return true;
+  return /\d/.test(String(val));
+};
+
 function SettingRow({ label, value }: { label: string; value: string | number | null | undefined }) {
+  const isValNumeric = value !== null && value !== undefined && isNumeric(value);
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-b-0">
-      <span className="text-[11px] text-zinc-500 font-mono uppercase tracking-wider">{label}</span>
-      <span className="text-sm font-bold text-white font-display">
+      <span className="text-xs text-zinc-400 font-sans font-medium">{label}</span>
+      <span className={`text-sm text-white ${isValNumeric ? 'font-mono font-medium' : 'font-display font-bold'}`}>
         {value !== null && value !== undefined && value !== '' ? value : <span className="text-zinc-700">—</span>}
       </span>
     </div>
@@ -93,12 +100,13 @@ function EmptyState({ message }: { message: string }) {
 function StatHighlight({ label, value, accent = false }: { label: string; value: string | number | null | undefined; accent?: boolean }) {
   const displayValue = value !== null && value !== undefined && value !== '' ? value : '—';
   const isEmpty = displayValue === '—';
+  const isValNumeric = !isEmpty && isNumeric(displayValue);
 
   if (accent) {
     return (
       <div className="bg-accent/[0.05] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3 rounded-xl transition-all duration-300 flex flex-col gap-1">
-        <span className="text-[9px] font-bold uppercase tracking-wider text-accent/70 font-mono">{label}</span>
-        <span className={`text-lg font-extrabold font-display ${isEmpty ? 'text-zinc-700' : 'text-accent'}`}>
+        <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans">{label}</span>
+        <span className={`text-lg font-extrabold ${isEmpty ? 'text-zinc-700 font-display' : isValNumeric ? 'text-accent font-mono font-medium' : 'text-accent font-display'}`}>
           {displayValue}
         </span>
       </div>
@@ -107,8 +115,8 @@ function StatHighlight({ label, value, accent = false }: { label: string; value:
 
   return (
     <div className="bg-[#12121A]/40 border border-border-custom hover:border-border-hover/60 p-3 rounded-xl transition-all duration-300 flex flex-col gap-1">
-      <span className="text-[9px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">{label}</span>
-      <span className={`text-lg font-bold font-display ${isEmpty ? 'text-zinc-700' : 'text-white'}`}>
+      <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans">{label}</span>
+      <span className={`text-lg font-bold ${isEmpty ? 'text-zinc-700 font-display' : isValNumeric ? 'font-mono font-medium text-white' : 'font-display text-white'}`}>
         {displayValue}
       </span>
     </div>
@@ -144,6 +152,11 @@ export default async function PlayerProfilePage({ params }: PageProps) {
   }
   if (!player) return notFound();
 
+  // Dynamic profile image mock for Boo
+  if (player.username.toLowerCase() === 'boo') {
+    player.profile_img_url = '/images/boo.png';
+  }
+
   // --- Fetch settings ---
   const { data: settingsData } = await supabase
     .from('player_game_settings')
@@ -167,6 +180,21 @@ export default async function PlayerProfilePage({ params }: PageProps) {
     .eq('player_id', player.id);
 
   const products = (productsData || []).map((item: any) => item.products).filter((p: any) => p !== null);
+
+  // Dynamic mock images for testing (Boo)
+  if (player.username.toLowerCase() === 'boo') {
+    products.forEach((prod: any) => {
+      if (prod.category.toLowerCase() === 'mouse') {
+        prod.name = 'Razer Viper V4 Pro White';
+        prod.image_url = '/images/viper-v4.png';
+      }
+      if (prod.category.toLowerCase() === 'monitor') {
+        prod.name = 'ZOWIE XL2586X+';
+        prod.image_url = '/images/zowie-monitor.png';
+      }
+    });
+  }
+
   const gears = products.filter((p: any) => p.product_type === 'gear');
   const hardware = products.filter((p: any) => p.product_type === 'hardware');
   const playerMouse = gears.find((g: any) => g.category.toLowerCase() === 'mouse');
@@ -213,95 +241,130 @@ export default async function PlayerProfilePage({ params }: PageProps) {
       {/* SECTION 1: PROFILE HEADER (Full Width) */}
       {/* ================================================ */}
       <section className="relative z-10 bg-card backdrop-blur-[8px] border border-border-custom p-6 sm:p-8 rounded-2xl mb-10 hover:border-border-hover transition-all duration-300">
-        <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Avatar */}
-          <div className="h-24 w-24 rounded-2xl bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl overflow-hidden shadow-[0_0_30px_rgba(245,158,11,0.05)] shrink-0">
-            {player.profile_img_url ? (
-              <img src={player.profile_img_url} alt={player.username} className="h-full w-full object-cover" />
-            ) : (
-              player.username[0].toUpperCase()
-            )}
-          </div>
-
-          {/* Info */}
-          <div className="flex-1 min-w-0 space-y-3">
-            <div className="flex flex-wrap items-baseline gap-3">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display flex items-center gap-3">
-                {player.username}
-                <FavoriteButton playerId={player.id} />
-              </h1>
-              {player.team && (
-                <span className="text-[10px] font-bold text-accent bg-accent/10 border border-accent/20 px-2.5 py-1 rounded-lg font-mono tracking-wide">
-                  {player.team}
-                </span>
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+          <div className="flex flex-col md:flex-row md:items-start gap-6 flex-1 min-w-0">
+            {/* Avatar */}
+            <div className="h-28 w-28 md:h-32 md:w-32 rounded-2xl bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shadow-[0_0_30px_rgba(245,158,11,0.05)] shrink-0">
+              {player.profile_img_url ? (
+                <img src={player.profile_img_url} alt={player.username} className="h-full w-full object-cover" />
+              ) : (
+                player.username[0].toUpperCase()
               )}
             </div>
 
-            {/* Meta row */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-zinc-400 font-mono">
-              {player.real_name && (
-                <span className="font-medium">{player.real_name}</span>
-              )}
-              {player.nationality && (
-                <span className="flex items-center gap-1.5">
-                  {player.country_code && (
+            {/* Info */}
+            <div className="flex-1 min-w-0 space-y-3">
+              <div className="flex flex-wrap items-baseline gap-3">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display flex items-center gap-3">
+                  {player.username}
+                  <FavoriteButton playerId={player.id} />
+                </h1>
+                {player.team && (
+                  <span className="text-[10px] font-bold text-accent bg-accent/10 border border-accent/20 px-2.5 py-1 rounded-lg font-sans tracking-wide">
+                    {player.team}
+                  </span>
+                )}
+              </div>
+
+              {/* Meta row */}
+              <div className="flex flex-wrap items-center text-sm text-zinc-300 font-sans gap-y-1.5 [&>span]:border-r [&>span]:border-white/10 [&>span]:pr-4 [&>span]:mr-4 [&>span:last-child]:border-r-0 [&>span:last-child]:pr-0 [&>span:last-child]:mr-0">
+                {player.real_name && (
+                  <span className="font-medium">{player.real_name}</span>
+                )}
+                {player.nationality && (
+                  <span className="flex items-center gap-1.5">
+                    {player.country_code && (
+                      <img
+                        src={`https://flagcdn.com/16x12/${player.country_code.toLowerCase()}.png`}
+                        alt={player.country_code}
+                        className="w-4 h-3 object-cover rounded-[2px]"
+                      />
+                    )}
+                    {player.nationality}
+                  </span>
+                )}
+                {!player.nationality && player.country_code && (
+                  <span className="flex items-center gap-1.5">
                     <img
                       src={`https://flagcdn.com/16x12/${player.country_code.toLowerCase()}.png`}
                       alt={player.country_code}
                       className="w-4 h-3 object-cover rounded-[2px]"
                     />
-                  )}
-                  {player.nationality}
-                </span>
-              )}
-              {!player.nationality && player.country_code && (
-                <span className="flex items-center gap-1.5">
-                  <img
-                    src={`https://flagcdn.com/16x12/${player.country_code.toLowerCase()}.png`}
-                    alt={player.country_code}
-                    className="w-4 h-3 object-cover rounded-[2px]"
-                  />
-                  {player.country_code}
-                </span>
-              )}
-              {player.birth_date && (
-                <span className="flex items-center gap-1.5">
-                  <svg className="h-3.5 w-3.5 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                    <line x1="16" y1="2" x2="16" y2="6" />
-                    <line x1="8" y1="2" x2="8" y2="6" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                  </svg>
-                  <span>{formatBirthDate(player.birth_date)}</span>
-                </span>
-              )}
-            </div>
-
-            {/* Game badges */}
-            <div className="flex flex-wrap gap-2 pt-1">
-              {settingsData && settingsData.map((s: any) => (
-                <div key={s.id} className="flex items-center gap-2 bg-[#12121A]/80 border border-border-custom py-1.5 px-3 rounded-lg">
-                  <span className={`text-[9px] font-bold px-2 py-0.5 rounded font-mono ${s.games.slug === 'valorant'
-                    ? 'bg-red-500/10 text-red-400 border border-red-500/20'
-                    : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                    }`}>
-                    {s.games.name}
+                    {player.country_code}
                   </span>
-                  {s.game_role && (
-                    <span className="text-[10px] text-zinc-400 font-medium border-l border-white/10 pl-2 font-mono">
-                      {s.game_role}
+                )}
+                {player.birth_date && (
+                  <span className="flex items-center gap-1.5">
+                    <svg className="h-3.5 w-3.5 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    <span>{formatBirthDate(player.birth_date)}</span>
+                  </span>
+                )}
+              </div>
+
+              {/* Game badges */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {settingsData && settingsData.map((s: any) => (
+                  <div key={s.id} className="flex items-center gap-2 bg-[#12121A]/80 border border-border-custom py-1.5 px-3 rounded-lg">
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded font-mono ${s.games.slug === 'valorant'
+                      ? 'bg-red-500/10 text-red-400 border border-red-500/20'
+                      : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                      }`}>
+                      {s.games.name}
                     </span>
-                  )}
-                </div>
-              ))}
+                    {s.game_role && (
+                      <span className="text-[10px] text-zinc-400 font-medium border-l border-white/10 pl-2 font-mono">
+                        {s.game_role}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Description placeholder */}
+              <p className="text-xs text-zinc-400 leading-relaxed max-w-2xl pt-1">
+                {(player as any).bio || "Description ex: Professional Esports player. Best known for exceptional playstyle, high-level game sense, and contribution to team strategies in competitive tournaments."}
+              </p>
+            </div>
+          </div>
+
+          {/* Social media logos placeholder & Copy profile URL */}
+          <div className="flex flex-wrap items-center gap-3 shrink-0 lg:ml-auto">
+            {/* Social logos */}
+            <div className="flex items-center gap-1 bg-[#12121A]/60 border border-border-custom px-2.5 py-1.5 rounded-xl">
+              <div
+                className="w-7 h-7 flex items-center justify-center text-zinc-500"
+                title="X"
+              >
+                <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </div>
+              <div
+                className="w-7 h-7 flex items-center justify-center text-zinc-500"
+                title="Instagram"
+              >
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01" />
+                </svg>
+              </div>
+              <div
+                className="w-7 h-7 flex items-center justify-center text-zinc-500"
+                title="Twitch"
+              >
+                <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" fillRule="evenodd" clipRule="evenodd" />
+                </svg>
+              </div>
             </div>
 
-            {/* Description placeholder */}
-            {(player as any).bio && (
-              <p className="text-xs text-zinc-400 leading-relaxed max-w-2xl pt-1">
-                {(player as any).bio}
-              </p>
-            )}
+            {/* Copy profile URL button */}
+            <CopyProfileUrlButton />
           </div>
         </div>
       </section>
@@ -336,13 +399,13 @@ export default async function PlayerProfilePage({ params }: PageProps) {
 
                 {/* Mouse product banner */}
                 {playerMouse && (
-                  <div className="flex items-center gap-3 bg-[#12121A]/60 border border-border-custom p-3 rounded-xl mb-4">
+                  <div className="flex items-center gap-3 bg-[#12121A]/40 border border-border-custom/50 p-2 rounded-xl mb-5 hover:border-border-hover/80 transition-all duration-200">
                     {playerMouse.image_url ? (
-                      <div className="w-10 h-10 rounded-lg bg-black/40 border border-white/10 p-1 flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
                         <img src={playerMouse.image_url} alt={playerMouse.name} className="max-h-full max-w-full object-contain" />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center shrink-0 text-zinc-500">
+                      <div className="w-12 h-12 rounded-lg bg-black/40 border border-zinc-805 flex items-center justify-center shrink-0 text-zinc-600 shadow-inner">
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                           <rect x="5" y="2" width="14" height="20" rx="7" />
                           <path d="M12 2v10M5 12h14" />
@@ -350,10 +413,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                       </div>
                     )}
                     <div className="min-w-0">
-                      <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-mono mr-2">
-                        {playerMouse.name.split(' ')[0]}
-                      </span>
-                      <span className="text-xs font-bold text-white font-display">{playerMouse.name}</span>
+                      <p className="text-xs font-extrabold text-white tracking-wide uppercase font-sans line-clamp-1">{playerMouse.name}</p>
                     </div>
                   </div>
                 )}
@@ -411,13 +471,13 @@ export default async function PlayerProfilePage({ params }: PageProps) {
 
                 {/* Keyboard product banner */}
                 {playerKeyboard && (
-                  <div className="flex items-center gap-3 bg-[#12121A]/60 border border-border-custom p-3 rounded-xl mb-4">
+                  <div className="flex items-center gap-3 bg-[#12121A]/40 border border-border-custom/50 p-2 rounded-xl mb-5 hover:border-border-hover/80 transition-all duration-200">
                     {playerKeyboard.image_url ? (
-                      <div className="w-10 h-10 rounded-lg bg-black/40 border border-white/10 p-1 flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
                         <img src={playerKeyboard.image_url} alt={playerKeyboard.name} className="max-h-full max-w-full object-contain" />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center shrink-0 text-zinc-500">
+                      <div className="w-12 h-12 rounded-lg bg-black/40 border border-zinc-805 flex items-center justify-center shrink-0 text-zinc-600 shadow-inner">
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                           <rect x="2" y="4" width="20" height="16" rx="3" />
                           <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10" />
@@ -425,10 +485,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                       </div>
                     )}
                     <div className="min-w-0">
-                      <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-mono mr-2">
-                        {playerKeyboard.name.split(' ')[0]}
-                      </span>
-                      <span className="text-xs font-bold text-white font-display">{playerKeyboard.name}</span>
+                      <p className="text-xs font-extrabold text-white tracking-wide uppercase font-sans line-clamp-1">{playerKeyboard.name}</p>
                     </div>
                   </div>
                 )}
@@ -528,7 +585,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
 
                 {/* Crosshair Settings */}
                 <div className="space-y-1 mb-3">
-                  <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-mono mb-3">Crosshair Settings</p>
+                  <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans mb-3">Crosshair Settings</p>
                   <SettingRow label="Inner Lines" value={null} />
                   <SettingRow label="Outer Lines" value={null} />
                   <SettingRow label="Center Dot" value={null} />
@@ -588,19 +645,18 @@ export default async function PlayerProfilePage({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left: General */}
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-mono mb-3 border-b border-white/5 pb-2">Video — General</p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mb-3 border-b border-white/5 pb-2">Video — General</p>
                 <div className="space-y-1">
-                  <SettingRow label="Display Mode" value="Fullscreen" />
+                  <SettingRow label="Display Mode" value={settingsJson.display_mode || 'Fullscreen'} />
                   <SettingRow label="Resolution" value={primarySettings?.resolution} />
                   <SettingRow label="Aspect Ratio" value={displayAspect} />
-                  <SettingRow label="Refresh Rate" value={displayRefresh ? `${displayRefresh} Hz` : null} />
                   {!isValorant && settingsJson.scaling_mode && (
                     <SettingRow label="Scaling Mode" value={settingsJson.scaling_mode} />
                   )}
-                  <SettingRow label="NVIDIA Reflex Low Latency" value={null} />
+                  <SettingRow label="NVIDIA Reflex Low Latency" value={settingsJson.nvidia_reflex || null} />
                 </div>
 
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-mono mt-5 mb-3 border-b border-white/5 pb-2">Accessibility</p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mt-5 mb-3 border-b border-white/5 pb-2">Accessibility</p>
                 <div className="space-y-1">
                   <SettingRow label="Enemy Highlight Color" value={settingsJson.enemy_highlight_color || null} />
                 </div>
@@ -608,21 +664,21 @@ export default async function PlayerProfilePage({ params }: PageProps) {
 
               {/* Right: Graphics Quality */}
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-mono mb-3 border-b border-white/5 pb-2">Video — Graphics Quality</p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mb-3 border-b border-white/5 pb-2">Video — Graphics Quality</p>
                 <div className="space-y-1">
-                  <SettingRow label="Multithreaded Rendering" value={null} />
-                  <SettingRow label="Material Quality" value={null} />
-                  <SettingRow label="Texture Quality" value={null} />
-                  <SettingRow label="Detail Quality" value={null} />
-                  <SettingRow label="UI Quality" value={null} />
-                  <SettingRow label="Vignette" value={null} />
-                  <SettingRow label="VSync" value={null} />
-                  <SettingRow label="Anti-Aliasing" value={null} />
-                  <SettingRow label="Anisotropic Filtering" value={null} />
-                  <SettingRow label="Improve Clarity" value={null} />
-                  <SettingRow label="Bloom" value={null} />
-                  <SettingRow label="Distortion" value={null} />
-                  <SettingRow label="Cast Shadows" value={null} />
+                  <SettingRow label="Multithreaded Rendering" value={settingsJson.multithreaded_rendering || null} />
+                  <SettingRow label="Material Quality" value={settingsJson.material_quality || null} />
+                  <SettingRow label="Texture Quality" value={settingsJson.texture_quality || null} />
+                  <SettingRow label="Detail Quality" value={settingsJson.detail_quality || null} />
+                  <SettingRow label="UI Quality" value={settingsJson.ui_quality || null} />
+                  <SettingRow label="Vignette" value={settingsJson.vignette || null} />
+                  <SettingRow label="VSync" value={settingsJson.vsync || null} />
+                  <SettingRow label="Anti-Aliasing" value={settingsJson.anti_aliasing || null} />
+                  <SettingRow label="Anisotropic Filtering" value={settingsJson.anisotropic_filtering || null} />
+                  <SettingRow label="Improve Clarity" value={settingsJson.improve_clarity || null} />
+                  <SettingRow label="Bloom" value={settingsJson.bloom || null} />
+                  <SettingRow label="Distortion" value={settingsJson.distortion || null} />
+                  <SettingRow label="Cast Shadows" value={settingsJson.cast_shadows || null} />
                 </div>
               </div>
             </div>

@@ -120,52 +120,71 @@ export async function GET(request: NextRequest) {
     }
 
     // เรียงทีมก่อนเพื่อให้คนที่อยู่ทีมเดียวกันอยู่ติดกัน แล้วค่อยเรียงชื่อผู้เล่น
-    query = query.range(from, to)
-      .order('team', { foreignTable: 'players', ascending: true, nullsFirst: false })
-      .order('username', { foreignTable: 'players', ascending: true });
+    const { data, error } = await query;
+ 
+     if (error) {
+       return NextResponse.json({ error: error.message }, { status: 500 });
+     }
+ 
+     // ปรับรูปแบบข้อมูลให้อ่านและนำไปแสดงผลฝั่ง Frontend ได้ง่ายขึ้น
+     const formattedPlayers = (data || []).map((item: any) => ({
+       settings_id: item.id,
+       player_id: item.players.id,
+       username: item.players.username,
+       real_name: item.players.real_name,
+       team: item.players.team,
+       nationality: item.players.nationality,
+       country_code: item.players.country_code,
+       profile_img_url: item.players.profile_img_url,
+       game: item.games.name,
+       game_slug: item.games.slug,
+       game_role: item.game_role,
+       mouse_settings: {
+         dpi: item.mouse_dpi,
+         hz: item.mouse_hz,
+         sens: item.in_game_sens,
+         edpi: item.edpi
+       },
+       video_settings: {
+         resolution: item.resolution,
+         aspect_ratio: item.aspect_ratio,
+         refresh_rate: item.refresh_rate
+       },
+       game_specific_settings: item.settings_data
+     }));
 
-    const { data, error, count } = await query;
+     // เรียงทีมก่อนเพื่อให้คนที่อยู่ทีมเดียวกันอยู่ติดกัน แล้วค่อยเรียงชื่อผู้เล่น (Free Agent อยู่ท้ายสุด)
+     formattedPlayers.sort((a: any, b: any) => {
+       const teamA = (a.team || '').trim().toLowerCase();
+       const teamB = (b.team || '').trim().toLowerCase();
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+       const isFreeA = teamA === '' || teamA === 'free agent' || teamA === 'none' || teamA === '—';
+       const isFreeB = teamB === '' || teamB === 'free agent' || teamB === 'none' || teamB === '—';
 
-    // ปรับรูปแบบข้อมูลให้อ่านและนำไปแสดงผลฝั่ง Frontend ได้ง่ายขึ้น
-    const formattedPlayers = (data || []).map((item: any) => ({
-      settings_id: item.id,
-      player_id: item.players.id,
-      username: item.players.username,
-      real_name: item.players.real_name,
-      team: item.players.team,
-      nationality: item.players.nationality,
-      country_code: item.players.country_code,
-      profile_img_url: item.players.profile_img_url,
-      game: item.games.name,
-      game_slug: item.games.slug,
-      game_role: item.game_role,
-      mouse_settings: {
-        dpi: item.mouse_dpi,
-        hz: item.mouse_hz,
-        sens: item.in_game_sens,
-        edpi: item.edpi
-      },
-      video_settings: {
-        resolution: item.resolution,
-        aspect_ratio: item.aspect_ratio,
-        refresh_rate: item.refresh_rate
-      },
-      game_specific_settings: item.settings_data
-    }));
+       if (isFreeA && !isFreeB) return 1;
+       if (!isFreeA && isFreeB) return -1;
 
-    return NextResponse.json({
-      players: formattedPlayers,
-      pagination: {
-        total: count || 0,
-        page,
-        limit,
-        pages: count ? Math.ceil(count / limit) : 0
-      }
-    });
+       if (teamA !== teamB) {
+         return teamA.localeCompare(teamB);
+       }
+
+       const userA = (a.username || '').trim().toLowerCase();
+       const userB = (b.username || '').trim().toLowerCase();
+       return userA.localeCompare(userB);
+     });
+
+     const totalCount = formattedPlayers.length;
+     const paginatedPlayers = formattedPlayers.slice(from, to + 1);
+ 
+     return NextResponse.json({
+       players: paginatedPlayers,
+       pagination: {
+         total: totalCount,
+         page,
+         limit,
+         pages: Math.ceil(totalCount / limit)
+       }
+     });
 
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
