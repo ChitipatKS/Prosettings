@@ -723,7 +723,6 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="e.g. TenZ"
                 className="w-full h-10 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
               />
             </div>
@@ -734,7 +733,6 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                 type="text"
                 value={realName}
                 onChange={(e) => setRealName(e.target.value)}
-                placeholder="e.g. Tyson Ngo"
                 className="w-full h-10 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
               />
             </div>
@@ -745,7 +743,6 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                 type="text"
                 value={team}
                 onChange={(e) => setTeam(e.target.value)}
-                placeholder="e.g. Sentinels"
                 className="w-full h-10 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
               />
             </div>

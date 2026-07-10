@@ -632,7 +632,7 @@ export default function Home() {
               </div>
             ) : players.length === 0 ? (
               <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
-                <h3 className="text-sm font-bold text-white mt-4 font-display">No pro players found</h3>
+                <h3 className="text-sm font-bold text-white mt-4 font-display">No players found</h3>
                 <p className="text-zinc-500 text-xs mt-1 font-mono">Try another search term or change the game filter.</p>
               </div>
             ) : (

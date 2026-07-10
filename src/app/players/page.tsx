@@ -84,7 +84,7 @@ function TeamSearchSelect({
           placeholder={selectedValue === 'all' || !selectedValue ? "All Teams" : selectedValue}
           className="w-full h-11 bg-black/40 border border-border-custom rounded-xl px-4 pr-10 text-xs font-bold text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/15 transition-all font-mono"
         />
-        
+
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
           {selectedValue && selectedValue !== 'all' && (
             <button
@@ -100,7 +100,7 @@ function TeamSearchSelect({
               ×
             </button>
           )}
-          <span 
+          <span
             className="text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
             style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
           >
@@ -126,11 +126,10 @@ function TeamSearchSelect({
                       setSearchQuery(team);
                       setIsOpen(false);
                     }}
-                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${
-                      isSelected 
-                        ? 'bg-accent/15 text-accent font-bold' 
+                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${isSelected
+                        ? 'bg-accent/15 text-accent font-bold'
                         : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
-                    }`}
+                      }`}
                   >
                     {team}
                   </div>
@@ -170,9 +169,9 @@ function CountrySearchSelect({
 
   const filteredOptions = searchQuery.trim().length > 0
     ? options.filter(c =>
-        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.code.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.code.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     : [];
 
   return (
@@ -197,7 +196,7 @@ function CountrySearchSelect({
           placeholder={selectedValue === 'all' || !selectedCountry ? "All Nations" : `${selectedCountry.name} (${selectedCountry.code})`}
           className="w-full h-11 bg-black/40 border border-border-custom rounded-xl px-4 pr-10 text-xs font-bold text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/15 transition-all font-mono"
         />
-        
+
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
           {selectedValue && selectedValue !== 'all' && (
             <button
@@ -213,7 +212,7 @@ function CountrySearchSelect({
               ×
             </button>
           )}
-          <span 
+          <span
             className="text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
             style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
           >
@@ -239,11 +238,10 @@ function CountrySearchSelect({
                       setSearchQuery(`${country.name} (${country.code})`);
                       setIsOpen(false);
                     }}
-                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${
-                      isSelected 
-                        ? 'bg-accent/15 text-accent font-bold' 
+                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${isSelected
+                        ? 'bg-accent/15 text-accent font-bold'
                         : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
-                    }`}
+                      }`}
                   >
                     {country.name} ({country.code})
                   </div>
@@ -269,7 +267,7 @@ export default function PlayersDirectory() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
-  
+
   // Filters
   const [selectedGame, setSelectedGame] = useState('all');
   const [selectedTeam, setSelectedTeam] = useState('all');
@@ -321,7 +319,7 @@ export default function PlayersDirectory() {
       try {
         setLoading(true);
         let url = `/api/players?page=${pagination.page}&limit=${pagination.limit}`;
-        
+
         if (debouncedSearch) {
           url += `&search=${encodeURIComponent(debouncedSearch.trim())}`;
         }
@@ -374,7 +372,7 @@ export default function PlayersDirectory() {
 
   return (
     <div className="flex-1 w-full max-w-6xl mx-auto px-6 md:px-8 py-16 flex flex-col justify-between space-y-12 animate-in fade-in duration-300">
-      
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border-custom pb-8">
         <div className="space-y-2">
@@ -385,7 +383,7 @@ export default function PlayersDirectory() {
             Browse and inspect configurations of {pagination.total} professional players globally.
           </p>
         </div>
-        
+
         {/* Active Filters Summary */}
         {(selectedGame !== 'all' || selectedTeam !== 'all' || selectedCountry !== 'all' || search) && (
           <button
@@ -421,25 +419,22 @@ export default function PlayersDirectory() {
           <div className="flex bg-black/40 border border-border-custom p-1 rounded-xl items-center">
             <button
               onClick={() => setSelectedGame('all')}
-              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${
-                selectedGame === 'all' ? 'bg-accent text-accent-fg shadow-lg' : 'text-zinc-400 hover:text-white'
-              }`}
+              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${selectedGame === 'all' ? 'bg-accent text-accent-fg shadow-lg' : 'text-zinc-400 hover:text-white'
+                }`}
             >
               All
             </button>
             <button
               onClick={() => setSelectedGame('cs2')}
-              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${
-                selectedGame === 'cs2' ? 'bg-amber-500/10 text-accent border border-accent/20' : 'text-zinc-400 hover:text-white'
-              }`}
+              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${selectedGame === 'cs2' ? 'bg-amber-500/10 text-accent border border-accent/20' : 'text-zinc-400 hover:text-white'
+                }`}
             >
               CS2
             </button>
             <button
               onClick={() => setSelectedGame('valorant')}
-              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${
-                selectedGame === 'valorant' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'text-zinc-400 hover:text-white'
-              }`}
+              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${selectedGame === 'valorant' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'text-zinc-400 hover:text-white'
+                }`}
             >
               VALORANT
             </button>
@@ -471,7 +466,7 @@ export default function PlayersDirectory() {
           </div>
         ) : players.length === 0 ? (
           <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
-            <h3 className="text-sm font-bold text-white mt-4 font-display">No pro players match your criteria</h3>
+            <h3 className="text-sm font-bold text-white mt-4 font-display">No players match your criteria</h3>
             <p className="text-zinc-500 text-xs mt-1 font-mono">Try adjusting your filters or typing another name.</p>
           </div>
         ) : (
@@ -484,22 +479,22 @@ export default function PlayersDirectory() {
               >
                 {/* 1. Portrait Section with Glow */}
                 <div className="relative h-44 bg-[#0D0D13] flex items-center justify-center border-b border-white/5 overflow-hidden">
-                  
+
                   {/* Decorative background */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 pointer-events-none" />
 
                   {player.profile_img_url ? (
                     <>
-                      <img 
-                        src={player.profile_img_url} 
-                        alt={player.username} 
+                      <img
+                        src={player.profile_img_url}
+                        alt={player.username}
                         className="h-full w-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       />
                     </>
                   ) : (
                     <>
                       {/* Decorative grid */}
-                      <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
+                      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
                       {/* Glow blob */}
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-accent/10 blur-3xl group-hover:bg-accent/20 transition-all duration-500" />
                       {/* Avatar circle */}
@@ -530,7 +525,7 @@ export default function PlayersDirectory() {
                         </span>
                       )}
                     </div>
-                    
+
                     <p className="text-xs font-bold text-accent/80 font-mono tracking-wide line-clamp-1">
                       {player.real_name || '-'}
                     </p>
@@ -570,11 +565,11 @@ export default function PlayersDirectory() {
           >
             ← PREV
           </button>
-          
+
           <span className="text-zinc-500 text-xs font-semibold font-mono">
             PAGE {pagination.page} OF {pagination.pages}
           </span>
-          
+
           <button
             onClick={() => handlePageChange(pagination.page + 1)}
             disabled={pagination.page >= pagination.pages || loading}

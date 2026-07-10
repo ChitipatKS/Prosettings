@@ -303,7 +303,6 @@ export default function ProfilePage() {
 
   // Form profile states
   const [username, setUsername] = useState('');
-  const [team, setTeam] = useState('Community Member');
   const [selectedCountryCode, setSelectedCountryCode] = useState('');
   const [countriesList, setCountriesList] = useState<{ code: string; name: string }[]>([]);
 
@@ -411,7 +410,6 @@ export default function ProfilePage() {
         if (profile) {
           setIsProfileCreated(profile.is_profile_created);
           setUsername(profile.username || '');
-          setTeam(profile.team || 'Community Member');
           setSelectedCountryCode(profile.country_code || '');
 
           // Load social links
@@ -581,14 +579,12 @@ export default function ProfilePage() {
     };
 
     const cleanUsername = username.trim() || email?.split('@')[0] || 'User';
-    const cleanTeam = team.trim() || 'Community Member';
 
     try {
       const { error } = await supabase
         .from('user_profiles')
         .update({
           username: cleanUsername,
-          team: cleanTeam,
           nationality,
           country_code: selectedCountryCode,
           is_profile_created: true,
@@ -603,7 +599,6 @@ export default function ProfilePage() {
         setErrorMsg(error.message);
       } else {
         setUsername(cleanUsername);
-        setTeam(cleanTeam);
         setIsProfileCreated(true);
         setIsEditing(false);
 
@@ -746,17 +741,6 @@ export default function ProfilePage() {
                   disabled
                   title="Your username is locked and cannot be changed."
                   className="w-full h-11 bg-zinc-900/50 border border-zinc-800 rounded-xl px-4 text-xs text-zinc-500 cursor-not-allowed font-mono select-none"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Team / Organisation</label>
-                <input
-                  type="text"
-                  value={team}
-                  onChange={(e) => setTeam(e.target.value)}
-                  placeholder="e.g. Your team (optional)"
-                  className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all"
                 />
               </div>
 
@@ -1056,7 +1040,7 @@ export default function ProfilePage() {
 
                   <div className="pt-2">
                     <span className="block text-center text-[10px] font-bold uppercase tracking-wider px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-sans w-full">
-                      {team || 'Community Member'}
+                      Community Member
                     </span>
                   </div>
                 </div>
