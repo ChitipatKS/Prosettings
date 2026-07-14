@@ -78,6 +78,19 @@ export default function AdminLayout({
               })}
             </nav>
           </div>
+
+          {/* Bottom: Back to Site */}
+          <div className="p-6 border-t border-zinc-800/40">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-[11px] font-semibold text-zinc-500 hover:text-accent transition-colors font-sans"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Site
+            </Link>
+          </div>
         </aside>
 
         {/* Admin Content Area */}

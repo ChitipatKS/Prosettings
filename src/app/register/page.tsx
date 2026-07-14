@@ -12,7 +12,7 @@ function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect') || '/profile';
@@ -30,7 +30,7 @@ function RegisterForm() {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
-    
+
     // Simple username validation
     if (username.trim().length < 3) {
       setErrorMsg('Username must be at least 3 characters long.');
@@ -96,7 +96,7 @@ function RegisterForm() {
             required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="e.g. TenZ_Fan"
+            placeholder="Username"
             className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-accent transition-all font-mono"
           />
         </div>

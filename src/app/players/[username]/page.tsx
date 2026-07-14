@@ -55,6 +55,152 @@ function formatBirthDate(dateStr: string | null) {
   }
 }
 
+// Helper to render beautiful game badge logos (Valorant, CS2, PUBG, Apex, Fortnite)
+function renderGameLogo(slug: string) {
+  const s = (slug || '').toLowerCase();
+  if (s.includes('valorant')) {
+    return (
+      <div className="w-5 h-5 rounded overflow-hidden shadow-md border border-black/20 flex items-center justify-center shrink-0" title="VALORANT">
+        <img
+          src="/images/valorant-logo.png"
+          alt="VALORANT"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+  if (s.includes('cs2') || s.includes('csgo') || s.includes('counter-strike') || s.includes('cs')) {
+    return (
+      <div className="w-5 h-5 rounded overflow-hidden shadow-md border border-black/20 flex items-center justify-center shrink-0" title="CS2">
+        <img
+          src="/images/cs2-logo.png"
+          alt="CS2"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+  if (s.includes('apex')) {
+    return (
+      <div className="w-5 h-5 rounded bg-[#DA292A] flex items-center justify-center shadow-md border border-black/10 shrink-0" title="Apex Legends">
+        <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2L2 22h20L12 2z" />
+        </svg>
+      </div>
+    );
+  }
+  if (s.includes('pubg')) {
+    return (
+      <div className="w-5 h-5 rounded bg-[#F2A900] flex items-center justify-center shadow-md border border-black/10 shrink-0" title="PUBG">
+        <span className="text-[7px] font-black text-black tracking-tighter">PUBG</span>
+      </div>
+    );
+  }
+  if (s.includes('fortnite')) {
+    return (
+      <div className="w-5 h-5 rounded bg-[#2E97F1] flex items-center justify-center shadow-md border border-black/10 shrink-0" title="Fortnite">
+        <span className="text-[8px] font-black text-white tracking-tighter">FN</span>
+      </div>
+    );
+  }
+  return (
+    <span className="text-[9px] font-bold px-2 py-0.5 rounded font-mono bg-zinc-800 text-zinc-400 border border-zinc-700/80">
+      {slug.toUpperCase()}
+    </span>
+  );
+}
+
+// Helper to render team logos from static assets
+function getTeamLogo(teamName: string | null): string | undefined {
+  if (!teamName) return undefined;
+  const t = teamName.toLowerCase().trim();
+  if (t.includes('sentinels')) {
+    return '/images/teams/sentinels.png';
+  }
+  return undefined;
+}
+
+// Helper to calculate age from birth date string
+function calculateAge(dateStr: string | null): number | null {
+  if (!dateStr) return null;
+  try {
+    const birthDate = new Date(dateStr);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  } catch {
+    return null;
+  }
+}
+
+// Helper to get custom brand colors per esports team
+function getTeamBrandColors(teamName: string | null) {
+  if (!teamName) return {
+    bg: 'bg-zinc-800/40',
+    border: 'border-zinc-700/30',
+    text: 'text-zinc-300',
+    avatarRing: 'border-zinc-800/80 shadow-[0_0_20px_rgba(255,255,255,0.02)]',
+    glow: 'hover:shadow-[0_0_10px_rgba(255,255,255,0.05)]'
+  };
+  const t = teamName.toLowerCase().trim();
+  if (t.includes('sentinels')) {
+    return {
+      bg: 'bg-[#E01E35]/10',
+      border: 'border-[#E01E35]/30',
+      text: 'text-[#E01E35]',
+      avatarRing: 'border-[#E01E35]/40 shadow-[0_0_25px_rgba(224,30,53,0.12)]',
+      glow: 'hover:shadow-[0_0_15px_rgba(224,30,53,0.25)]'
+    };
+  }
+  if (t.includes('tsm')) {
+    return {
+      bg: 'bg-zinc-800/80',
+      border: 'border-zinc-700/80',
+      text: 'text-white',
+      avatarRing: 'border-zinc-500/30 shadow-[0_0_25px_rgba(255,255,255,0.08)]',
+      glow: 'hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]'
+    };
+  }
+  if (t.includes('fnatic')) {
+    return {
+      bg: 'bg-[#FF5900]/10',
+      border: 'border-[#FF5900]/30',
+      text: 'text-[#FF5900]',
+      avatarRing: 'border-[#FF5900]/40 shadow-[0_0_25px_rgba(255,89,0,0.12)]',
+      glow: 'hover:shadow-[0_0_15px_rgba(255,89,0,0.25)]'
+    };
+  }
+  if (t.includes('paper rex') || t.includes('prx')) {
+    return {
+      bg: 'bg-[#F20574]/10',
+      border: 'border-[#F20574]/30',
+      text: 'text-[#F20574]',
+      avatarRing: 'border-[#F20574]/40 shadow-[0_0_25px_rgba(242,5,116,0.12)]',
+      glow: 'hover:shadow-[0_0_15px_rgba(242,5,116,0.25)]'
+    };
+  }
+  if (t.includes('t1')) {
+    return {
+      bg: 'bg-[#E4002B]/10',
+      border: 'border-[#E4002B]/30',
+      text: 'text-[#E4002B]',
+      avatarRing: 'border-[#E4002B]/40 shadow-[0_0_25px_rgba(228,0,43,0.12)]',
+      glow: 'hover:shadow-[0_0_15px_rgba(228,0,43,0.25)]'
+    };
+  }
+  return {
+    bg: 'bg-zinc-800/40',
+    border: 'border-zinc-700/30',
+    text: 'text-zinc-300',
+    avatarRing: 'border-zinc-800/80 shadow-[0_0_20px_rgba(255,255,255,0.02)]',
+    glow: 'hover:shadow-[0_0_10px_rgba(255,255,255,0.05)]'
+  };
+}
+
 // --- Reusable inline components ---
 const isNumeric = (val: string | number) => {
   if (typeof val === 'number') return true;
@@ -220,6 +366,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
   );
 
   const isValorant = (primarySettings?.games as any)?.slug === 'valorant';
+  const brandColors = getTeamBrandColors(player.team);
 
   return (
     <div className="relative flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -244,7 +391,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
           <div className="flex flex-col md:flex-row md:items-start gap-6 flex-1 min-w-0">
             {/* Avatar */}
-            <div className="h-28 w-28 md:h-32 md:w-32 rounded-2xl bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shadow-[0_0_30px_rgba(245,158,11,0.05)] shrink-0">
+            <div className="w-32 h-32 md:w-40 md:h-40 min-w-32 min-h-32 md:min-w-40 md:min-h-40 max-w-32 max-h-32 md:max-w-40 md:max-h-40 aspect-square rounded-full bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shrink-0 shadow-[0_0_30px_rgba(245,158,11,0.05)]">
               {player.profile_img_url ? (
                 <img src={player.profile_img_url} alt={player.username} className="h-full w-full object-cover" />
               ) : (
@@ -260,16 +407,26 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                   <FavoriteButton playerId={player.id} />
                 </h1>
                 {player.team && (
-                  <span className="text-[10px] font-bold text-accent bg-accent/10 border border-accent/20 px-2.5 py-1 rounded-lg font-sans tracking-wide">
-                    {player.team}
-                  </span>
+                  <Link href={`/teams?team=${encodeURIComponent(player.team)}`}>
+                    <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-lg font-sans tracking-wide border cursor-pointer transition-all duration-300 ${brandColors.bg} ${brandColors.border} ${brandColors.text} ${brandColors.glow}`}>
+                      {getTeamLogo(player.team) ? (
+                        <div className="w-4 h-4 rounded overflow-hidden shrink-0 flex items-center justify-center bg-zinc-950 border border-zinc-800/50">
+                          <img src={getTeamLogo(player.team)} alt={player.team} className="w-full h-full object-cover" />
+                        </div>
+                      ) : null}
+                      <span>{player.team}</span>
+                    </span>
+                  </Link>
                 )}
               </div>
 
               {/* Meta row */}
-              <div className="flex flex-wrap items-center text-sm text-zinc-300 font-sans gap-y-1.5 [&>span]:border-r [&>span]:border-white/10 [&>span]:pr-4 [&>span]:mr-4 [&>span:last-child]:border-r-0 [&>span:last-child]:pr-0 [&>span:last-child]:mr-0">
+              <div className="flex flex-wrap items-center text-xs sm:text-sm text-zinc-400 font-sans gap-x-3 gap-y-1.5">
                 {player.real_name && (
-                  <span className="font-medium">{player.real_name}</span>
+                  <span className="font-semibold text-zinc-200">{player.real_name}</span>
+                )}
+                {player.real_name && (player.nationality || player.country_code || player.birth_date) && (
+                  <span className="text-zinc-700 font-bold">•</span>
                 )}
                 {player.nationality && (
                   <span className="flex items-center gap-1.5">
@@ -280,7 +437,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                         className="w-4 h-3 object-cover rounded-[2px]"
                       />
                     )}
-                    {player.nationality}
+                    <span>{player.nationality}</span>
                   </span>
                 )}
                 {!player.nationality && player.country_code && (
@@ -290,8 +447,11 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                       alt={player.country_code}
                       className="w-4 h-3 object-cover rounded-[2px]"
                     />
-                    {player.country_code}
+                    <span>{player.country_code}</span>
                   </span>
+                )}
+                {(player.nationality || player.country_code) && player.birth_date && (
+                  <span className="text-zinc-700 font-bold">•</span>
                 )}
                 {player.birth_date && (
                   <span className="flex items-center gap-1.5">
@@ -301,7 +461,10 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                       <line x1="8" y1="2" x2="8" y2="6" />
                       <line x1="3" y1="10" x2="21" y2="10" />
                     </svg>
-                    <span>{formatBirthDate(player.birth_date)}</span>
+                    <span>
+                      {formatBirthDate(player.birth_date)}
+                      {calculateAge(player.birth_date) !== null && ` (${calculateAge(player.birth_date)} years old)`}
+                    </span>
                   </span>
                 )}
               </div>
@@ -310,12 +473,16 @@ export default async function PlayerProfilePage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2 pt-1">
                 {settingsData && settingsData.map((s: any) => (
                   <div key={s.id} className="flex items-center gap-2 bg-[#12121A]/80 border border-border-custom py-1.5 px-3 rounded-lg">
-                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded font-mono ${s.games.slug === 'valorant'
-                      ? 'bg-red-500/10 text-red-400 border border-red-500/20'
-                      : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                      }`}>
-                      {s.games.name}
-                    </span>
+                    <Link href={`/players?game=${encodeURIComponent(s.games.slug)}`}>
+                      <div className="flex items-center gap-1.5 cursor-pointer">
+                        {renderGameLogo(s.games.slug)}
+                        <span className={`text-[10px] font-bold font-mono tracking-wide ${
+                          s.games.slug === 'valorant' ? 'text-red-400' : 'text-amber-400'
+                        }`}>
+                          {s.games.name}
+                        </span>
+                      </div>
+                    </Link>
                     {s.game_role && (
                       <span className="text-[10px] text-zinc-400 font-medium border-l border-white/10 pl-2 font-mono">
                         {s.game_role}
@@ -326,41 +493,46 @@ export default async function PlayerProfilePage({ params }: PageProps) {
               </div>
 
               {/* Description placeholder */}
-              <p className="text-xs text-zinc-400 leading-relaxed max-w-2xl pt-1">
-                {(player as any).bio || "Description ex: Professional Esports player. Best known for exceptional playstyle, high-level game sense, and contribution to team strategies in competitive tournaments."}
-              </p>
+              <div className="border-l-2 border-zinc-700/50 pl-4 py-0.5 max-w-2xl pt-1">
+                <p className="text-xs text-zinc-400 leading-relaxed italic font-sans">
+                  {(player as any).bio || "Description ex: Professional Esports player. Best known for exceptional playstyle, high-level game sense, and contribution to team strategies in competitive tournaments."}
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Social media logos placeholder & Copy profile URL */}
           <div className="flex flex-wrap items-center gap-3 shrink-0 lg:ml-auto">
             {/* Social logos */}
-            <div className="flex items-center gap-1 bg-[#12121A]/60 border border-border-custom px-2.5 py-1.5 rounded-xl">
-              <div
-                className="w-7 h-7 flex items-center justify-center text-zinc-500"
+            <div className="flex items-center gap-1 bg-[#12121A]/60 border border-border-custom px-2 py-1.5 rounded-xl">
+              <a
+                href="#"
+                className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
                 title="X"
               >
                 <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
-              </div>
-              <div
-                className="w-7 h-7 flex items-center justify-center text-zinc-500"
+              </a>
+              <a
+                href="#"
+                className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#E1306C] hover:bg-[#E1306C]/10 rounded-lg transition-all duration-200"
                 title="Instagram"
               >
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                   <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01" />
                 </svg>
-              </div>
-              <div
-                className="w-7 h-7 flex items-center justify-center text-zinc-500"
+              </a>
+              <a
+                href="#"
+                className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#9146FF] hover:bg-[#9146FF]/10 rounded-lg transition-all duration-200"
                 title="Twitch"
               >
                 <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" fillRule="evenodd" clipRule="evenodd" />
                 </svg>
-              </div>
+              </a>
             </div>
 
             {/* Copy profile URL button */}

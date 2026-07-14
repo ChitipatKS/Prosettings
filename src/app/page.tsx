@@ -270,7 +270,7 @@ export default function Home() {
                     className="w-full h-14 bg-background-alt border border-border-custom rounded-xl py-4 pl-12 pr-4 text-sm text-[#FAFAFA] placeholder-zinc-500 focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/25 focus:shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all duration-300"
                   />
                   {globalLoading && (
-                    <span className="absolute inset-y-0 right-0 pr-4 flex items-center text-xs text-zinc-500 font-mono tracking-wider">
+                    <span className="absolute inset-y-0 right-0 pr-4 flex items-center text-xs text-zinc-500 font-sans tracking-wider">
                       SEARCHING...
                     </span>
                   )}
@@ -280,7 +280,7 @@ export default function Home() {
                 {globalFocused && globalSearch.trim().length >= 2 && (
                   <div className="absolute left-0 right-0 mt-2 rounded-2xl bg-[#12121A] border border-border-custom shadow-2xl z-50 overflow-hidden py-1 animate-in fade-in slide-in-from-top-1 duration-200">
                     {globalResults.length === 0 ? (
-                      <div className="text-center py-6 text-zinc-500 text-xs font-mono">
+                      <div className="text-center py-6 text-zinc-500 text-xs font-sans">
                         {globalLoading ? 'Searching...' : 'No players found'}
                       </div>
                     ) : (
@@ -297,13 +297,13 @@ export default function Home() {
                             >
                               <div className="space-y-0.5">
                                 <span className="font-bold text-[#FAFAFA] text-xs font-display">{player.username}</span>
-                                <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 font-mono">
+                                <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 font-sans">
                                   {player.real_name && <span>{player.real_name}</span>}
                                   {player.real_name && player.team && <span>•</span>}
                                   {player.team && <span className="text-accent/80 font-bold">{player.team}</span>}
                                 </div>
                               </div>
-                              <span className={`text-[8px] font-bold uppercase tracking-wider py-0.5 px-2 rounded font-mono ${getGameBadgeClass(player.game_slug)}`}>
+                              <span className={`text-[8px] font-bold uppercase tracking-wider py-0.5 px-2 rounded font-sans ${getGameBadgeClass(player.game_slug)}`}>
                                 {player.game}
                               </span>
                             </button>
@@ -319,7 +319,7 @@ export default function Home() {
               <div className="shrink-0">
                 <button
                   type="submit"
-                  className="h-14 px-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 hover:scale-[1.02] active:scale-[0.98] text-[#0A0A0F] text-xs font-bold transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_35px_rgba(245,158,11,0.55)] border border-amber-400/20 flex items-center justify-center gap-2 cursor-pointer font-mono uppercase tracking-wider"
+                  className="h-14 px-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 hover:scale-[1.02] active:scale-[0.98] text-[#0A0A0F] text-xs font-bold transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_35px_rgba(245,158,11,0.55)] border border-amber-400/20 flex items-center justify-center gap-2 cursor-pointer font-sans uppercase tracking-wider"
                 >
                   <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -335,7 +335,7 @@ export default function Home() {
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight font-display">
               Select Your <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">Favorite Game!</span>
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 font-semibold tracking-wide font-mono uppercase">
+            <p className="text-xs sm:text-sm text-zinc-400 font-semibold tracking-wide font-sans uppercase">
               From our selection of Popular games
             </p>
           </div>
@@ -348,12 +348,12 @@ export default function Home() {
               <div className="space-y-6">
                 <div className="relative h-44 rounded-2xl bg-gradient-to-tr from-amber-950 via-zinc-900 to-amber-600 bg-[length:20px_20px] bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] flex items-center justify-center border border-white/5 overflow-hidden">
                   <span className="text-2xl font-black tracking-widest text-[#FAFAFA] uppercase font-display group-hover:scale-110 transition-transform duration-300">CS2</span>
-                  <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white font-mono backdrop-blur-md">1</div>
+                  <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white font-sans backdrop-blur-md">1</div>
                 </div>
 
                 <div className="space-y-2">
                   <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">CS2</h3>
-                  <div className="flex flex-col gap-2 pt-2 text-xs font-mono text-zinc-400">
+                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-400">
                     <div className="flex items-center gap-2">
                       <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -388,7 +388,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => setSelectedGame('cs2')}
-                  className="text-white hover:text-accent font-bold text-xs font-mono tracking-wider flex items-center gap-1 transition-colors duration-200"
+                  className="text-white hover:text-accent font-bold text-xs font-sans tracking-wider flex items-center gap-1 transition-colors duration-200"
                 >
                   VIEW ALL &gt;
                 </button>
@@ -400,12 +400,12 @@ export default function Home() {
               <div className="space-y-6">
                 <div className="relative h-44 rounded-2xl bg-gradient-to-tr from-rose-950 via-zinc-900 to-red-600 bg-[length:20px_20px] bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] flex items-center justify-center border border-white/5 overflow-hidden">
                   <span className="text-2xl font-black tracking-widest text-[#FAFAFA] uppercase font-display group-hover:scale-110 transition-transform duration-300">VALORANT</span>
-                  <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white font-mono backdrop-blur-md">2</div>
+                  <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white font-sans backdrop-blur-md">2</div>
                 </div>
 
                 <div className="space-y-2">
                   <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">Valorant</h3>
-                  <div className="flex flex-col gap-2 pt-2 text-xs font-mono text-zinc-400">
+                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-400">
                     <div className="flex items-center gap-2">
                       <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -441,7 +441,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => setSelectedGame('valorant')}
-                  className="text-white hover:text-accent font-bold text-xs font-mono tracking-wider flex items-center gap-1 transition-colors duration-200"
+                  className="text-white hover:text-accent font-bold text-xs font-sans tracking-wider flex items-center gap-1 transition-colors duration-200"
                 >
                   VIEW ALL&gt;
                 </button>
@@ -451,60 +451,60 @@ export default function Home() {
             {/* CARD 3: Empty Placeholder */}
             <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
               <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
-                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-mono">TBD</span>
-                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-mono">3</div>
+                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-sans">TBD</span>
+                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-sans">3</div>
               </div>
               <div className="space-y-2 mt-6">
                 <h3 className="text-lg font-bold text-zinc-600 font-display">Coming Soon</h3>
-                <p className="text-xs text-zinc-600 font-mono">Game details will be updated later</p>
+                <p className="text-xs text-zinc-600 font-sans">Game details will be updated later</p>
               </div>
               <div className="mt-8 pt-4 border-t border-dashed border-border-custom flex items-center justify-end">
-                <span className="text-zinc-600 text-xs font-mono font-semibold">LOCKED</span>
+                <span className="text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
               </div>
             </div>
 
             {/* CARD 4: Empty Placeholder */}
             <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
               <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
-                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-mono">TBD</span>
-                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-mono">4</div>
+                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-sans">TBD</span>
+                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-sans">4</div>
               </div>
               <div className="space-y-2 mt-6">
                 <h3 className="text-lg font-bold text-zinc-600 font-display">Coming Soon</h3>
-                <p className="text-xs text-zinc-600 font-mono">Game details will be updated later</p>
+                <p className="text-xs text-zinc-600 font-sans">Game details will be updated later</p>
               </div>
               <div className="mt-8 pt-4 border-t border-dashed border-border-custom flex items-center justify-end">
-                <span className="text-zinc-600 text-xs font-mono font-semibold">LOCKED</span>
+                <span className="text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
               </div>
             </div>
 
             {/* CARD 5: Empty Placeholder */}
             <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
               <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
-                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-mono">TBD</span>
-                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-mono">5</div>
+                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-sans">TBD</span>
+                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-sans">5</div>
               </div>
               <div className="space-y-2 mt-6">
                 <h3 className="text-lg font-bold text-zinc-600 font-display">Coming Soon</h3>
-                <p className="text-xs text-zinc-600 font-mono">Game details will be updated later</p>
+                <p className="text-xs text-zinc-600 font-sans">Game details will be updated later</p>
               </div>
               <div className="mt-8 pt-4 border-t border-dashed border-border-custom flex items-center justify-end">
-                <span className="text-zinc-600 text-xs font-mono font-semibold">LOCKED</span>
+                <span className="text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
               </div>
             </div>
 
             {/* CARD 6: Empty Placeholder */}
             <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
               <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
-                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-mono">TBD</span>
-                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-mono">6</div>
+                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-sans">TBD</span>
+                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-sans">6</div>
               </div>
               <div className="space-y-2 mt-6">
                 <h3 className="text-lg font-bold text-zinc-600 font-display">Coming Soon</h3>
-                <p className="text-xs text-zinc-600 font-mono">Game details will be updated later</p>
+                <p className="text-xs text-zinc-600 font-sans">Game details will be updated later</p>
               </div>
               <div className="mt-8 pt-4 border-t border-dashed border-border-custom flex items-center justify-end">
-                <span className="text-zinc-600 text-xs font-mono font-semibold">LOCKED</span>
+                <span className="text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
               </div>
             </div>
 
@@ -525,7 +525,7 @@ export default function Home() {
                   setSearch('');
                   setDebouncedSearch('');
                 }}
-                className="text-xs font-bold text-zinc-500 hover:text-white transition-colors duration-200 font-mono tracking-wider flex items-center gap-1"
+                className="text-xs font-bold text-zinc-500 hover:text-white transition-colors duration-200 font-sans tracking-wider flex items-center gap-1"
               >
                 &lt; BACK TO GAMES
               </button>
@@ -633,7 +633,7 @@ export default function Home() {
             ) : players.length === 0 ? (
               <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
                 <h3 className="text-sm font-bold text-white mt-4 font-display">No players found</h3>
-                <p className="text-zinc-500 text-xs mt-1 font-mono">Try another search term or change the game filter.</p>
+                <p className="text-zinc-500 text-xs mt-1 font-sans">Try another search term or change the game filter.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -645,11 +645,11 @@ export default function Home() {
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <span className={`text-[9px] font-bold uppercase tracking-wider py-0.5 px-2 rounded ${getGameBadgeClass(player.game_slug)} font-mono`}>
+                        <span className={`text-[9px] font-bold uppercase tracking-wider py-0.5 px-2 rounded ${getGameBadgeClass(player.game_slug)} font-sans`}>
                           {player.game}
                         </span>
                         {player.country_code && (
-                          <span className="text-[10px] text-zinc-500 font-bold font-mono tracking-wide" title={player.nationality || ''}>
+                          <span className="text-[10px] text-zinc-500 font-bold font-sans tracking-wide" title={player.nationality || ''}>
                             {player.country_code}
                           </span>
                         )}
@@ -668,11 +668,11 @@ export default function Home() {
                             {player.username}
                           </h3>
                           {player.team ? (
-                            <p className="text-[10px] font-bold text-accent/80 font-mono tracking-wide line-clamp-1">
+                            <p className="text-[10px] font-bold text-accent/80 font-sans tracking-wide line-clamp-1">
                               {player.team}
                             </p>
                           ) : (
-                            <p className="text-[10px] font-medium text-zinc-600 font-mono italic">
+                            <p className="text-[10px] font-medium text-zinc-600 font-sans italic">
                               No Team
                             </p>
                           )}
@@ -680,22 +680,22 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="border-t border-white/5 pt-4 space-y-2 font-mono">
+                    <div className="border-t border-white/5 pt-4 space-y-2 font-sans">
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>Sensitivity</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300">
+                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
                           {player.mouse_settings.sens !== null ? player.mouse_settings.sens.toFixed(3) : '—'}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>DPI (eDPI)</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300">
+                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
                           {player.mouse_settings.dpi || '—'} ({player.mouse_settings.edpi || '—'})
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>Resolution</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300">
+                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
                           {player.video_settings.resolution || '—'}
                         </span>
                       </div>
@@ -712,19 +712,19 @@ export default function Home() {
               <button
                 onClick={() => handlePageChange(pagination.page - 1)}
                 disabled={pagination.page <= 1 || loading}
-                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-mono"
+                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans"
               >
                 ← PREV
               </button>
 
-              <span className="text-zinc-500 text-xs font-semibold font-mono">
+              <span className="text-zinc-500 text-xs font-semibold font-sans">
                 PAGE {pagination.page} OF {pagination.pages}
               </span>
 
               <button
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={pagination.page >= pagination.pages || loading}
-                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-mono"
+                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans"
               >
                 NEXT →
               </button>
@@ -747,7 +747,7 @@ export default function Home() {
                   setSearchFilterGame('all');
                   setSearchFilterStatus('all');
                 }}
-                className="text-xs font-bold text-zinc-500 hover:text-white transition-colors duration-200 font-mono tracking-wider flex items-center gap-1"
+                className="text-xs font-bold text-zinc-500 hover:text-white transition-colors duration-200 font-sans tracking-wider flex items-center gap-1"
               >
                 &lt; BACK TO GAMES
               </button>
@@ -768,7 +768,7 @@ export default function Home() {
             ) : players.length === 0 ? (
               <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
                 <h3 className="text-sm font-bold text-white mt-4 font-display">No pro players found</h3>
-                <p className="text-zinc-500 text-xs mt-1 font-mono">Try another search term or change the filter settings.</p>
+                <p className="text-zinc-500 text-xs mt-1 font-sans">Try another search term or change the filter settings.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -780,11 +780,11 @@ export default function Home() {
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <span className={`text-[9px] font-bold uppercase tracking-wider py-0.5 px-2 rounded ${getGameBadgeClass(player.game_slug)} font-mono`}>
+                        <span className={`text-[9px] font-bold uppercase tracking-wider py-0.5 px-2 rounded ${getGameBadgeClass(player.game_slug)} font-sans`}>
                           {player.game}
                         </span>
                         {player.country_code && (
-                          <span className="text-[10px] text-zinc-500 font-bold font-mono tracking-wide" title={player.nationality || ''}>
+                          <span className="text-[10px] text-zinc-500 font-bold font-sans tracking-wide" title={player.nationality || ''}>
                             {player.country_code}
                           </span>
                         )}
@@ -803,11 +803,11 @@ export default function Home() {
                             {player.username}
                           </h3>
                           {player.team ? (
-                            <p className="text-[10px] font-bold text-accent/80 font-mono tracking-wide line-clamp-1">
+                            <p className="text-[10px] font-bold text-accent/80 font-sans tracking-wide line-clamp-1">
                               {player.team}
                             </p>
                           ) : (
-                            <p className="text-[10px] font-medium text-zinc-600 font-mono italic">
+                            <p className="text-[10px] font-medium text-zinc-600 font-sans italic">
                               No Team
                             </p>
                           )}
@@ -815,22 +815,22 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="border-t border-white/5 pt-4 space-y-2 font-mono">
+                    <div className="border-t border-white/5 pt-4 space-y-2 font-sans">
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>Sensitivity</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300">
+                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
                           {player.mouse_settings.sens !== null ? player.mouse_settings.sens.toFixed(3) : '—'}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>DPI (eDPI)</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300">
+                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
                           {player.mouse_settings.dpi || '—'} ({player.mouse_settings.edpi || '—'})
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>Resolution</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300">
+                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
                           {player.video_settings.resolution || '—'}
                         </span>
                       </div>
@@ -847,19 +847,19 @@ export default function Home() {
               <button
                 onClick={() => handlePageChange(pagination.page - 1)}
                 disabled={pagination.page <= 1 || loading}
-                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-mono"
+                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans"
               >
                 ← PREV
               </button>
 
-              <span className="text-zinc-500 text-xs font-semibold font-mono">
+              <span className="text-zinc-500 text-xs font-semibold font-sans">
                 PAGE {pagination.page} OF {pagination.pages}
               </span>
 
               <button
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={pagination.page >= pagination.pages || loading}
-                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-mono"
+                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans"
               >
                 NEXT →
               </button>

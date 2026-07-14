@@ -92,27 +92,25 @@ export default function FavoriteButton({ playerId }: FavoriteButtonProps) {
 
   if (loading) {
     return (
-      <div className="h-9 w-9 rounded-lg bg-zinc-800/40 border border-zinc-700/30 animate-pulse flex items-center justify-center">
-        <span className="h-4.5 w-4.5 rounded-full bg-zinc-700/50"></span>
-      </div>
+      <div className="h-6 w-6 rounded-full bg-zinc-800/40 animate-pulse flex items-center justify-center shrink-0" />
     );
   }
 
   return (
     <button
       onClick={handleToggle}
-      className={`h-9 w-9 flex items-center justify-center rounded-lg border transition-all duration-300 active:scale-90 cursor-pointer ${
-        isFavorited
-          ? 'bg-accent/15 border-accent/40 text-accent shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:bg-accent/25'
-          : 'bg-zinc-900/40 border-zinc-800 hover:border-zinc-700/80 text-zinc-500 hover:text-zinc-300'
-      }`}
+      className="p-1 rounded-full hover:bg-white/5 transition-all duration-200 active:scale-75 cursor-pointer flex items-center justify-center"
       title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
     >
       <svg
-        className={`h-4.5 w-4.5 transition-transform duration-300 ${isFavorited ? 'scale-110 fill-accent' : 'fill-none'}`}
+        className={`h-6 w-6 transition-all duration-300 ${
+          isFavorited
+            ? 'fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(245,158,11,0.5)]'
+            : 'fill-none text-zinc-500 hover:text-zinc-300'
+        }`}
         viewBox="0 0 24 24"
         stroke="currentColor"
-        strokeWidth={2}
+        strokeWidth={1.8}
       >
         <path
           strokeLinecap="round"

@@ -82,6 +82,17 @@ export default function AdminGearsPage() {
     return () => clearTimeout(timer);
   }, [search]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('add') === 'true') {
+        setTimeout(() => {
+          openModal(null);
+        }, 150);
+      }
+    }
+  }, []);
+
   // Handle Category Change (adjust product_type automatically)
   const handleCategoryChange = (val: string) => {
     setCategory(val);

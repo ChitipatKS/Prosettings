@@ -209,6 +209,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
   // Image Upload State
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const teamInputRef = useRef<HTMLInputElement>(null);
 
   // 2. Games Played State
   const [playsValorant, setPlaysValorant] = useState(false);
@@ -264,6 +265,18 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
   const [selectedMonitorId, setSelectedMonitorId] = useState('');
   const [selectedGpuId, setSelectedGpuId] = useState('');
   const [selectedCpuId, setSelectedCpuId] = useState('');
+
+  // Autofocus team input if query param is set
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('focus') === 'team') {
+        setTimeout(() => {
+          teamInputRef.current?.focus();
+        }, 500);
+      }
+    }
+  }, []);
 
   // Load lists on mount
   useEffect(() => {
@@ -741,6 +754,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
               <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Team Name</label>
               <input
                 type="text"
+                ref={teamInputRef}
                 value={team}
                 onChange={(e) => setTeam(e.target.value)}
                 className="w-full h-10 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"

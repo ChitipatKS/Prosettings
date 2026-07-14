@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 type Player = {
   settings_id: number;
@@ -48,6 +49,71 @@ function getFlagEmoji(countryCode: string) {
   } catch {
     return '🏳️';
   }
+}
+
+// Helper to render beautiful game badge logos (Valorant, CS2, PUBG, Apex, Fortnite)
+function renderGameLogo(slug: string) {
+  const s = (slug || '').toLowerCase();
+  if (s.includes('valorant')) {
+    return (
+      <div className="w-[26px] h-[26px] rounded overflow-hidden shadow-lg border border-black/20 flex items-center justify-center transition-transform duration-300 hover:scale-110" title="VALORANT">
+        <img
+          src="/images/valorant-logo.png"
+          alt="VALORANT"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+  if (s.includes('cs2') || s.includes('csgo') || s.includes('counter-strike') || s.includes('cs')) {
+    return (
+      <div className="w-[26px] h-[26px] rounded overflow-hidden shadow-lg border border-black/20 flex items-center justify-center transition-transform duration-300 hover:scale-110" title="CS2">
+        <img
+          src="/images/cs2-logo.png"
+          alt="CS2"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+  if (s.includes('apex')) {
+    return (
+      <div className="w-[26px] h-[26px] rounded bg-[#DA292A] flex items-center justify-center shadow-lg border border-black/10 transition-transform duration-300 hover:scale-110" title="Apex Legends">
+        <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2L2 22h20L12 2z" />
+        </svg>
+      </div>
+    );
+  }
+  if (s.includes('pubg')) {
+    return (
+      <div className="w-[26px] h-[26px] rounded bg-[#F2A900] flex items-center justify-center shadow-lg border border-black/10 transition-transform duration-300 hover:scale-110" title="PUBG">
+        <span className="text-[8px] font-black text-black tracking-tighter">PUBG</span>
+      </div>
+    );
+  }
+  if (s.includes('fortnite')) {
+    return (
+      <div className="w-[26px] h-[26px] rounded bg-[#2E97F1] flex items-center justify-center shadow-lg border border-black/10 transition-transform duration-300 hover:scale-110" title="Fortnite">
+        <span className="text-[9px] font-black text-white tracking-tighter">FN</span>
+      </div>
+    );
+  }
+  return (
+    <div className="w-[26px] h-[26px] rounded bg-zinc-800 flex items-center justify-center shadow-lg border border-zinc-700/80 transition-transform duration-300 hover:scale-110" title={slug}>
+      <span className="text-[8px] font-bold text-zinc-400 uppercase">{slug.slice(0, 2)}</span>
+    </div>
+  );
+}
+
+// Helper to render team logos from static assets
+function getTeamLogo(teamName: string | null): string | undefined {
+  if (!teamName) return undefined;
+  const t = teamName.toLowerCase().trim();
+  if (t.includes('sentinels')) {
+    return '/images/teams/sentinels.png';
+  }
+  return undefined;
 }
 
 function TeamSearchSelect({
@@ -176,6 +242,7 @@ function TeamSearchSelect({
             ) : (
               filteredOptions.map((team) => {
                 const isSelected = team === selectedValue;
+                const logo = getTeamLogo(team);
                 return (
                   <div
                     key={team}
@@ -190,8 +257,11 @@ function TeamSearchSelect({
                         : 'text-zinc-300 hover:bg-zinc-800/30 hover:text-white'
                     }`}
                   >
-                    {/* Blank logo container for team name (as the user requested: "don't do anything with the logo let it blank if I have images I'll do then") */}
-                    <div className="w-5 h-5 rounded-md bg-zinc-900 border border-zinc-800/50 shrink-0"></div>
+                    {logo ? (
+                      <img src={logo} alt={team} className="w-5 h-5 rounded-md object-cover shrink-0" />
+                    ) : (
+                      <div className="w-5 h-5 rounded-md bg-zinc-900 border border-zinc-800/50 shrink-0"></div>
+                    )}
                     <span>{team}</span>
                   </div>
                 );
@@ -361,8 +431,9 @@ function CountrySearchSelect({
   );
 }
 
-export default function PlayersDirectory() {
+function PlayersDirectoryContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [players, setPlayers] = useState<Player[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     total: 0,
@@ -374,10 +445,105 @@ export default function PlayersDirectory() {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
+  // User Authentication & Favorites state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [favorites, setFavorites] = useState<number[]>([]);
+
+  // Check login state
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session?.user);
+    };
+    checkSession();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session?.user);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  // Fetch favorites from database when user is logged in
+  useEffect(() => {
+    const fetchDbFavorites = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+      
+      const { data, error } = await supabase
+        .from('user_favorites')
+        .select('player_id')
+        .eq('user_id', session.user.id);
+      
+      if (!error && data) {
+        setFavorites(data.map(fav => fav.player_id));
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchDbFavorites();
+    } else {
+      setFavorites([]);
+    }
+  }, [isLoggedIn]);
+
+  // Toggle favorite in database
+  const toggleFavorite = async (playerId: number) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return;
+
+    const isFav = favorites.includes(playerId);
+    
+    if (isFav) {
+      // Remove from DB
+      const { error } = await supabase
+        .from('user_favorites')
+        .delete()
+        .eq('user_id', session.user.id)
+        .eq('player_id', playerId);
+
+      if (!error) {
+        setFavorites(prev => prev.filter(id => id !== playerId));
+      }
+    } else {
+      // Add to DB
+      const { error } = await supabase
+        .from('user_favorites')
+        .insert({
+          user_id: session.user.id,
+          player_id: playerId
+        });
+
+      if (!error) {
+        setFavorites(prev => [...prev, playerId]);
+      }
+    }
+  };
+
   // Filters
   const [selectedGame, setSelectedGame] = useState('all');
   const [selectedTeam, setSelectedTeam] = useState('all');
   const [selectedCountry, setSelectedCountry] = useState('all');
+
+  // Sync with searchParams on load
+  useEffect(() => {
+    const gameParam = searchParams.get('game');
+    const teamParam = searchParams.get('team');
+    const countryParam = searchParams.get('country');
+
+    if (gameParam && (gameParam === 'cs2' || gameParam === 'valorant')) {
+      setSelectedGame(gameParam);
+    }
+    if (teamParam) {
+      setSelectedTeam(teamParam);
+    }
+    if (countryParam) {
+      setSelectedCountry(countryParam);
+    }
+  }, [searchParams]);
 
   // Filter options lists
   const [teamsList, setTeamsList] = useState<string[]>([]);
@@ -577,86 +743,107 @@ export default function PlayersDirectory() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {players.map((player) => (
-              <div
-                key={player.settings_id}
-                onClick={() => router.push(`/players/${player.username}`)}
-                className="bg-card backdrop-blur-[8px] border border-border-custom rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group overflow-hidden cursor-pointer"
-              >
-                {/* 1. Portrait Section with Glow */}
-                <div className="relative h-44 bg-[#0D0D13] flex items-center justify-center border-b border-white/5 overflow-hidden">
-
-                  {/* Decorative background */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 pointer-events-none" />
-
-                  {player.profile_img_url ? (
-                    <>
-                      <img
-                        src={player.profile_img_url}
-                        alt={player.username}
-                        className="h-full w-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      {/* Decorative grid */}
-                      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-                      {/* Glow blob */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-accent/10 blur-3xl group-hover:bg-accent/20 transition-all duration-500" />
-                      {/* Avatar circle */}
-                      <div className="relative z-20 w-20 h-20 rounded-full border-2 border-white/10 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center shadow-xl group-hover:border-accent/30 transition-all duration-300">
-                        <span className="text-3xl font-black text-zinc-300 group-hover:text-accent transition-colors duration-300 font-display leading-none">
-                          {player.username[0].toUpperCase()}
-                        </span>
+            {players.map((player) => {
+              const isFav = favorites.includes(player.player_id);
+              const teamLogo = getTeamLogo(player.team);
+              return (
+                <div
+                  key={player.settings_id}
+                  onClick={() => router.push(`/players/${player.username}`)}
+                  className="relative bg-[#12121A]/70 backdrop-blur-md border border-border-custom hover:border-zinc-700/80 rounded-2xl p-6 flex flex-col items-center justify-between text-center hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(245,158,11,0.02)] transition-all duration-300 group cursor-pointer min-h-[300px]"
+                >
+                  {/* Top Left Team Name Badge */}
+                  <div className="absolute top-4 left-5 z-20 flex items-center gap-1.5 text-[10px] font-bold text-zinc-500 uppercase tracking-widest pointer-events-none max-w-[68%]">
+                    {player.team && (
+                      <div className="w-4.5 h-4.5 rounded bg-zinc-950 border border-zinc-800/80 overflow-hidden shrink-0 flex items-center justify-center">
+                        {teamLogo ? (
+                          <img src={teamLogo} alt={player.team || 'Team'} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full bg-zinc-900" />
+                        )}
                       </div>
-                    </>
-                  )}
-
-                  {/* Corner Game Badge */}
-                  <span className={`absolute top-3 right-3 text-[8px] font-bold uppercase tracking-wider py-0.5 px-2 rounded-md font-mono z-20 ${getGameBadgeClass(player.game_slug)}`}>
-                    {player.game}
-                  </span>
-                </div>
-
-                {/* 2. Info details */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-extrabold text-[#FAFAFA] text-lg font-display group-hover:text-accent transition-colors duration-300 line-clamp-1">
-                        {player.username}
-                      </h3>
-                      {player.country_code && (
-                        <span className="text-[10px] text-zinc-500 font-bold font-mono tracking-wider" title={player.nationality || ''}>
-                          {player.country_code}
-                        </span>
-                      )}
-                    </div>
-
-                    <p className="text-xs font-bold text-accent/80 font-mono tracking-wide line-clamp-1">
-                      {player.real_name || '-'}
-                    </p>
+                    )}
+                    <span className="truncate">{player.team || 'Free Agent'}</span>
                   </div>
 
-                  {/* Team Tag pill badge in place of specs preview box and button */}
-                  <div className="pt-2 flex justify-center">
+                  {/* Floating Star (Favorite) Button at Top Right - Only show if logged in */}
+                  {isLoggedIn && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (player.team) {
-                          router.push(`/teams?team=${encodeURIComponent(player.team)}&game=${player.game_slug}`);
-                        } else {
-                          router.push(`/teams`);
-                        }
+                        toggleFavorite(player.player_id);
                       }}
-                      className="inline-block text-center text-[10px] font-bold uppercase tracking-wider px-3.5 py-2.5 rounded-xl bg-accent/5 text-accent border border-accent/15 font-mono w-full hover:bg-accent/20 hover:border-accent/40 active:scale-95 transition-all duration-300 cursor-pointer"
+                      className="absolute top-3 right-4.5 z-20 p-1.5 rounded-full hover:bg-white/5 transition-all duration-200"
+                      title={isFav ? "Remove from Favorites" : "Add to Favorites"}
                     >
-                      {player.team || 'Free Agent'}
+                      <svg
+                        className={`w-5 h-5 transition-all duration-300 active:scale-75 ${
+                          isFav
+                            ? 'fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(245,158,11,0.6)]'
+                            : 'fill-none text-zinc-650 hover:text-zinc-400'
+                        }`}
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.36 1.242.588 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.175 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 10.1c-.773-.568-.375-1.81.587-1.81h4.907a1 1 0 00.95-.69l1.519-4.674z"
+                        />
+                      </svg>
                     </button>
+                  )}
+
+                  {/* 1. Portrait Circle Section */}
+                  <div className="relative w-28 h-28 mx-auto mb-4 mt-4 shrink-0">
+                    <div className="w-full h-full rounded-full border-2 border-zinc-800/80 bg-gradient-to-b from-zinc-850 to-zinc-950 overflow-hidden flex items-center justify-center shadow-inner relative z-10">
+                      {player.profile_img_url ? (
+                        <img
+                          src={player.profile_img_url}
+                          alt={player.username}
+                          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-zinc-900/60 flex items-center justify-center text-2xl font-black text-zinc-500 font-display leading-none">
+                          {player.username[0].toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    {/* Game Badge overlap at bottom center */}
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
+                      {renderGameLogo(player.game_slug)}
+                    </div>
+                  </div>
+
+                  {/* 2. Info Details */}
+                  <div className="w-full flex-1 flex flex-col justify-between pt-2 space-y-4">
+                    <div className="space-y-1">
+                      <h3 className="font-extrabold text-[#FAFAFA] text-lg font-sans group-hover:text-accent transition-colors duration-300 line-clamp-1">
+                        {player.username}
+                      </h3>
+                      <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400 font-sans">
+                        <span className="font-medium">{player.real_name || '-'}</span>
+                        {player.country_code && (
+                          <span className="text-sm leading-none shrink-0" title={player.nationality || ''}>
+                            {getFlagEmoji(player.country_code)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* View Profile CTA */}
+                    <div className="flex justify-center pt-1 w-full">
+                      <div
+                        className="flex items-center justify-center gap-1.5 px-5 py-2 w-full max-w-[120px] rounded-lg text-xs font-bold bg-white/5 text-zinc-400 border border-white/5 group-hover:bg-accent/10 group-hover:text-accent group-hover:border-accent/20 transition-all duration-300"
+                      >
+                        <span>View Profile</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -686,5 +873,17 @@ export default function PlayersDirectory() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function PlayersDirectory() {
+  return (
+    <Suspense fallback={
+      <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col items-center justify-center">
+        <div className="text-zinc-500 text-xs font-mono animate-pulse">Loading players directory...</div>
+      </div>
+    }>
+      <PlayersDirectoryContent />
+    </Suspense>
   );
 }

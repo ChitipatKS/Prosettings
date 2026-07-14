@@ -42,7 +42,7 @@ export default function SensConverter() {
     const csBase = val / CONVERSION_FACTORS[fromGame];
     // Convert to target game
     const targetVal = csBase * CONVERSION_FACTORS[toGame];
-    
+
     // Round to 3 decimal places
     setConvertedValue(Math.round(targetVal * 1000) / 1000);
   }, [inputValue, fromGame, toGame]);
@@ -71,14 +71,14 @@ export default function SensConverter() {
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto px-6 md:px-8 py-16 flex flex-col justify-center space-y-12 animate-in fade-in duration-300">
-      
+
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-4">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="text-xs font-bold text-zinc-500 hover:text-white transition-colors duration-200 font-mono tracking-wider flex items-center gap-1 justify-center"
         >
-          &lt; BACK TO HOME
+          BACK TO HOME
         </Link>
         <h1 className="text-4xl font-extrabold tracking-tight text-white font-display">
           Mouse <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">Sensitivity Converter</span>
@@ -90,13 +90,13 @@ export default function SensConverter() {
 
       {/* Calculator Card */}
       <div className="bg-card backdrop-blur-[8px] border border-border-custom p-6 sm:p-10 rounded-2xl shadow-2xl relative overflow-visible">
-        
+
         {/* Glow ambient decoration */}
         <div className="absolute -top-10 -left-10 w-44 h-44 rounded-full bg-accent/5 blur-[80px] pointer-events-none"></div>
         <div className="absolute -bottom-10 -right-10 w-44 h-44 rounded-full bg-accent/5 blur-[80px] pointer-events-none"></div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-          
+
           {/* Left Column: From */}
           <div className="space-y-6 flex flex-col justify-between">
             <div className="space-y-4">
@@ -184,20 +184,19 @@ export default function SensConverter() {
               <span className="block text-xs font-bold font-mono uppercase text-zinc-500 tracking-wider text-center">
                 Converted Sensitivity
               </span>
-              
+
               {convertedValue !== null ? (
                 <div className="flex flex-col items-center justify-center space-y-2 mt-2">
                   <div className="text-4xl font-extrabold text-white tracking-tight font-display">
                     {convertedValue}
                   </div>
-                  
+
                   <button
                     onClick={handleCopy}
-                    className={`h-8 px-4 rounded-xl text-[10px] font-bold uppercase font-mono tracking-wider flex items-center gap-1.5 transition-all duration-200 ${
-                      copied 
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                    className={`h-8 px-4 rounded-xl text-[10px] font-bold uppercase font-mono tracking-wider flex items-center gap-1.5 transition-all duration-200 ${copied
+                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                         : 'bg-white/5 hover:bg-white/10 text-[#FAFAFA] border border-white/5 hover:border-white/10'
-                    }`}
+                      }`}
                   >
                     {copied ? (
                       <>
@@ -244,9 +243,9 @@ export default function SensConverter() {
           How mouse sensitivity is calculated
         </h4>
         <p className="text-xs text-zinc-400 leading-relaxed">
-          Most games use different yaw values or scaling models to determine your camera rotation speed. 
-          For example, <strong>CS2</strong> and <strong>VALORANT</strong> use a 3.18x difference factor: moving your mouse 
-          the exact same distance in VALORANT requires ~0.314x the sensitivity number used in CS2/CS:GO. 
+          Most games use different yaw values or scaling models to determine your camera rotation speed.
+          For example, <strong>CS2</strong> and <strong>VALORANT</strong> use a 3.18x difference factor: moving your mouse
+          the exact same distance in VALORANT requires ~0.314x the sensitivity number used in CS2/CS:GO.
           By standardizing these calculations, you can preserve muscle memory across all titles.
         </p>
       </div>
