@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -36,6 +36,20 @@ type Pagination = {
   pages: number;
 };
 
+// Helper to convert 2-letter country code to Flag Emoji (e.g. TH -> 🇹🇭)
+function getFlagEmoji(countryCode: string) {
+  if (!countryCode || countryCode.length !== 2) return '🏳️';
+  try {
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  } catch {
+    return '🏳️';
+  }
+}
+
 function TeamSearchSelect({
   options,
   selectedValue,
@@ -49,69 +63,114 @@ function TeamSearchSelect({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Close dropdown on click outside
   useEffect(() => {
-    if (selectedValue && selectedValue !== 'all') {
-      setSearchQuery(selectedValue);
-    } else {
-      setSearchQuery('');
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
     }
-  }, [selectedValue]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
+  // Filter options based on search query
   const filteredOptions = searchQuery.trim().length > 0
     ? options.filter(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
-    : [];
+    : options;
+
+  const displayValue = selectedValue === 'all' || !selectedValue ? "All Teams" : selectedValue;
 
   return (
-    <div className="relative w-full sm:w-[200px]">
-      <div className="relative">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setIsOpen(true);
-            if (e.target.value === '') {
-              onChange('all');
-            }
-          }}
-          onFocus={() => {
-            setIsOpen(true);
-          }}
-          onBlur={() => {
-            setTimeout(() => setIsOpen(false), 200);
-          }}
-          placeholder={selectedValue === 'all' || !selectedValue ? "All Teams" : selectedValue}
-          className="w-full h-11 bg-black/40 border border-border-custom rounded-xl px-4 pr-10 text-xs font-bold text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/15 transition-all font-mono"
-        />
-
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+    <div className="relative w-full sm:w-[200px]" ref={dropdownRef}>
+      {/* Trigger Button */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full h-11 bg-black/40 border border-border-custom hover:border-zinc-700 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold text-zinc-300 transition-all"
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75" />
+          </svg>
+          <span className="truncate">{displayValue}</span>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
           {selectedValue && selectedValue !== 'all' && (
-            <button
-              type="button"
+            <span
               onClick={(e) => {
                 e.stopPropagation();
                 onChange('all');
                 setSearchQuery('');
               }}
-              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
               title="Clear selection"
             >
               ×
-            </button>
+            </span>
           )}
-          <span
-            className="text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
+          <svg
+            className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
             style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            ▼
-          </span>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
+      </button>
 
-        {isOpen && searchQuery.trim().length > 0 && (
-          <div className="absolute z-50 w-full mt-1.5 max-h-60 overflow-y-auto bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-800">
+      {/* Dropdown Panel */}
+      {isOpen && (
+        <div className="absolute z-50 w-full mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col">
+          {/* Search Input Box */}
+          <div className="p-2 border-b border-zinc-900 flex items-center gap-2 relative">
+            <span className="absolute left-4 text-zinc-500">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              autoFocus
+              className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all"
+            />
+          </div>
+
+          {/* Options Scroll List */}
+          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-800">
+            {/* "All Teams" Option */}
+            <div
+              onMouseDown={(e) => {
+                e.preventDefault();
+                onChange('all');
+                setSearchQuery('');
+                setIsOpen(false);
+              }}
+              className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
+                selectedValue === 'all' || !selectedValue
+                  ? 'bg-accent/15 text-accent font-bold'
+                  : 'text-zinc-400 hover:bg-zinc-800/30 hover:text-white'
+              }`}
+            >
+              {/* Blank logo container for team name (as the user requested) */}
+              <div className="w-5 h-5 rounded-md bg-zinc-900 border border-zinc-800/50 shrink-0"></div>
+              <span>All Teams</span>
+            </div>
+
             {filteredOptions.length === 0 ? (
-              <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
+              <div className="px-4 py-3 text-xs text-zinc-500 italic">
                 No matching teams found
               </div>
             ) : (
@@ -123,22 +182,24 @@ function TeamSearchSelect({
                     onMouseDown={(e) => {
                       e.preventDefault();
                       onChange(team);
-                      setSearchQuery(team);
                       setIsOpen(false);
                     }}
-                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${isSelected
+                    className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
+                      isSelected
                         ? 'bg-accent/15 text-accent font-bold'
-                        : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
-                      }`}
+                        : 'text-zinc-300 hover:bg-zinc-800/30 hover:text-white'
+                    }`}
                   >
-                    {team}
+                    {/* Blank logo container for team name (as the user requested: "don't do anything with the logo let it blank if I have images I'll do then") */}
+                    <div className="w-5 h-5 rounded-md bg-zinc-900 border border-zinc-800/50 shrink-0"></div>
+                    <span>{team}</span>
                   </div>
                 );
               })
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -156,101 +217,146 @@ function CountrySearchSelect({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const selectedCountry = options.find(c => c.code === selectedValue);
 
-  useEffect(() => {
-    if (selectedCountry) {
-      setSearchQuery(`${selectedCountry.name} (${selectedCountry.code})`);
-    } else {
-      setSearchQuery('');
-    }
-  }, [selectedCountry]);
+  const displayValue = selectedCountry
+    ? `${getFlagEmoji(selectedCountry.code)} ${selectedCountry.name} (${selectedCountry.code})`
+    : "All Nations";
 
   const filteredOptions = searchQuery.trim().length > 0
     ? options.filter(c =>
       c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.code.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    : [];
+    : options;
 
   return (
-    <div className="relative w-full sm:w-[200px]">
-      <div className="relative">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setIsOpen(true);
-            if (e.target.value === '') {
-              onChange('all');
-            }
-          }}
-          onFocus={() => {
-            setIsOpen(true);
-          }}
-          onBlur={() => {
-            setTimeout(() => setIsOpen(false), 200);
-          }}
-          placeholder={selectedValue === 'all' || !selectedCountry ? "All Nations" : `${selectedCountry.name} (${selectedCountry.code})`}
-          className="w-full h-11 bg-black/40 border border-border-custom rounded-xl px-4 pr-10 text-xs font-bold text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/15 transition-all font-mono"
-        />
-
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+    <div className="relative w-full sm:w-[200px]" ref={dropdownRef}>
+      {/* Trigger Button */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full h-11 bg-black/40 border border-border-custom hover:border-zinc-700 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold text-zinc-300 transition-all"
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-19m0 0a5 5 0 005 5h4a5 5 0 015-5h2v10H9a5 5 0 00-5 5H3" />
+          </svg>
+          <span className="truncate">{displayValue}</span>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
           {selectedValue && selectedValue !== 'all' && (
-            <button
-              type="button"
+            <span
               onClick={(e) => {
                 e.stopPropagation();
                 onChange('all');
                 setSearchQuery('');
               }}
-              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
               title="Clear selection"
             >
               ×
-            </button>
+            </span>
           )}
-          <span
-            className="text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
+          <svg
+            className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
             style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            ▼
-          </span>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
+      </button>
 
-        {isOpen && searchQuery.trim().length > 0 && (
-          <div className="absolute z-50 w-full mt-1.5 max-h-60 overflow-y-auto bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-800">
+      {/* Dropdown Panel */}
+      {isOpen && (
+        <div className="absolute right-0 z-50 w-full mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col">
+          {/* Search Input Box */}
+          <div className="p-2 border-b border-zinc-900 flex items-center gap-2 relative">
+            <span className="absolute left-4 text-zinc-500">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              autoFocus
+              className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all"
+            />
+          </div>
+
+          {/* Options Scroll List */}
+          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-800">
+            {/* "All Nations" Option */}
+            <div
+              onMouseDown={(e) => {
+                e.preventDefault();
+                onChange('all');
+                setSearchQuery('');
+                setIsOpen(false);
+              }}
+              className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
+                selectedValue === 'all' || !selectedValue
+                  ? 'bg-accent/15 text-accent font-bold'
+                  : 'text-zinc-400 hover:bg-zinc-800/30 hover:text-white'
+              }`}
+            >
+              <span className="text-sm shrink-0">🏳️</span>
+              <span>All Nations</span>
+            </div>
+
             {filteredOptions.length === 0 ? (
-              <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
+              <div className="px-4 py-3 text-xs text-zinc-500 italic">
                 No matching nations found
               </div>
             ) : (
               filteredOptions.map((country) => {
                 const isSelected = country.code === selectedValue;
+                const flag = getFlagEmoji(country.code);
                 return (
                   <div
                     key={country.code}
                     onMouseDown={(e) => {
                       e.preventDefault();
                       onChange(country.code);
-                      setSearchQuery(`${country.name} (${country.code})`);
                       setIsOpen(false);
                     }}
-                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${isSelected
+                    className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
+                      isSelected
                         ? 'bg-accent/15 text-accent font-bold'
-                        : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
-                      }`}
+                        : 'text-zinc-300 hover:bg-zinc-800/30 hover:text-white'
+                    }`}
                   >
-                    {country.name} ({country.code})
+                    <span className="text-sm shrink-0">{flag}</span>
+                    <span>{country.name} ({country.code})</span>
                   </div>
                 );
               })
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
