@@ -52,6 +52,44 @@ export async function GET(request: NextRequest) {
     const role = searchParams.get('role') || '';
     const team = searchParams.get('team') || '';
     const country = searchParams.get('country') || '';
+
+    // Retrieve all players from players table for selection modal
+    if (searchParams.get('all') === 'true') {
+      const searchVal = searchParams.get('search') || '';
+      let query = supabase
+        .from('players')
+        .select('id, username, real_name, team_id, team, profile_img_url, teams(name)')
+        .order('username');
+
+      if (searchVal.trim()) {
+        query = query.or(`username.ilike.%${searchVal.trim()}%,real_name.ilike.%${searchVal.trim()}%`);
+      }
+
+      const { data: dbPlayers, error } = await query;
+
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
+      const mappedPlayers = (dbPlayers || []).map((p: any) => ({
+        id: p.id,
+        username: p.username,
+        real_name: p.real_name,
+        team_id: p.team_id,
+        team: p.teams?.name || p.team,
+        profile_img_url: p.profile_img_url
+      }));
+
+      return NextResponse.json({ players: mappedPlayers });
+    }
+
+    console.log('API GET /api/players called with:', {
+      search,
+      game,
+      role,
+      team,
+      country
+    });
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '20', 10);
 
@@ -75,9 +113,11 @@ export async function GET(request: NextRequest) {
         username,
         real_name,
         team,
+        team_id,
         nationality,
         country_code,
-        profile_img_url
+        profile_img_url,
+        teams(name)
       ),
       games!inner (
         id,
@@ -126,32 +166,49 @@ export async function GET(request: NextRequest) {
        return NextResponse.json({ error: error.message }, { status: 500 });
      }
  
-     // ปรับรูปแบบข้อมูลให้อ่านและนำไปแสดงผลฝั่ง Frontend ได้ง่ายขึ้น
-     const formattedPlayers = (data || []).map((item: any) => ({
-       settings_id: item.id,
-       player_id: item.players.id,
-       username: item.players.username,
-       real_name: item.players.real_name,
-       team: item.players.team,
-       nationality: item.players.nationality,
-       country_code: item.players.country_code,
-       profile_img_url: item.players.profile_img_url,
-       game: item.games.name,
-       game_slug: item.games.slug,
-       game_role: item.game_role,
-       mouse_settings: {
-         dpi: item.mouse_dpi,
-         hz: item.mouse_hz,
-         sens: item.in_game_sens,
-         edpi: item.edpi
-       },
-       video_settings: {
-         resolution: item.resolution,
-         aspect_ratio: item.aspect_ratio,
-         refresh_rate: item.refresh_rate
-       },
-       game_specific_settings: item.settings_data
-     }));
+     // Group player settings by player ID to collapse multiple games into one profile card
+     const playersMap = new Map<number, any>();
+
+     for (const item of (data as any || [])) {
+       const pId = item.players.id;
+       const gameObj = {
+         id: item.games.id,
+         name: item.games.name,
+         slug: item.games.slug,
+         role: item.game_role,
+         mouse_settings: {
+           dpi: item.mouse_dpi,
+           hz: item.mouse_hz,
+           sens: item.in_game_sens,
+           edpi: item.edpi
+         },
+         video_settings: {
+           resolution: item.resolution,
+           aspect_ratio: item.aspect_ratio,
+           refresh_rate: item.refresh_rate
+         },
+         game_specific_settings: item.settings_data
+       };
+
+       if (playersMap.has(pId)) {
+         playersMap.get(pId).games.push(gameObj);
+       } else {
+         playersMap.set(pId, {
+           settings_id: item.id,
+           player_id: pId,
+           username: item.players.username,
+           real_name: item.players.real_name,
+           team: item.players.teams?.name || item.players.team,
+           team_id: item.players.team_id,
+           nationality: item.players.nationality,
+           country_code: item.players.country_code,
+           profile_img_url: item.players.profile_img_url,
+           games: [gameObj]
+         });
+       }
+     }
+
+     const formattedPlayers = Array.from(playersMap.values());
 
      // เรียงทีมก่อนเพื่อให้คนที่อยู่ทีมเดียวกันอยู่ติดกัน แล้วค่อยเรียงชื่อผู้เล่น (Free Agent อยู่ท้ายสุด)
      formattedPlayers.sort((a: any, b: any) => {

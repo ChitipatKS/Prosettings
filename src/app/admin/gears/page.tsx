@@ -36,6 +36,37 @@ export default function AdminGearsPage() {
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
+  // Custom confirmation dialog state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    onCancel?: () => void;
+    isAlertOnly?: boolean;
+  } | null>(null);
+
+  const showConfirm = (
+    title: string,
+    message: string,
+    onConfirm: () => void,
+    isAlertOnly: boolean = false
+  ) => {
+    setConfirmModal({
+      isOpen: true,
+      title,
+      message,
+      onConfirm: () => {
+        onConfirm();
+        setConfirmModal(null);
+      },
+      onCancel: isAlertOnly ? undefined : () => {
+        setConfirmModal(null);
+      },
+      isAlertOnly
+    });
+  };
+
   // Form / Modal State
   const [isOpen, setIsOpen] = useState(false);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
@@ -55,9 +86,9 @@ export default function AdminGearsPage() {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  async function loadProducts() {
+  async function loadProducts(silent: boolean = false) {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       let query = supabase.from('products').select('*');
 
       if (search.trim()) {
@@ -70,7 +101,7 @@ export default function AdminGearsPage() {
     } catch (err) {
       console.error('Error loading products:', err);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }
 
@@ -208,25 +239,36 @@ export default function AdminGearsPage() {
   };
 
   const handleDeleteProduct = async (id: number, productName: string) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete product "${productName}"? This will remove references in player profiles!`);
-    if (!confirmDelete) return;
+    showConfirm(
+      'Confirm Product Deletion',
+      `Are you sure you want to delete product "${productName}"? This will remove references in player profiles!`,
+      async () => {
+        try {
+          setDeletingId(id);
+          // Optimistically remove from state
+          setProducts(prev => prev.filter(p => p.id !== id));
 
-    try {
-      setDeletingId(id);
+          // Delete references in player_products
+          await supabase.from('player_products').delete().eq('product_id', id);
 
-      // Delete references in player_products
-      await supabase.from('player_products').delete().eq('product_id', id);
+          // Delete from products table
+          const { error } = await supabase.from('products').delete().eq('id', id);
+          if (error) throw error;
 
-      // Delete from products table
-      const { error } = await supabase.from('products').delete().eq('id', id);
-      if (error) throw error;
-
-      loadProducts();
-    } catch (err: any) {
-      alert(`Error deleting product: ${err.message}`);
-    } finally {
-      setDeletingId(null);
-    }
+          loadProducts(true); // Silent background reload
+        } catch (err: any) {
+          loadProducts(); // Rollback local state
+          showConfirm(
+            'Deletion Error',
+            `Error deleting product: ${err.message}`,
+            () => {},
+            true
+          );
+        } finally {
+          setDeletingId(null);
+        }
+      }
+    );
   };
 
   return (
@@ -512,6 +554,49 @@ export default function AdminGearsPage() {
         </div>
       )}
 
+      {/* Custom Styled Confirmation Dialog */}
+      {confirmModal && confirmModal.isOpen && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#12121A] border border-white/10 rounded-2xl overflow-hidden shadow-2xl animate-fade-in font-sans">
+            {/* Top gold-orange accent line */}
+            <div className="h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500" />
+            
+            <div className="p-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+                  ⚠️
+                </div>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-white font-mono">
+                  {confirmModal.title}
+                </h3>
+              </div>
+
+              <p className="text-xs text-zinc-300 font-sans leading-relaxed">
+                {confirmModal.message}
+              </p>
+
+              <div className="flex justify-end gap-3 pt-2 font-mono text-[10px] font-bold">
+                {!confirmModal.isAlertOnly && (
+                  <button
+                    type="button"
+                    onClick={confirmModal.onCancel}
+                    className="px-4 py-2.5 rounded-xl border border-white/5 text-zinc-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                  >
+                    CANCEL
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={confirmModal.onConfirm}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-zinc-950 hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 transition-all cursor-pointer uppercase"
+                >
+                  {confirmModal.isAlertOnly ? 'OK' : 'CONFIRM'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

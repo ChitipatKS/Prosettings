@@ -367,10 +367,10 @@ export default function AdminDashboard() {
             <span>+</span> Add New Player
           </Link>
           <Link
-            href="/admin/players/new?focus=team"
+            href="/admin/teams"
             className="flex items-center justify-center gap-2 h-11 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-xs font-bold uppercase tracking-wider font-mono text-white transition-all cursor-pointer hover:-translate-y-px"
           >
-            <span>🛡️</span> Add New Team
+            <span>🛡️</span> Manage Teams & Logos
           </Link>
           <Link
             href="/admin/gears?add=true"

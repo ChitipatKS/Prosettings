@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
 type RouteParams = {
-  params: Promise<{ username: string }> | { username: string };
+  params: Promise<{ username: string }>;
 };
 
 export async function GET(request: NextRequest, context: RouteParams) {
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest, context: RouteParams) {
     }
 
     // 1. ดึงข้อมูลประวัติผู้เล่น (Player Profile)
-    const { data: player, error: playerError } = await supabase
+    const { data: dbPlayer, error: playerError } = await supabase
       .from('players')
-      .select('*')
+      .select('*, teams(id, name, logo_url)')
       .ilike('username', username)
       .maybeSingle();
 
@@ -26,9 +26,15 @@ export async function GET(request: NextRequest, context: RouteParams) {
       return NextResponse.json({ error: playerError.message }, { status: 500 });
     }
 
-    if (!player) {
+    if (!dbPlayer) {
       return NextResponse.json({ error: 'Player not found' }, { status: 404 });
     }
+
+    const player = {
+      ...dbPlayer,
+      team: dbPlayer.teams?.name || dbPlayer.team,
+      team_logo_url: dbPlayer.teams?.logo_url || null
+    };
 
     // 2. ดึงค่าการตั้งค่าเกมทั้งหมดของผู้เล่นคนนี้ (Game Settings)
     const { data: settingsData, error: settingsError } = await supabase

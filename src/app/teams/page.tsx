@@ -3,6 +3,8 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { getTeamLogo } from '@/lib/teamLogos';
+import TeamLogoImg from '@/components/TeamLogoImg';
 
 type Player = {
   settings_id: number;
@@ -22,13 +24,20 @@ function TeamsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedTeam = searchParams.get('team');
-  const selectedGameFilter = searchParams.get('game');
+  const initialGameFilter = searchParams.get('game') || 'all';
 
   const [teams, setTeams] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
+  const [allTeamPlayers, setAllTeamPlayers] = useState<Player[]>([]);
+  const [activeGameFilter, setActiveGameFilter] = useState<string>(initialGameFilter);
   const [loadingPlayers, setLoadingPlayers] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Sync activeGameFilter when searchParams change
+  useEffect(() => {
+    const g = searchParams.get('game') || 'all';
+    setActiveGameFilter(g);
+  }, [searchParams]);
 
   // Fetch unique teams
   useEffect(() => {
@@ -48,10 +57,10 @@ function TeamsContent() {
     fetchTeams();
   }, []);
 
-  // Fetch players when a team is selected or game filter is applied
+  // Fetch all players for selected team
   useEffect(() => {
     if (!selectedTeam) {
-      setTeamPlayers([]);
+      setAllTeamPlayers([]);
       return;
     }
 
@@ -62,13 +71,10 @@ function TeamsContent() {
         if (res.ok) {
           const data = await res.json();
           // Filter to make sure it's an exact match or closely matching team field
-          let players = (data.players || []).filter((p: Player) => 
+          const players = (data.players || []).filter((p: Player) => 
             p.team?.toLowerCase() === selectedTeam.toLowerCase()
           );
-          if (selectedGameFilter) {
-            players = players.filter((p: Player) => p.game_slug === selectedGameFilter);
-          }
-          setTeamPlayers(players);
+          setAllTeamPlayers(players);
         }
       } catch (err) {
         console.error('Error fetching team players:', err);
@@ -78,7 +84,40 @@ function TeamsContent() {
     };
 
     fetchTeamPlayers();
-  }, [selectedTeam, selectedGameFilter]);
+  }, [selectedTeam]);
+
+  // Extract available games dynamically for the selected team
+  const availableGames = Array.from(
+    new Map(
+      allTeamPlayers.map((p) => [p.game_slug, { slug: p.game_slug, name: p.game }])
+    ).values()
+  );
+
+  // Auto fallback activeGameFilter to 'all' if selected game doesn't exist in team
+  useEffect(() => {
+    if (activeGameFilter !== 'all' && allTeamPlayers.length > 0) {
+      const hasGame = allTeamPlayers.some(p => p.game_slug === activeGameFilter);
+      if (!hasGame) {
+        setActiveGameFilter('all');
+      }
+    }
+  }, [allTeamPlayers, activeGameFilter]);
+
+  // Filter team players based on activeGameFilter
+  const displayedPlayers = activeGameFilter === 'all'
+    ? allTeamPlayers
+    : allTeamPlayers.filter((p) => p.game_slug === activeGameFilter);
+
+  const handleGameToggle = (gameSlug: string) => {
+    setActiveGameFilter(gameSlug);
+    if (!selectedTeam) return;
+    const params = new URLSearchParams();
+    params.set('team', selectedTeam);
+    if (gameSlug !== 'all') {
+      params.set('game', gameSlug);
+    }
+    router.push(`/teams?${params.toString()}`);
+  };
 
   const filteredTeams = teams.filter(team => 
     team.toLowerCase().includes(searchQuery.toLowerCase())
@@ -88,7 +127,10 @@ function TeamsContent() {
     if (slug === 'valorant') {
       return 'bg-red-500/10 text-red-400 border border-red-500/20';
     }
-    return 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+    if (slug === 'cs2') {
+      return 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+    }
+    return 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
   };
 
   return (
@@ -138,7 +180,12 @@ function TeamsContent() {
                 <button
                   key={teamName}
                   onClick={() => {
-                    router.push(`/teams?team=${encodeURIComponent(teamName)}`);
+                    const params = new URLSearchParams();
+                    params.set('team', teamName);
+                    if (activeGameFilter !== 'all') {
+                      params.set('game', activeGameFilter);
+                    }
+                    router.push(`/teams?${params.toString()}`);
                   }}
                   className={`w-full text-left px-3 py-3 text-xs font-semibold font-display tracking-wide rounded-md transition-colors flex items-center justify-between ${
                     selectedTeam === teamName 
@@ -146,8 +193,11 @@ function TeamsContent() {
                       : 'text-zinc-300 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <span>{teamName}</span>
-                  <svg className={`h-3 w-3 text-zinc-500 ${selectedTeam === teamName ? 'text-accent' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <TeamLogoImg teamName={teamName} className="w-5 h-5" />
+                    <span className="truncate">{teamName}</span>
+                  </div>
+                  <svg className={`h-3 w-3 text-zinc-500 shrink-0 ${selectedTeam === teamName ? 'text-accent' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
@@ -165,14 +215,59 @@ function TeamsContent() {
                 <div className="border-b border-white/5 pb-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <span className="text-[10px] font-bold text-accent font-mono uppercase tracking-widest">
-                      {selectedGameFilter ? `${selectedGameFilter.toUpperCase()} Active Roster` : 'Active Roster'}
+                      {activeGameFilter !== 'all' ? `${activeGameFilter.toUpperCase()} Active Roster` : 'Active Roster'}
                     </span>
-                    <h2 className="text-3xl font-extrabold text-white font-display mt-1">{selectedTeam}</h2>
+                    <div className="flex items-center gap-3 mt-1.5">
+                      <TeamLogoImg teamName={selectedTeam} className="w-10 h-10 p-1 bg-black/50 border border-border-custom rounded-xl shadow-md" />
+                      <h2 className="text-3xl font-extrabold text-white font-display">{selectedTeam}</h2>
+                    </div>
                   </div>
                   <span className="text-xs text-zinc-500 font-mono font-semibold">
-                    {teamPlayers.length} {teamPlayers.length === 1 ? 'Player' : 'Players'} found
+                    {displayedPlayers.length} {displayedPlayers.length === 1 ? 'Player' : 'Players'} found
                   </span>
                 </div>
+
+                {/* Dynamic Game Toggle Bar for Selected Team */}
+                {availableGames.length > 0 && (
+                  <div className="mb-6 flex flex-wrap items-center gap-2 bg-black/40 border border-border-custom p-1.5 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => handleGameToggle('all')}
+                      className={`h-8 px-3.5 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+                        activeGameFilter === 'all'
+                          ? 'bg-accent text-zinc-950 shadow-md font-extrabold'
+                          : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <span>ALL</span>
+                      <span className="text-[9px] opacity-80 font-mono font-semibold">({allTeamPlayers.length})</span>
+                    </button>
+
+                    {availableGames.map((g) => {
+                      const count = allTeamPlayers.filter(p => p.game_slug === g.slug).length;
+                      const isActive = activeGameFilter === g.slug;
+                      return (
+                        <button
+                          key={g.slug}
+                          type="button"
+                          onClick={() => handleGameToggle(g.slug)}
+                          className={`h-8 px-3.5 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+                            isActive
+                              ? g.slug === 'valorant'
+                                ? 'bg-red-500/20 text-red-400 border border-red-500/40 font-extrabold shadow-sm'
+                                : g.slug === 'cs2'
+                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 font-extrabold shadow-sm'
+                                : 'bg-blue-500/20 text-blue-400 border border-blue-500/40 font-extrabold shadow-sm'
+                              : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <span>{g.name}</span>
+                          <span className="text-[9px] opacity-80 font-mono font-semibold">({count})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
 
                 {/* Team players list */}
                 {loadingPlayers ? (
@@ -181,13 +276,13 @@ function TeamsContent() {
                       <div key={idx} className="h-16 bg-white/5 rounded-2xl animate-pulse border border-border-custom"></div>
                     ))}
                   </div>
-                ) : teamPlayers.length === 0 ? (
+                ) : displayedPlayers.length === 0 ? (
                   <div className="text-center py-16 text-zinc-500 text-xs font-mono">
-                    No active players recorded for this team.
+                    No active players recorded for this game.
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {teamPlayers.map((player) => (
+                    {displayedPlayers.map((player) => (
                       <Link
                         key={player.settings_id}
                         href={`/players/${player.username}`}

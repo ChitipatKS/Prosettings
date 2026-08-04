@@ -210,6 +210,13 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const teamInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Teams Dropdown State
+  const [teams, setTeams] = useState<any[]>([]);
+  const [teamId, setTeamId] = useState<number | null>(null);
+  const [showTeamDropdown, setShowTeamDropdown] = useState(false);
+  const [teamSearch, setTeamSearch] = useState('');
 
   // 2. Games Played State
   const [playsValorant, setPlaysValorant] = useState(false);
@@ -239,6 +246,14 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
   const [valBloom, setValBloom] = useState('Off');
   const [valDistortion, setValDistortion] = useState('Off');
   const [valCastShadows, setValCastShadows] = useState('Off');
+
+  // Valorant Map Settings
+  const [valMapRotate, setValMapRotate] = useState('Rotate');
+  const [valMapFixedOrientation, setValMapFixedOrientation] = useState('Always the same');
+  const [valMapKeepCentered, setValMapKeepCentered] = useState('On');
+  const [valMapMinimapSize, setValMapMinimapSize] = useState('1.1');
+  const [valMapMinimapZoom, setValMapMinimapZoom] = useState('0.9');
+  const [valMapVisionCones, setValMapVisionCones] = useState('On');
 
   // CS2 Settings
   const [csRole, setCsRole] = useState('');
@@ -278,6 +293,19 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
     }
   }, []);
 
+  // Handle click outside dropdown to close it
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowTeamDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   // Load lists on mount
   useEffect(() => {
     async function loadFormMetadata() {
@@ -287,6 +315,13 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
         if (countriesRes.ok) {
           const data = await countriesRes.json();
           setCountries(data.countries || []);
+        }
+
+        // Load teams
+        const teamsRes = await fetch('/api/teams');
+        if (teamsRes.ok) {
+          const data = await teamsRes.json();
+          setTeams(data.teamObjects || []);
         }
 
         // Load all products
@@ -313,6 +348,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
           setUsername(player.username || '');
           setRealName(player.real_name || '');
           setTeam(player.team || '');
+          setTeamId(player.team_id || null);
           setCountryCode(player.country_code || '');
           setBirthDate(player.birth_date || '');
           setDescription(player.description || '');
@@ -385,6 +421,14 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
               setValBloom(sData.bloom || 'Off');
               setValDistortion(sData.distortion || 'Off');
               setValCastShadows(sData.cast_shadows || 'Off');
+
+              // Load Map settings
+              setValMapRotate(sData.map_rotate || 'Rotate');
+              setValMapFixedOrientation(sData.map_fixed_orientation || 'Always the same');
+              setValMapKeepCentered(sData.map_keep_centered || 'On');
+              setValMapMinimapSize(sData.map_minimap_size || '1.1');
+              setValMapMinimapZoom(sData.map_minimap_zoom || '0.9');
+              setValMapVisionCones(sData.map_vision_cones || 'On');
             }
 
             const csSetting = settings.find(s => s.game_id === 3); // CS2
@@ -484,6 +528,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
             username: username.trim(),
             real_name: realName.trim() || null,
             team: team.trim() || null,
+            team_id: teamId,
             nationality: nationality || null,
             country_code: countryCode || null,
             birth_date: birthDate || null,
@@ -500,6 +545,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
             username: username.trim(),
             real_name: realName.trim() || null,
             team: team.trim() || null,
+            team_id: teamId,
             nationality: nationality || null,
             country_code: countryCode || null,
             birth_date: birthDate || null,
@@ -553,7 +599,13 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
             improve_clarity: valImproveClarity,
             bloom: valBloom,
             distortion: valDistortion,
-            cast_shadows: valCastShadows
+            cast_shadows: valCastShadows,
+            map_rotate: valMapRotate,
+            map_fixed_orientation: valMapFixedOrientation,
+            map_keep_centered: valMapKeepCentered,
+            map_minimap_size: valMapMinimapSize,
+            map_minimap_zoom: valMapMinimapZoom,
+            map_vision_cones: valMapVisionCones
           }
         });
       }
@@ -687,7 +739,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
           
           {/* Avatar upload card */}
           <div className="md:col-span-1 flex flex-col items-center justify-center space-y-4 border border-zinc-800/50 p-6 rounded-xl bg-black/25">
-            <div className="w-24 h-24 rounded-2xl bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center font-bold text-accent text-3xl overflow-hidden relative shadow-inner group">
+            <div className="w-24 h-24 rounded-full bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center font-bold text-accent text-3xl overflow-hidden relative shadow-inner group">
               {profileImgUrl ? (
                 <img src={profileImgUrl} alt="Player Preview" className="h-full w-full object-cover" />
               ) : (
@@ -750,15 +802,92 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div ref={dropdownRef} className="space-y-1.5 relative">
               <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Team Name</label>
-              <input
-                type="text"
-                ref={teamInputRef}
-                value={team}
-                onChange={(e) => setTeam(e.target.value)}
-                className="w-full h-10 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
-              />
+              <div className="relative">
+                <input
+                  type="text"
+                  ref={teamInputRef}
+                  value={team}
+                  onChange={(e) => {
+                    setTeam(e.target.value);
+                    setTeamSearch(e.target.value);
+                    setShowTeamDropdown(true);
+                  }}
+                  onFocus={() => setShowTeamDropdown(true)}
+                  placeholder="Select or type to filter..."
+                  className="w-full h-10 bg-black/40 border border-zinc-800 rounded-lg px-3 pr-10 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowTeamDropdown(!showTeamDropdown)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors cursor-pointer text-[10px]"
+                >
+                  {showTeamDropdown ? '▲' : '▼'}
+                </button>
+              </div>
+
+              {showTeamDropdown && (
+                <div className="absolute left-0 right-0 mt-1 bg-[#12121A] border border-zinc-800 rounded-xl shadow-2xl z-50 p-2 space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={teamSearch}
+                    onChange={(e) => setTeamSearch(e.target.value)}
+                    className="w-full h-8 bg-black/60 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-accent/50 font-mono"
+                  />
+                  <div className="max-h-48 overflow-y-auto space-y-1 pr-1 scrollbar-thin scrollbar-thumb-zinc-800 text-left">
+                    <div
+                      onClick={() => {
+                        setTeam('');
+                        setTeamId(null);
+                        setTeamSearch('');
+                        setShowTeamDropdown(false);
+                      }}
+                      className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer text-xs transition-colors ${
+                        team === ''
+                          ? 'bg-accent/15 border border-accent/35 text-white font-bold'
+                          : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200 border border-transparent'
+                      }`}
+                    >
+                      <div className="w-5 h-5 rounded-md bg-zinc-850 border border-white/5 flex items-center justify-center shrink-0 text-[10px] text-zinc-500 font-bold font-mono">
+                        —
+                      </div>
+                      <span>None (Free Agent)</span>
+                    </div>
+
+                    {teams
+                      .filter(t => {
+                        const q = teamSearch.toLowerCase();
+                        return t.name.toLowerCase().includes(q);
+                      })
+                      .map(t => {
+                        const isSelected = team.toLowerCase() === t.name.toLowerCase();
+                        return (
+                          <div
+                            key={`team-opt-${t.id}`}
+                            onClick={() => {
+                              setTeam(t.name);
+                              setTeamId(t.id);
+                              setTeamSearch('');
+                              setShowTeamDropdown(false);
+                            }}
+                            className={`flex items-center gap-2.5 p-2 rounded-lg cursor-pointer text-xs transition-colors ${
+                              isSelected
+                                ? 'bg-accent/15 border border-accent/35 text-white font-bold'
+                                : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200 border border-transparent'
+                            }`}
+                          >
+                            <div className="w-5 h-5 rounded-md bg-zinc-850 border border-white/5 overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold text-accent font-mono">
+                              {t.name[0]?.toUpperCase()}
+                            </div>
+                            <span>{t.name}</span>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -1048,6 +1177,61 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                 <div className="space-y-1.5">
                   <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Cast Shadows</label>
                   <select value={valCastShadows} onChange={(e) => setValCastShadows(e.target.value)} className="w-full h-9 bg-[#0F0F15] border border-zinc-800 rounded-lg px-3 text-xs text-white focus:outline-none focus:border-red-500/40 transition-all font-mono cursor-pointer">
+                    <option value="On">On</option>
+                    <option value="Off">Off</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Valorant Map Settings block */}
+            <div className="mt-6 border-t border-red-500/10 pt-5 space-y-4">
+              <h4 className="text-[11px] font-extrabold text-red-400/85 font-mono uppercase tracking-wider">Minimap & Map Settings</h4>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Rotate</label>
+                  <select value={valMapRotate} onChange={(e) => setValMapRotate(e.target.value)} className="w-full h-9 bg-[#0F0F15] border border-zinc-800 rounded-lg px-3 text-xs text-white focus:outline-none focus:border-red-500/40 transition-all font-mono cursor-pointer">
+                    <option value="Rotate">Rotate</option>
+                    <option value="Fixed">Fixed</option>
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Fixed Orientation</label>
+                  <select value={valMapFixedOrientation} onChange={(e) => setValMapFixedOrientation(e.target.value)} className="w-full h-9 bg-[#0F0F15] border border-zinc-800 rounded-lg px-3 text-xs text-white focus:outline-none focus:border-red-500/40 transition-all font-mono cursor-pointer">
+                    <option value="Always the same">Always the same</option>
+                    <option value="Based on side">Based on side</option>
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Keep Player Centered</label>
+                  <select value={valMapKeepCentered} onChange={(e) => setValMapKeepCentered(e.target.value)} className="w-full h-9 bg-[#0F0F15] border border-zinc-800 rounded-lg px-3 text-xs text-white focus:outline-none focus:border-red-500/40 transition-all font-mono cursor-pointer">
+                    <option value="On">On</option>
+                    <option value="Off">Off</option>
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Minimap Size</label>
+                  <input
+                    type="text"
+                    value={valMapMinimapSize}
+                    onChange={(e) => setValMapMinimapSize(e.target.value)}
+                    placeholder="e.g. 1.1"
+                    className="w-full h-9 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white focus:outline-none focus:border-red-500/40 transition-all font-mono"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Minimap Zoom</label>
+                  <input
+                    type="text"
+                    value={valMapMinimapZoom}
+                    onChange={(e) => setValMapMinimapZoom(e.target.value)}
+                    placeholder="e.g. 0.9"
+                    className="w-full h-9 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white focus:outline-none focus:border-red-500/40 transition-all font-mono"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Minimap Vision Cones</label>
+                  <select value={valMapVisionCones} onChange={(e) => setValMapVisionCones(e.target.value)} className="w-full h-9 bg-[#0F0F15] border border-zinc-800 rounded-lg px-3 text-xs text-white focus:outline-none focus:border-red-500/40 transition-all font-mono cursor-pointer">
                     <option value="On">On</option>
                     <option value="Off">Off</option>
                   </select>

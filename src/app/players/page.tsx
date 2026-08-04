@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { getTeamLogo } from '@/lib/teamLogos';
+import TeamLogoImg from '@/components/TeamLogoImg';
 
 type Player = {
   settings_id: number;
@@ -14,16 +16,22 @@ type Player = {
   nationality: string | null;
   country_code: string | null;
   profile_img_url: string | null;
-  game: string;
-  game_slug: string;
-  game_role: string | null;
-  mouse_settings: {
+  games: {
+    id: number;
+    name: string;
+    slug: string;
+    role: string | null;
+  }[];
+  game?: string;
+  game_slug?: string;
+  game_role?: string | null;
+  mouse_settings?: {
     dpi: number | null;
     hz: number | null;
     sens: number | null;
     edpi: number | null;
   };
-  video_settings: {
+  video_settings?: {
     resolution: string | null;
     aspect_ratio: string | null;
     refresh_rate: number | null;
@@ -106,15 +114,6 @@ function renderGameLogo(slug: string) {
   );
 }
 
-// Helper to render team logos from static assets
-function getTeamLogo(teamName: string | null): string | undefined {
-  if (!teamName) return undefined;
-  const t = teamName.toLowerCase().trim();
-  if (t.includes('sentinels')) {
-    return '/images/teams/sentinels.png';
-  }
-  return undefined;
-}
 
 function TeamSearchSelect({
   options,
@@ -524,25 +523,26 @@ function PlayersDirectoryContent() {
   };
 
   // Filters
-  const [selectedGame, setSelectedGame] = useState('all');
-  const [selectedTeam, setSelectedTeam] = useState('all');
-  const [selectedCountry, setSelectedCountry] = useState('all');
+  const [selectedGame, setSelectedGame] = useState(() => {
+    const gameParam = searchParams.get('game');
+    return (gameParam === 'cs2' || gameParam === 'valorant') ? gameParam : 'all';
+  });
+  const [selectedTeam, setSelectedTeam] = useState(() => {
+    return searchParams.get('team') || 'all';
+  });
+  const [selectedCountry, setSelectedCountry] = useState(() => {
+    return searchParams.get('country') || 'all';
+  });
 
-  // Sync with searchParams on load
+  // Sync with searchParams on load/URL change
   useEffect(() => {
     const gameParam = searchParams.get('game');
     const teamParam = searchParams.get('team');
     const countryParam = searchParams.get('country');
 
-    if (gameParam && (gameParam === 'cs2' || gameParam === 'valorant')) {
-      setSelectedGame(gameParam);
-    }
-    if (teamParam) {
-      setSelectedTeam(teamParam);
-    }
-    if (countryParam) {
-      setSelectedCountry(countryParam);
-    }
+    setSelectedGame((gameParam === 'cs2' || gameParam === 'valorant') ? gameParam : 'all');
+    setSelectedTeam(teamParam || 'all');
+    setSelectedCountry(countryParam || 'all');
   }, [searchParams]);
 
   // Filter options lists
@@ -587,6 +587,8 @@ function PlayersDirectoryContent() {
 
   // Fetch players on parameters change
   useEffect(() => {
+    let active = true;
+
     const fetchPlayers = async () => {
       try {
         setLoading(true);
@@ -606,7 +608,7 @@ function PlayersDirectoryContent() {
         }
 
         const response = await fetch(url);
-        if (response.ok) {
+        if (response.ok && active) {
           const data = await response.json();
           setPlayers(data.players || []);
           setPagination(data.pagination);
@@ -614,11 +616,17 @@ function PlayersDirectoryContent() {
       } catch (err) {
         console.error('Error fetching players:', err);
       } finally {
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
 
     fetchPlayers();
+
+    return () => {
+      active = false;
+    };
   }, [pagination.page, debouncedSearch, selectedGame, selectedTeam, selectedCountry]);
 
   const handlePageChange = (newPage: number) => {
@@ -752,17 +760,8 @@ function PlayersDirectoryContent() {
                   onClick={() => router.push(`/players/${player.username}`)}
                   className="relative bg-[#12121A]/70 backdrop-blur-md border border-border-custom hover:border-zinc-700/80 rounded-2xl p-6 flex flex-col items-center justify-between text-center hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(245,158,11,0.02)] transition-all duration-300 group cursor-pointer min-h-[300px]"
                 >
-                  {/* Top Left Team Name Badge */}
                   <div className="absolute top-4 left-5 z-20 flex items-center gap-1.5 text-[10px] font-bold text-zinc-500 uppercase tracking-widest pointer-events-none max-w-[68%]">
-                    {player.team && (
-                      <div className="w-4.5 h-4.5 rounded bg-zinc-950 border border-zinc-800/80 overflow-hidden shrink-0 flex items-center justify-center">
-                        {teamLogo ? (
-                          <img src={teamLogo} alt={player.team || 'Team'} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full bg-zinc-900" />
-                        )}
-                      </div>
-                    )}
+                    <TeamLogoImg teamName={player.team} className="w-4.5 h-4.5" />
                     <span className="truncate">{player.team || 'Free Agent'}</span>
                   </div>
 
@@ -811,8 +810,12 @@ function PlayersDirectoryContent() {
                       )}
                     </div>
                     {/* Game Badge overlap at bottom center */}
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
-                      {renderGameLogo(player.game_slug)}
+                    <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1">
+                      {player.games && player.games.map((g) => (
+                        <div key={g.slug} className="shrink-0">
+                          {renderGameLogo(g.slug)}
+                        </div>
+                      ))}
                     </div>
                   </div>
 

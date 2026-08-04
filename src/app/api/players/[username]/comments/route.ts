@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
 type RouteParams = {
-  params: Promise<{ username: string }> | { username: string };
+  params: Promise<{ username: string }>;
 };
 
 // GET: ดึงความเห็นทั้งหมดของผู้เล่นรายบุคคล

@@ -23,12 +23,43 @@ export default function AdminPlayersList() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  // Custom confirmation dialog state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    onCancel?: () => void;
+    isAlertOnly?: boolean;
+  } | null>(null);
+
+  const showConfirm = (
+    title: string,
+    message: string,
+    onConfirm: () => void,
+    isAlertOnly: boolean = false
+  ) => {
+    setConfirmModal({
+      isOpen: true,
+      title,
+      message,
+      onConfirm: () => {
+        onConfirm();
+        setConfirmModal(null);
+      },
+      onCancel: isAlertOnly ? undefined : () => {
+        setConfirmModal(null);
+      },
+      isAlertOnly
+    });
+  };
  
   const limit = 50;
  
-  async function loadPlayers() {
+  async function loadPlayers(silent: boolean = false) {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const from = (page - 1) * limit;
       const to = from + limit - 1;
  
@@ -66,7 +97,7 @@ export default function AdminPlayersList() {
     } catch (err) {
       console.error('Error loading players:', err);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }
  
@@ -80,50 +111,59 @@ export default function AdminPlayersList() {
   }, [page, search, selectedGame]);
 
   const handleDeletePlayer = async (id: number, username: string) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete player "${username}"? This will delete all their game settings and gear references!`);
-    if (!confirmDelete) return;
+    showConfirm(
+      'Confirm Player Deletion',
+      `Are you sure you want to delete player "${username}"? This will delete all their game settings, gear references, and comments.`,
+      async () => {
+        try {
+          setDeletingId(id);
+          // Optimistically remove from state
+          setPlayers(prev => prev.filter(p => p.id !== id));
 
-    try {
-      setDeletingId(id);
+          // 1. Delete player game settings
+          const { error: settingsError } = await supabase
+            .from('player_game_settings')
+            .delete()
+            .eq('player_id', id);
+          
+          if (settingsError) throw settingsError;
 
-      // 1. Delete player game settings
-      const { error: settingsError } = await supabase
-        .from('player_game_settings')
-        .delete()
-        .eq('player_id', id);
-      
-      if (settingsError) throw settingsError;
+          // 2. Delete player gear products references
+          const { error: productsError } = await supabase
+            .from('player_products')
+            .delete()
+            .eq('player_id', id);
 
-      // 2. Delete player gear products references
-      const { error: productsError } = await supabase
-        .from('player_products')
-        .delete()
-        .eq('player_id', id);
+          if (productsError) throw productsError;
 
-      if (productsError) throw productsError;
+          // 3. Delete player favorites
+          await supabase
+            .from('user_favorites')
+            .delete()
+            .eq('player_id', id);
 
-      // 3. Delete player favorites
-      await supabase
-        .from('user_favorites')
-        .delete()
-        .eq('player_id', id);
+          // 4. Delete player from players table
+          const { error: playerError } = await supabase
+            .from('players')
+            .delete()
+            .eq('id', id);
 
-      // 4. Delete player from players table
-      const { error: playerError } = await supabase
-        .from('players')
-        .delete()
-        .eq('id', id);
+          if (playerError) throw playerError;
 
-      if (playerError) throw playerError;
-
-      // Reload list
-      alert(`Player "${username}" deleted successfully!`);
-      loadPlayers();
-    } catch (err: any) {
-      alert(`Error deleting player: ${err.message}`);
-    } finally {
-      setDeletingId(null);
-    }
+          loadPlayers(true); // Silent background sync
+        } catch (err: any) {
+          loadPlayers(); // Rollback list state
+          showConfirm(
+            'Deletion Error',
+            `Error deleting player: ${err.message}`,
+            () => {},
+            true
+          );
+        } finally {
+          setDeletingId(null);
+        }
+      }
+    );
   };
 
   return (
@@ -300,6 +340,49 @@ export default function AdminPlayersList() {
         </div>
       )}
 
+      {/* Custom Styled Confirmation Dialog */}
+      {confirmModal && confirmModal.isOpen && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#12121A] border border-white/10 rounded-2xl overflow-hidden shadow-2xl animate-fade-in font-sans">
+            {/* Top gold-orange accent line */}
+            <div className="h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500" />
+            
+            <div className="p-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+                  ⚠️
+                </div>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-white font-mono">
+                  {confirmModal.title}
+                </h3>
+              </div>
+
+              <p className="text-xs text-zinc-300 font-sans leading-relaxed">
+                {confirmModal.message}
+              </p>
+
+              <div className="flex justify-end gap-3 pt-2 font-mono text-[10px] font-bold">
+                {!confirmModal.isAlertOnly && (
+                  <button
+                    type="button"
+                    onClick={confirmModal.onCancel}
+                    className="px-4 py-2.5 rounded-xl border border-white/5 text-zinc-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                  >
+                    CANCEL
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={confirmModal.onConfirm}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-zinc-950 hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 transition-all cursor-pointer uppercase"
+                >
+                  {confirmModal.isAlertOnly ? 'OK' : 'CONFIRM'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

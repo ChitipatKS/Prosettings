@@ -242,7 +242,10 @@ export default function Home() {
           {/* Hero Banner Section (Clean & Detailed) */}
           <div className="text-center max-w-3xl mx-auto space-y-5 pt-8">
             <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight font-display">
-              Optimize Your Setup. <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.25)]">Elevate Your Game.</span>
+              Optimize Your Setup<br></br>
+              <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.25)]">
+                Elevate Your Game
+              </span>
             </h1>
             <div className="flex justify-center">
               <p className="text-sm sm:text-base text-zinc-400 font-normal">
@@ -344,15 +347,20 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
             {/* CARD 1: CS2 */}
-            <div className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group">
+            <Link href="/players?game=cs2" className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
               <div className="space-y-6">
-                <div className="relative h-44 rounded-2xl bg-gradient-to-tr from-amber-950 via-zinc-900 to-amber-600 bg-[length:20px_20px] bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] flex items-center justify-center border border-white/5 overflow-hidden">
-                  <span className="text-2xl font-black tracking-widest text-[#FAFAFA] uppercase font-display group-hover:scale-110 transition-transform duration-300">CS2</span>
-                  <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white font-sans backdrop-blur-md">1</div>
+                <div className="relative h-44 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center">
+                  <img
+                    src="/images/cs2-banner.png"
+                    alt="CS2 Banner"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:opacity-90 transition-opacity duration-300"></div>
+                  <span className="relative z-10 text-2xl font-black tracking-widest text-[#FAFAFA] uppercase font-display drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]"></span>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">CS2</h3>
+                  <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">Counter-Strike 2</h3>
                   <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-400">
                     <div className="flex items-center gap-2">
                       <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -369,42 +377,23 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
-              <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between">
-                <div className="flex -space-x-1.5 overflow-hidden">
-                  {cs2Stats.players.slice(0, 5).map((p, idx) => (
-                    <div
-                      key={p.player_id || idx}
-                      className="inline-block h-6 w-6 rounded-full bg-zinc-800 border border-border-custom flex items-center justify-center text-[8px] font-bold text-accent overflow-hidden font-display"
-                      title={p.username}
-                    >
-                      {p.profile_img_url ? (
-                        <img src={p.profile_img_url} alt={p.username} className="h-full w-full object-cover" />
-                      ) : (
-                        p.username[0].toUpperCase()
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <button
-                  onClick={() => setSelectedGame('cs2')}
-                  className="text-white hover:text-accent font-bold text-xs font-sans tracking-wider flex items-center gap-1 transition-colors duration-200"
-                >
-                  VIEW ALL &gt;
-                </button>
-              </div>
-            </div>
+            </Link>
 
             {/* CARD 2: Valorant */}
-            <div className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group">
+            <Link href="/players?game=valorant" className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
               <div className="space-y-6">
-                <div className="relative h-44 rounded-2xl bg-gradient-to-tr from-rose-950 via-zinc-900 to-red-600 bg-[length:20px_20px] bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] flex items-center justify-center border border-white/5 overflow-hidden">
-                  <span className="text-2xl font-black tracking-widest text-[#FAFAFA] uppercase font-display group-hover:scale-110 transition-transform duration-300">VALORANT</span>
-                  <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white font-sans backdrop-blur-md">2</div>
+                <div className="relative h-44 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center">
+                  <img
+                    src="/images/valorant-banner.jpg"
+                    alt="VALORANT Banner"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:opacity-90 transition-opacity duration-300"></div>
+                  <span className="relative z-10 text-2xl font-black tracking-widest text-[#FAFAFA] uppercase font-display drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]"></span>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">Valorant</h3>
+                  <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">VALORANT</h3>
                   <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-400">
                     <div className="flex items-center gap-2">
                       <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -421,47 +410,39 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            </Link>
 
-              {/* Bottom overlap avatars and action */}
-              <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between">
-                <div className="flex -space-x-1.5 overflow-hidden">
-                  {valorantStats.players.slice(0, 5).map((p, idx) => (
-                    <div
-                      key={p.player_id || idx}
-                      className="inline-block h-6 w-6 rounded-full bg-zinc-800 border border-border-custom flex items-center justify-center text-[8px] font-bold text-accent overflow-hidden font-display"
-                      title={p.username}
-                    >
-                      {p.profile_img_url ? (
-                        <img src={p.profile_img_url} alt={p.username} className="h-full w-full object-cover" />
-                      ) : (
-                        p.username[0].toUpperCase()
-                      )}
-                    </div>
-                  ))}
+            {/* CARD 3: Overwatch */}
+            <Link href="/players?game=overwatch" className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
+              <div className="space-y-6">
+                <div className="relative h-44 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center">
+                  <img
+                    src="/images/overwatch-banner.jpg"
+                    alt="Overwatch Banner"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:opacity-90 transition-opacity duration-300"></div>
                 </div>
-                <button
-                  onClick={() => setSelectedGame('valorant')}
-                  className="text-white hover:text-accent font-bold text-xs font-sans tracking-wider flex items-center gap-1 transition-colors duration-200"
-                >
-                  VIEW ALL&gt;
-                </button>
-              </div>
-            </div>
 
-            {/* CARD 3: Empty Placeholder */}
-            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
-              <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
-                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-sans">TBD</span>
-                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-sans">3</div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">OVERWATCH</h3>
+                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-400">
+                    <div className="flex items-center gap-2">
+                      <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                      </svg>
+                      <span className="text-accent font-bold">0+</span> Players
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456" />
+                      </svg>
+                      <span className="text-accent font-bold">0+</span> Gamers Setup
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="space-y-2 mt-6">
-                <h3 className="text-lg font-bold text-zinc-600 font-display">Coming Soon</h3>
-                <p className="text-xs text-zinc-600 font-sans">Game details will be updated later</p>
-              </div>
-              <div className="mt-8 pt-4 border-t border-dashed border-border-custom flex items-center justify-end">
-                <span className="text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
-              </div>
-            </div>
+            </Link>
 
             {/* CARD 4: Empty Placeholder */}
             <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">

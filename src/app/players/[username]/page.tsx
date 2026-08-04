@@ -1,15 +1,14 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import GearCard from '@/components/GearCard';
-import CommentSection from '@/components/CommentSection';
+import { getTeamLogo } from '@/lib/teamLogos';
+import TeamLogoImg from '@/components/TeamLogoImg';
 import FavoriteButton from '@/components/FavoriteButton';
-import ProfileSidebar from '@/components/ProfileSidebar';
-import CopyButton from '@/components/CopyButton';
 import CopyProfileUrlButton from '@/components/CopyProfileUrlButton';
+import PlayerProfileClient from '@/components/PlayerProfileClient';
 
 type PageProps = {
-  params: Promise<{ username: string }> | { username: string };
+  params: Promise<{ username: string }>;
 };
 
 // --- Helper functions ---
@@ -110,15 +109,6 @@ function renderGameLogo(slug: string) {
   );
 }
 
-// Helper to render team logos from static assets
-function getTeamLogo(teamName: string | null): string | undefined {
-  if (!teamName) return undefined;
-  const t = teamName.toLowerCase().trim();
-  if (t.includes('sentinels')) {
-    return '/images/teams/sentinels.png';
-  }
-  return undefined;
-}
 
 // Helper to calculate age from birth date string
 function calculateAge(dateStr: string | null): number | null {
@@ -409,11 +399,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                 {player.team && (
                   <Link href={`/teams?team=${encodeURIComponent(player.team)}`}>
                     <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-lg font-sans tracking-wide border cursor-pointer transition-all duration-300 ${brandColors.bg} ${brandColors.border} ${brandColors.text} ${brandColors.glow}`}>
-                      {getTeamLogo(player.team) ? (
-                        <div className="w-4 h-4 rounded overflow-hidden shrink-0 flex items-center justify-center bg-zinc-950 border border-zinc-800/50">
-                          <img src={getTeamLogo(player.team)} alt={player.team} className="w-full h-full object-cover" />
-                        </div>
-                      ) : null}
+                      <TeamLogoImg teamName={player.team} className="w-4 h-4" />
                       <span>{player.team}</span>
                     </span>
                   </Link>
@@ -469,28 +455,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                 )}
               </div>
 
-              {/* Game badges */}
-              <div className="flex flex-wrap gap-2 pt-1">
-                {settingsData && settingsData.map((s: any) => (
-                  <div key={s.id} className="flex items-center gap-2 bg-[#12121A]/80 border border-border-custom py-1.5 px-3 rounded-lg">
-                    <Link href={`/players?game=${encodeURIComponent(s.games.slug)}`}>
-                      <div className="flex items-center gap-1.5 cursor-pointer">
-                        {renderGameLogo(s.games.slug)}
-                        <span className={`text-[10px] font-bold font-mono tracking-wide ${
-                          s.games.slug === 'valorant' ? 'text-red-400' : 'text-amber-400'
-                        }`}>
-                          {s.games.name}
-                        </span>
-                      </div>
-                    </Link>
-                    {s.game_role && (
-                      <span className="text-[10px] text-zinc-400 font-medium border-l border-white/10 pl-2 font-mono">
-                        {s.game_role}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
+
 
               {/* Description placeholder */}
               <div className="border-l-2 border-zinc-700/50 pl-4 py-0.5 max-w-2xl pt-1">
@@ -542,380 +507,17 @@ export default async function PlayerProfilePage({ params }: PageProps) {
       </section>
 
       {/* ================================================ */}
-      {/* MAIN CONTENT + SIDEBAR LAYOUT */}
+      {/* INTERACTIVE CLIENT DETAIL AREA */}
       {/* ================================================ */}
-      <div className="relative z-10 flex gap-8">
-
-        {/* ======= MAIN CONTENT ======= */}
-        <div className="flex-1 min-w-0 space-y-10">
-
-          {/* ================================================ */}
-          {/* SECTION 2: SETTINGS 2-COLUMN LAYOUT */}
-          {/* ================================================ */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-            {/* ---- LEFT COLUMN: Devices & Controls ---- */}
-            <div className="space-y-6">
-
-              {/* MOUSE SETTINGS */}
-              <div id="mouse-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
-                <SectionHeader 
-                  icon={
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <rect x="5" y="2" width="14" height="20" rx="7" />
-                      <path d="M12 2v10M5 12h14" />
-                    </svg>
-                  } 
-                  title="Mouse Settings" 
-                />
-
-                {/* Mouse product banner */}
-                {playerMouse && (
-                  <div className="flex items-center gap-3 bg-[#12121A]/40 border border-border-custom/50 p-2 rounded-xl mb-5 hover:border-border-hover/80 transition-all duration-200">
-                    {playerMouse.image_url ? (
-                      <div className="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
-                        <img src={playerMouse.image_url} alt={playerMouse.name} className="max-h-full max-w-full object-contain" />
-                      </div>
-                    ) : (
-                      <div className="w-12 h-12 rounded-lg bg-black/40 border border-zinc-805 flex items-center justify-center shrink-0 text-zinc-600 shadow-inner">
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <rect x="5" y="2" width="14" height="20" rx="7" />
-                          <path d="M12 2v10M5 12h14" />
-                        </svg>
-                      </div>
-                    )}
-                    <div className="min-w-0">
-                      <p className="text-xs font-extrabold text-white tracking-wide uppercase font-sans line-clamp-1">{playerMouse.name}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stats grid */}
-                <div className="grid grid-cols-2 gap-2.5">
-                  <StatHighlight label="DPI" value={primarySettings?.mouse_dpi} accent />
-                  <StatHighlight label="Sensitivity" value={primarySettings?.in_game_sens !== null && primarySettings?.in_game_sens !== undefined ? Number(primarySettings.in_game_sens).toFixed(3) : null} accent />
-                  <StatHighlight label="eDPI" value={primarySettings?.edpi} />
-                  <StatHighlight label="Hz" value={primarySettings?.mouse_hz ? `${primarySettings.mouse_hz}` : null} />
-                  {isValorant && settingsJson.scoped_sens && (
-                    <StatHighlight label="ADS / Scoped" value={settingsJson.scoped_sens} />
-                  )}
-                  {!isValorant && settingsJson.zoom_sens && (
-                    <StatHighlight label="Zoom Sens" value={settingsJson.zoom_sens} />
-                  )}
-                </div>
-
-                {/* Show other game settings if multiple */}
-                {settingsData && settingsData.length > 1 && (
-                  <div className="mt-4 space-y-3">
-                    {settingsData.slice(1).map((s: any) => {
-                      const sJson = s.settings_data || {};
-                      const isVal = s.games.slug === 'valorant';
-                      return (
-                        <div key={s.id} className="border-t border-white/5 pt-3">
-                          <p className="text-[9px] font-bold uppercase tracking-wider text-zinc-500 font-mono mb-2 flex items-center gap-2">
-                            <span className={`w-1.5 h-1.5 rounded-full ${isVal ? 'bg-red-500' : 'bg-amber-500'}`}></span>
-                            {s.games.name} {s.game_role && `· ${s.game_role}`}
-                          </p>
-                          <div className="grid grid-cols-2 gap-2">
-                            <StatHighlight label="DPI" value={s.mouse_dpi} accent />
-                            <StatHighlight label="Sens" value={s.in_game_sens !== null ? Number(s.in_game_sens).toFixed(3) : null} accent />
-                            <StatHighlight label="eDPI" value={s.edpi} />
-                            <StatHighlight label="Hz" value={s.mouse_hz ? `${s.mouse_hz}` : null} />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* KEYBOARD SETTINGS */}
-              <div id="keyboard-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
-                <SectionHeader 
-                  icon={
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <rect x="2" y="4" width="20" height="16" rx="3" />
-                      <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10" />
-                    </svg>
-                  } 
-                  title="Keyboard Settings" 
-                />
-
-                {/* Keyboard product banner */}
-                {playerKeyboard && (
-                  <div className="flex items-center gap-3 bg-[#12121A]/40 border border-border-custom/50 p-2 rounded-xl mb-5 hover:border-border-hover/80 transition-all duration-200">
-                    {playerKeyboard.image_url ? (
-                      <div className="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
-                        <img src={playerKeyboard.image_url} alt={playerKeyboard.name} className="max-h-full max-w-full object-contain" />
-                      </div>
-                    ) : (
-                      <div className="w-12 h-12 rounded-lg bg-black/40 border border-zinc-805 flex items-center justify-center shrink-0 text-zinc-600 shadow-inner">
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <rect x="2" y="4" width="20" height="16" rx="3" />
-                          <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10" />
-                        </svg>
-                      </div>
-                    )}
-                    <div className="min-w-0">
-                      <p className="text-xs font-extrabold text-white tracking-wide uppercase font-sans line-clamp-1">{playerKeyboard.name}</p>
-                    </div>
-                  </div>
-                )}
-
-                {hasKeyboardSettings ? (
-                  <div className="space-y-1">
-                    {settingsJson.rapid_trigger !== undefined && (
-                      <SettingRow label="Rapid Trigger" value={settingsJson.rapid_trigger} />
-                    )}
-                    {settingsJson.actuation_point !== undefined && (
-                      <SettingRow label="Actuation Point" value={settingsJson.actuation_point} />
-                    )}
-                    {settingsJson.polling_rate !== undefined && (
-                      <SettingRow label="Polling Rate" value={`${settingsJson.polling_rate} Hz`} />
-                    )}
-                    {settingsJson.keyboard_profile !== undefined && (
-                      <SettingRow label="Profile Code" value={settingsJson.keyboard_profile} />
-                    )}
-
-                    {/* Copy to clipboard button placeholder */}
-                    {settingsJson.keyboard_profile && (
-                      <div className="pt-3">
-                        <CopyButton 
-                          textToCopy={settingsJson.keyboard_profile} 
-                          label="Copy Profile Code" 
-                          successLabel="Profile Code Copied!"
-                        />
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <EmptyState message="No keyboard performance data available" />
-                )}
-              </div>
-
-              {/* CONTROLS / KEYBINDS */}
-              <div id="controls-keybinds" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
-                <SectionHeader 
-                  icon={
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <rect x="2" y="6" width="20" height="12" rx="3" />
-                      <path d="M6 12h4M8 10v4M15 11h.01M18 13h.01" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  } 
-                  title="Controls / Keybinds" 
-                />
-
-                <EmptyState message="Keybind data coming soon — stay tuned!" />
-              </div>
-            </div>
-
-            {/* ---- RIGHT COLUMN: Crosshair & Map ---- */}
-            <div className="space-y-6">
-
-              {/* CROSSHAIR SIMULATION */}
-              <div id="crosshair" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
-                <SectionHeader 
-                  icon={
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 3v3M12 18v3M3 12h3M18 12h3M12 12h.01" strokeLinecap="round" />
-                    </svg>
-                  } 
-                  title="Crosshair" 
-                />
-
-                {/* Crosshair preview area */}
-                <div className="relative bg-[#12121a] bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px] border border-border-custom rounded-xl overflow-hidden mb-4" style={{ aspectRatio: '16/9' }}>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {/* Crosshair simulation placeholder */}
-                    <div className="relative">
-                      <div className="w-px h-6 bg-green-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full opacity-80"></div>
-                      <div className="w-px h-6 bg-green-400 absolute top-1/2 left-1/2 -translate-x-1/2 opacity-80"></div>
-                      <div className="w-6 h-px bg-green-400 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-full opacity-80"></div>
-                      <div className="w-6 h-px bg-green-400 absolute top-1/2 left-1/2 -translate-y-1/2 opacity-80"></div>
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-80"></div>
-                    </div>
-                  </div>
-
-                  {/* Navigation arrows */}
-                  <button className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all cursor-pointer">
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                  </button>
-                  <button className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all cursor-pointer">
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </button>
-
-                  {/* Crosshair counter */}
-                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] font-mono text-zinc-500 bg-black/60 px-2 py-0.5 rounded-full border border-white/5">
-                    1 / 1
-                  </div>
-                </div>
-
-                {/* Crosshair Settings */}
-                <div className="space-y-1 mb-3">
-                  <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans mb-3">Crosshair Settings</p>
-                  <SettingRow label="Inner Lines" value={null} />
-                  <SettingRow label="Outer Lines" value={null} />
-                  <SettingRow label="Center Dot" value={null} />
-                  <SettingRow label="Thickness" value={null} />
-                  <SettingRow label="Outline" value={null} />
-                  <SettingRow label="Color" value={null} />
-                </div>
-
-                {/* Copy crosshair code */}
-                <CopyButton 
-                  textToCopy={settingsJson.crosshair_code || "0;P;c;5;o;1;d;1;z;3;f;0;0t;4;0l;2;0o;2;0a;1;0f;0;1b;0"} 
-                  label="Copy Crosshair Code" 
-                  successLabel="Crosshair Code Copied!"
-                  className="w-full text-[10px] font-bold py-2.5 px-4 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
-                />
-              </div>
-
-              {/* MAP SETTINGS */}
-              <div className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
-                <SectionHeader 
-                  icon={
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-                      <line x1="9" y1="3" x2="9" y2="18" />
-                      <line x1="15" y1="6" x2="15" y2="21" />
-                    </svg>
-                  } 
-                  title="Map Settings" 
-                />
-
-                <div className="space-y-1">
-                  <SettingRow label="Rotate" value={null} />
-                  <SettingRow label="Fixed Orientation" value={null} />
-                  <SettingRow label="Keep Player Centered" value={null} />
-                  <SettingRow label="Minimap Size" value={null} />
-                  <SettingRow label="Minimap Zoom" value={null} />
-                  <SettingRow label="Minimap Vision Cones" value={null} />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ================================================ */}
-          {/* SECTION 3: VIDEO SETTINGS (Full Width, 2-col inside) */}
-          {/* ================================================ */}
-          <div id="video-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 sm:p-6 rounded-2xl">
-            <SectionHeader 
-              icon={
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <rect x="2" y="3" width="20" height="14" rx="2" />
-                  <path d="M8 21h8M12 17v4" />
-                </svg>
-              } 
-              title="Video Settings" 
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Left: General */}
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mb-3 border-b border-white/5 pb-2">Video — General</p>
-                <div className="space-y-1">
-                  <SettingRow label="Display Mode" value={settingsJson.display_mode || 'Fullscreen'} />
-                  <SettingRow label="Resolution" value={primarySettings?.resolution} />
-                  <SettingRow label="Aspect Ratio" value={displayAspect} />
-                  {!isValorant && settingsJson.scaling_mode && (
-                    <SettingRow label="Scaling Mode" value={settingsJson.scaling_mode} />
-                  )}
-                  <SettingRow label="NVIDIA Reflex Low Latency" value={settingsJson.nvidia_reflex || null} />
-                </div>
-
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mt-5 mb-3 border-b border-white/5 pb-2">Accessibility</p>
-                <div className="space-y-1">
-                  <SettingRow label="Enemy Highlight Color" value={settingsJson.enemy_highlight_color || null} />
-                </div>
-              </div>
-
-              {/* Right: Graphics Quality */}
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mb-3 border-b border-white/5 pb-2">Video — Graphics Quality</p>
-                <div className="space-y-1">
-                  <SettingRow label="Multithreaded Rendering" value={settingsJson.multithreaded_rendering || null} />
-                  <SettingRow label="Material Quality" value={settingsJson.material_quality || null} />
-                  <SettingRow label="Texture Quality" value={settingsJson.texture_quality || null} />
-                  <SettingRow label="Detail Quality" value={settingsJson.detail_quality || null} />
-                  <SettingRow label="UI Quality" value={settingsJson.ui_quality || null} />
-                  <SettingRow label="Vignette" value={settingsJson.vignette || null} />
-                  <SettingRow label="VSync" value={settingsJson.vsync || null} />
-                  <SettingRow label="Anti-Aliasing" value={settingsJson.anti_aliasing || null} />
-                  <SettingRow label="Anisotropic Filtering" value={settingsJson.anisotropic_filtering || null} />
-                  <SettingRow label="Improve Clarity" value={settingsJson.improve_clarity || null} />
-                  <SettingRow label="Bloom" value={settingsJson.bloom || null} />
-                  <SettingRow label="Distortion" value={settingsJson.distortion || null} />
-                  <SettingRow label="Cast Shadows" value={settingsJson.cast_shadows || null} />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ================================================ */}
-          {/* SECTION 4: GEARS */}
-          {/* ================================================ */}
-          <div id="gears" className="scroll-mt-24">
-            <SectionHeader 
-              icon={
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path d="M3 14c0-4.97 4.03-9 9-9s9 4.03 9 9M3 14h3v5H3v-5Zm15 0h3v5h-3v-5Z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              } 
-              title="Gaming Gear" 
-            />
-            {gears.length === 0 ? (
-              <EmptyState message="No gaming gear information available" />
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {gears.map((product: any) => (
-                  <GearCard key={product.id} product={product} />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* ================================================ */}
-          {/* SECTION 5: PC SPEC */}
-          {/* ================================================ */}
-          <div id="pc-spec" className="scroll-mt-24">
-            <SectionHeader 
-              icon={
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <rect x="5" y="5" width="14" height="14" rx="2" />
-                  <path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4M9 9h6v6H9z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              } 
-              title="PC Specifications" 
-            />
-            {hardware.length === 0 ? (
-              <EmptyState message="No hardware specifications available" />
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {hardware.map((product: any) => (
-                  <GearCard key={product.id} product={product} />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* ================================================ */}
-          {/* SECTION 6: COMMENTS */}
-          {/* ================================================ */}
-          <div id="comments" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 sm:p-6 rounded-2xl">
-            <CommentSection username={player.username} />
-          </div>
-
-        </div>
-
-        {/* ======= RIGHT SIDEBAR (Desktop only) ======= */}
-        <ProfileSidebar />
-
-      </div>
+      <PlayerProfileClient
+        player={player}
+        settingsData={settingsData || []}
+        gears={gears}
+        hardware={hardware}
+        playerMouse={playerMouse}
+        playerKeyboard={playerKeyboard}
+        playerMonitor={playerMonitor}
+      />
     </div>
   );
 }
