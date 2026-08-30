@@ -64,7 +64,7 @@ export async function GET() {
     while (hasMore) {
       const { data: batch, error } = await supabase
         .from('players')
-        .select('id, username, real_name, team, profile_img_url')
+        .select('id, username, Full_name, team, profile_img_url')
         .range(pageNum * pageSize, (pageNum + 1) * pageSize - 1);
 
       if (error || !batch || batch.length === 0) {
@@ -92,7 +92,7 @@ export async function GET() {
         playersByTeam.get(t.toLowerCase())!.push({
           id: p.id,
           username: p.username,
-          real_name: p.real_name,
+          real_name: p.Full_name || p.full_name || null,
           profile_img_url: p.profile_img_url
         });
       }

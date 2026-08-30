@@ -27,7 +27,7 @@ export async function GET(request: NextRequest, context: RouteParams) {
     }
 
     if (!player) {
-      return NextResponse.json({ error: 'Player not found' }, { status: 404 });
+      return NextResponse.json({ comments: [] });
     }
 
     // 2. ดึง comments ทั้งหมดของ player_id นี้ เรียงลำดับจากล่าสุด

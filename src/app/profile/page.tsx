@@ -4,13 +4,15 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import GearCard from '@/components/GearCard';
-import StatCard from '@/components/StatCard';
+import PlayerProfileClient from '@/components/PlayerProfileClient';
+import TeamLogoImg from '@/components/TeamLogoImg';
 
 type Player = {
   id: number;
   username: string;
-  real_name: string | null;
+  Full_name?: string | null;
+  full_name?: string | null;
+  real_name?: string | null;
   team: string | null;
   country_code: string | null;
   profile_img_url: string | null;
@@ -28,6 +30,53 @@ type GearProduct = {
   amazon_url: string | null;
   estimated_price_thb: number | null;
 };
+
+function calculateAge(birthDateStr?: string | null): number | null {
+  if (!birthDateStr) return null;
+  const birthDate = new Date(birthDateStr);
+  if (isNaN(birthDate.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+function formatBirthDate(birthDateStr?: string | null): string {
+  if (!birthDateStr) return '';
+  const d = new Date(birthDateStr);
+  if (isNaN(d.getTime())) return birthDateStr;
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function formatSocialUrl(url: string, platform: 'twitter' | 'twitch' | 'instagram' | 'youtube' | 'tiktok' | 'discord' | 'facebook'): string {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+  const clean = trimmed.replace(/^@/, '');
+  switch (platform) {
+    case 'twitter':
+      return `https://x.com/${clean}`;
+    case 'twitch':
+      return `https://twitch.tv/${clean}`;
+    case 'instagram':
+      return `https://instagram.com/${clean}`;
+    case 'youtube':
+      return clean.startsWith('UC') ? `https://youtube.com/channel/${clean}` : `https://youtube.com/@${clean}`;
+    case 'tiktok':
+      return `https://tiktok.com/@${clean}`;
+    case 'facebook':
+      return `https://facebook.com/${clean}`;
+    case 'discord':
+      return `https://discord.com/users/${clean}`;
+    default:
+      return `https://${trimmed}`;
+  }
+}
 
 function GearSearchSelect({
   label,
@@ -47,10 +96,8 @@ function GearSearchSelect({
   const [isUserTyping, setIsUserTyping] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Find current selected product
   const selectedProduct = options.find(p => p.id.toString() === selectedValue);
 
-  // Synchronize searchQuery with selectedProduct name when not actively typing
   useEffect(() => {
     if (!isUserTyping) {
       if (selectedProduct) {
@@ -61,12 +108,9 @@ function GearSearchSelect({
     }
   }, [selectedProduct, isUserTyping]);
 
-  // Filter options based on search query — only when user is actively typing
   const filteredOptions = isUserTyping && searchQuery.trim().length > 0
     ? options.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
     : [];
-
-  const displayOptions = filteredOptions;
 
   return (
     <div className="relative space-y-1.5 w-full">
@@ -87,18 +131,14 @@ function GearSearchSelect({
             }
           }}
           onFocus={() => {
-            // Select all text so user can immediately start typing to search
             if (inputRef.current) {
               inputRef.current.select();
             }
-            // Don't open dropdown until user types
           }}
           onBlur={() => {
-            // Delay closing slightly so onMouseDown can register
             setTimeout(() => {
               setIsOpen(false);
               setIsUserTyping(false);
-              // Restore selected product name if exists
               if (selectedProduct) {
                 setSearchQuery(selectedProduct.name);
               } else {
@@ -110,7 +150,6 @@ function GearSearchSelect({
           className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 pr-10 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
         />
 
-        {/* Toggle / Indicator Icon */}
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
           {selectedValue && (
             <button
@@ -135,15 +174,14 @@ function GearSearchSelect({
           </span>
         </div>
 
-        {/* Dropdown Options List */}
         {isOpen && isUserTyping && searchQuery.trim().length > 0 && (
           <div className="absolute z-50 w-full mt-1.5 max-h-60 overflow-y-auto bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-800">
-            {displayOptions.length === 0 ? (
+            {filteredOptions.length === 0 ? (
               <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
                 No matching gears found
               </div>
             ) : (
-              displayOptions.map((product) => {
+              filteredOptions.map((product) => {
                 const isSelected = product.id.toString() === selectedValue;
                 return (
                   <div
@@ -153,13 +191,20 @@ function GearSearchSelect({
                       onChange(product.id.toString());
                       setSearchQuery(product.name);
                       setIsOpen(false);
+                      setIsUserTyping(false);
                     }}
-                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${isSelected
+                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors flex items-center justify-between ${
+                      isSelected
                         ? 'bg-accent/15 text-accent font-bold'
                         : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
-                      }`}
+                    }`}
                   >
-                    {product.name}
+                    <span>{product.name}</span>
+                    {product.estimated_price_thb && (
+                      <span className="text-[10px] text-zinc-500 font-sans">
+                        ฿{Number(product.estimated_price_thb).toLocaleString()}
+                      </span>
+                    )}
                   </div>
                 );
               })
@@ -176,7 +221,7 @@ function CountrySearchSelect({
   options,
   selectedValue,
   onChange,
-  placeholder = "Select Country..."
+  placeholder = "Search country..."
 }: {
   label: string;
   options: { code: string; name: string }[];
@@ -186,25 +231,24 @@ function CountrySearchSelect({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const selectedCountry = options.find(c => c.code === selectedValue);
 
   useEffect(() => {
     if (selectedCountry) {
       setSearchQuery(`${selectedCountry.name} (${selectedCountry.code})`);
-    } else {
+    } else if (!selectedValue) {
       setSearchQuery('');
     }
-  }, [selectedCountry]);
+  }, [selectedCountry, selectedValue]);
 
-  const filteredOptions = searchQuery.trim().length > 0
+  const displayOptions = searchQuery.trim().length > 0 && !selectedCountry
     ? options.filter(c =>
-      c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.code.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    : [];
-
-  const displayOptions = filteredOptions;
+        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.code.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : options;
 
   return (
     <div className="relative space-y-1.5 w-full">
@@ -213,6 +257,7 @@ function CountrySearchSelect({
       </label>
       <div className="relative">
         <input
+          ref={inputRef}
           type="text"
           value={searchQuery}
           onChange={(e) => {
@@ -223,10 +268,20 @@ function CountrySearchSelect({
             }
           }}
           onFocus={() => {
+            if (inputRef.current) {
+              inputRef.current.select();
+            }
             setIsOpen(true);
           }}
           onBlur={() => {
-            setTimeout(() => setIsOpen(false), 200);
+            setTimeout(() => {
+              setIsOpen(false);
+              if (selectedCountry) {
+                setSearchQuery(`${selectedCountry.name} (${selectedCountry.code})`);
+              } else {
+                setSearchQuery('');
+              }
+            }, 200);
           }}
           placeholder={placeholder}
           className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 pr-10 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
@@ -273,10 +328,11 @@ function CountrySearchSelect({
                       setSearchQuery(`${country.name} (${country.code})`);
                       setIsOpen(false);
                     }}
-                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${isSelected
+                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${
+                      isSelected
                         ? 'bg-accent/15 text-accent font-bold'
                         : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
-                      }`}
+                    }`}
                   >
                     {country.name} ({country.code})
                   </div>
@@ -300,10 +356,17 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   // Form profile states
   const [username, setUsername] = useState('');
+  const [fullName, setFullName] = useState('');
   const [selectedCountryCode, setSelectedCountryCode] = useState('');
+  const [nationality, setNationality] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [description, setDescription] = useState('');
+  const [profileImgUrl, setProfileImgUrl] = useState('');
+  const [team, setTeam] = useState('Community Member');
   const [countriesList, setCountriesList] = useState<{ code: string; name: string }[]>([]);
 
   // Games and settings states
@@ -320,6 +383,10 @@ export default function ProfilePage() {
   const [valRes, setValRes] = useState('1920x1080');
   const [valAspect, setValAspect] = useState('16:9');
   const [valEnemyHighlight, setValEnemyHighlight] = useState('Red (Default)');
+  const [valCrosshairCode, setValCrosshairCode] = useState('');
+  const [valRapidTrigger, setValRapidTrigger] = useState('');
+  const [valActuationPoint, setValActuationPoint] = useState('');
+  const [valPollingRate, setValPollingRate] = useState('');
 
   // CS2 settings
   const [csDpi, setCsDpi] = useState('800');
@@ -351,11 +418,13 @@ export default function ProfilePage() {
   const [selectedGears, setSelectedGears] = useState<GearProduct[]>([]);
 
   // Social Links
+  const [twitter, setTwitter] = useState('');
+  const [twitch, setTwitch] = useState('');
+  const [instagram, setInstagram] = useState('');
+  const [youtube, setYoutube] = useState('');
+  const [tiktok, setTiktok] = useState('');
   const [discord, setDiscord] = useState('');
   const [facebook, setFacebook] = useState('');
-  const [instagram, setInstagram] = useState('');
-  const [twitch, setTwitch] = useState('');
-  const [youtube, setYoutube] = useState('');
 
   // Favorite pro players list
   const [favorites, setFavorites] = useState<Player[]>([]);
@@ -410,15 +479,22 @@ export default function ProfilePage() {
         if (profile) {
           setIsProfileCreated(profile.is_profile_created);
           setUsername(profile.username || '');
+          setFullName(profile.Full_name || profile.full_name || profile.real_name || '');
           setSelectedCountryCode(profile.country_code || '');
+          setNationality(profile.nationality || '');
+          setBirthDate(profile.birth_date || '');
+          setDescription(profile.description || '');
+          setProfileImgUrl(profile.profile_img_url || '');
 
           // Load social links
           const socials = profile.social_links || {};
+          setTwitter(socials.twitter || socials.x || '');
+          setTwitch(socials.twitch || '');
+          setInstagram(socials.instagram || '');
+          setYoutube(socials.youtube || '');
+          setTiktok(socials.tiktok || '');
           setDiscord(socials.discord || '');
           setFacebook(socials.facebook || '');
-          setInstagram(socials.instagram || '');
-          setTwitch(socials.twitch || '');
-          setYoutube(socials.youtube || '');
 
           // Load games played
           const settings = profile.game_settings || {};
@@ -436,6 +512,10 @@ export default function ProfilePage() {
             setValRes(settings.valorant.resolution || '1920x1080');
             setValAspect(settings.valorant.aspect_ratio || '16:9');
             setValEnemyHighlight(settings.valorant.settings_data?.enemy_highlight_color || 'Red (Default)');
+            setValCrosshairCode(settings.valorant.settings_data?.crosshair_code || '');
+            setValRapidTrigger(settings.valorant.settings_data?.rapid_trigger || '');
+            setValActuationPoint(settings.valorant.settings_data?.actuation_point || '');
+            setValPollingRate(settings.valorant.settings_data?.polling_rate || '');
           }
 
           // Load cs2 values if exist
@@ -450,7 +530,6 @@ export default function ProfilePage() {
 
           // Set active gear dropdowns
           const ids = profile.gear_ids || [];
-          // Pre-populate gear selections
           if (gearResults['mouse'] && ids.length) {
             const m = gearResults['mouse'].find((p: any) => ids.includes(p.id));
             if (m) setSelectedMouseId(m.id.toString());
@@ -479,12 +558,10 @@ export default function ProfilePage() {
             }
           }
 
-          // If profile is not created yet, default to editing mode
           if (!profile.is_profile_created) {
             setIsEditing(true);
           }
         } else {
-          // Default to editing
           setIsEditing(true);
         }
 
@@ -496,7 +573,7 @@ export default function ProfilePage() {
             players (
               id,
               username,
-              real_name,
+              Full_name,
               team,
               country_code,
               profile_img_url,
@@ -540,7 +617,11 @@ export default function ProfilePage() {
         aspect_ratio: valAspect || '16:9',
         refresh_rate: null,
         settings_data: {
-          enemy_highlight_color: valEnemyHighlight
+          enemy_highlight_color: valEnemyHighlight,
+          crosshair_code: valCrosshairCode.trim() || undefined,
+          rapid_trigger: valRapidTrigger.trim() || undefined,
+          actuation_point: valActuationPoint.trim() || undefined,
+          polling_rate: valPollingRate.trim() || undefined
         }
       };
     }
@@ -568,14 +649,16 @@ export default function ProfilePage() {
 
     // Get nationality name matching selected code
     const countryObj = countriesList.find(c => c.code === selectedCountryCode);
-    const nationality = countryObj ? countryObj.name : '';
+    const natName = countryObj ? countryObj.name : nationality;
 
     const socialLinks = {
-      discord: discord.trim(),
-      facebook: facebook.trim(),
-      instagram: instagram.trim(),
+      twitter: twitter.trim(),
       twitch: twitch.trim(),
-      youtube: youtube.trim()
+      instagram: instagram.trim(),
+      youtube: youtube.trim(),
+      tiktok: tiktok.trim(),
+      discord: discord.trim(),
+      facebook: facebook.trim()
     };
 
     const cleanUsername = username.trim() || email?.split('@')[0] || 'User';
@@ -585,8 +668,12 @@ export default function ProfilePage() {
         .from('user_profiles')
         .update({
           username: cleanUsername,
-          nationality,
+          Full_name: fullName.trim() || null,
+          nationality: natName,
           country_code: selectedCountryCode,
+          birth_date: birthDate || null,
+          description: description.trim() || null,
+          profile_img_url: profileImgUrl.trim() || null,
           is_profile_created: true,
           game_settings: gameSettings,
           gear_ids: gearIds,
@@ -599,6 +686,7 @@ export default function ProfilePage() {
         setErrorMsg(error.message);
       } else {
         setUsername(cleanUsername);
+        setNationality(natName);
         setIsProfileCreated(true);
         setIsEditing(false);
 
@@ -624,16 +712,23 @@ export default function ProfilePage() {
     }
   };
 
+  const handleCopyProfileLink = () => {
+    if (typeof window !== 'undefined') {
+      const url = `${window.location.origin}/profile`;
+      navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   const handleRemoveFavorite = async (playerId: number, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (!userId) return;
 
-    // Start transition
     setRemovingFavoriteIds(prev => [...prev, playerId]);
 
-    // Wait 600ms for animation to finish before database deletion and updating list state
     setTimeout(async () => {
       try {
         const { error } = await supabase
@@ -653,320 +748,429 @@ export default function ProfilePage() {
     }, 600);
   };
 
-  const getGameBadgeClass = (slug: string) => {
-    if (slug === 'valorant') {
-      return 'bg-red-500/10 text-red-400 border border-red-500/20';
-    }
-    return 'bg-amber-500/10 text-amber-400 border border-accent/20';
-  };
-
   if (loading) {
     return (
-      <div className="flex-1 w-full max-w-6xl mx-auto px-6 md:px-8 py-20 flex flex-col justify-center items-center space-y-4">
+      <div className="flex-1 w-full max-w-7xl mx-auto px-6 md:px-8 py-20 flex flex-col justify-center items-center space-y-4">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-accent"></div>
         <span className="text-zinc-500 text-xs font-mono">Loading Profile Dashboard...</span>
       </div>
     );
   }
 
-  const playerMouse = selectedGears.find(g => g.category.toLowerCase() === 'mouse');
-  const playerKeyboard = selectedGears.find(g => g.category.toLowerCase() === 'keyboard');
-  
-  // ในหน้า Profile Dashboard ปัจจุบันยังไม่มีช่องกรอกเซ็ตติ้งคีย์บอร์ดโดยเฉพาะ ดังนั้นจะตั้งเป็น false เพื่อให้แสดงผลคีย์บอร์ดที่ My Gear ด้านล่าง
-  const hasAnyKeyboardSettings = false;
+  const playerMouse = selectedGears.find(g => g.category.toLowerCase() === 'mouse') || null;
+  const playerKeyboard = selectedGears.find(g => g.category.toLowerCase() === 'keyboard') || null;
+  const playerMonitor = selectedGears.find(g => g.category.toLowerCase() === 'monitor') || null;
 
-  const remainingGears = selectedGears.filter(g => {
-    if (g.product_type !== 'gear') return false;
-    if (g.category.toLowerCase() === 'mouse') return false;
-    if (g.category.toLowerCase() === 'keyboard') {
-      return !hasAnyKeyboardSettings;
+  // Build settingsData array for PlayerProfileClient
+  const constructedSettingsData: any[] = [];
+  if (gamesPlayed.valorant) {
+    constructedSettingsData.push({
+      id: 1,
+      game_role: 'Community Member',
+      mouse_dpi: parseFloat(valDpi) || 800,
+      mouse_hz: parseInt(valHz, 10) || 1000,
+      in_game_sens: parseFloat(valSens) || 0.35,
+      edpi: (parseFloat(valDpi) || 800) * (parseFloat(valSens) || 0.35),
+      resolution: valRes || '1920x1080',
+      aspect_ratio: valAspect || '16:9',
+      refresh_rate: null,
+      settings_data: {
+        scoped_sens: valScopedSens,
+        enemy_highlight_color: valEnemyHighlight,
+        crosshair_code: valCrosshairCode || undefined,
+        rapid_trigger: valRapidTrigger || undefined,
+        actuation_point: valActuationPoint || undefined,
+        polling_rate: valPollingRate || undefined
+      },
+      games: {
+        id: 2,
+        name: 'VALORANT',
+        slug: 'valorant'
+      }
+    });
+  }
+
+  if (gamesPlayed.cs2) {
+    constructedSettingsData.push({
+      id: 2,
+      game_role: 'Community Member',
+      mouse_dpi: parseFloat(csDpi) || 800,
+      mouse_hz: parseInt(csHz, 10) || 1000,
+      in_game_sens: parseFloat(csSens) || 1.0,
+      edpi: (parseFloat(csDpi) || 800) * (parseFloat(csSens) || 1.0),
+      resolution: csRes || '1280x960',
+      aspect_ratio: csAspect || '4:3',
+      refresh_rate: null,
+      settings_data: {
+        zoom_sens: csZoomSens
+      },
+      games: {
+        id: 3,
+        name: 'CS2',
+        slug: 'cs2'
+      }
+    });
+  }
+
+  const profileDataForClient = {
+    id: 0,
+    username: username || 'User',
+    Full_name: fullName,
+    real_name: fullName,
+    team: team || 'Community Member',
+    country_code: selectedCountryCode,
+    nationality: nationality,
+    profile_img_url: profileImgUrl,
+    birth_date: birthDate,
+    description: description,
+    social_links: {
+      twitter,
+      twitch,
+      instagram,
+      youtube,
+      tiktok,
+      discord,
+      facebook
     }
-    return true;
-  });
+  };
+
+  const gearItems = selectedGears.filter(g => g.product_type === 'gear');
+  const hardwareItems = selectedGears.filter(g => g.product_type === 'hardware');
 
   return (
-    <div className="flex-1 w-full max-w-6xl mx-auto px-6 md:px-8 py-16 flex flex-col space-y-10 animate-in fade-in duration-300">
-
-      {/* Back Link */}
-      {isEditing && isProfileCreated && (
-        <div>
-          <button
-            type="button"
-            onClick={() => setIsEditing(false)}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 hover:text-white transition-colors duration-200 focus-visible:outline-none focus-visible:text-accent font-mono cursor-pointer"
-          >
-            ← BACK TO PROFILE
-          </button>
-        </div>
-      )}
-
-      {/* Header Banner */}
-      <div className="border-b border-zinc-800/60 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white font-display">
-            My <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">Profile Dashboard</span>
-          </h1>
-        </div>
-        {!isEditing && isProfileCreated && (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-5 py-2.5 bg-zinc-900 border border-zinc-800 hover:border-accent hover:text-accent font-mono text-xs font-bold rounded-xl transition-all cursor-pointer"
-          >
-            EDIT PROFILE CARD
-          </button>
-        )}
-      </div>
+    <div className="relative flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300">
+      {/* Ambient orbs */}
+      <div className="absolute top-[15%] left-[-10%] w-[500px] h-[500px] rounded-full bg-accent opacity-[0.015] blur-[150px] pointer-events-none"></div>
+      <div className="absolute bottom-[25%] right-[-10%] w-[400px] h-[400px] rounded-full bg-accent opacity-[0.015] blur-[150px] pointer-events-none"></div>
 
       {isEditing ? (
         /* ==================== PROFILE EDITOR FORM ==================== */
-        <form onSubmit={handleSaveProfile} className="space-y-8 max-w-3xl">
-          {errorMsg && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono p-4 rounded-xl">
-              {errorMsg}
-            </div>
-          )}
-
-          {/* Block 1: Basic Information */}
-          <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
-              1. Basic Profile Info
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Username</label>
-                <input
-                  type="text"
-                  value={username}
-                  disabled
-                  title="Your username is locked and cannot be changed."
-                  className="w-full h-11 bg-zinc-900/50 border border-zinc-800 rounded-xl px-4 text-xs text-zinc-500 cursor-not-allowed font-mono select-none"
-                />
-              </div>
-
-              <CountrySearchSelect
-                label="Nationality / Country"
-                options={countriesList}
-                selectedValue={selectedCountryCode}
-                onChange={setSelectedCountryCode}
-                placeholder="Type to search country..."
-              />
-            </div>
-          </div>
-
-          {/* Block 2: Game Settings */}
-          <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
-              2. Game Specific Settings
-            </h2>
-
-            <div className="space-y-6">
-              {/* Checkboxes for games */}
-              <div className="flex gap-6 items-center">
-                <label className="flex items-center gap-2.5 text-xs text-white font-mono cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={gamesPlayed.valorant}
-                    onChange={(e) => setGamesPlayed(prev => ({ ...prev, valorant: e.target.checked }))}
-                    className="h-4 w-4 rounded border-zinc-800 text-accent focus:ring-accent accent-accent"
-                  />
-                  Plays VALORANT
-                </label>
-                <label className="flex items-center gap-2.5 text-xs text-white font-mono cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={gamesPlayed.cs2}
-                    onChange={(e) => setGamesPlayed(prev => ({ ...prev, cs2: e.target.checked }))}
-                    className="h-4 w-4 rounded border-zinc-800 text-accent focus:ring-accent accent-accent"
-                  />
-                  Plays CS2
-                </label>
-              </div>
-
-              {/* VALORANT Inputs */}
-              {gamesPlayed.valorant && (
-                <div className="border border-red-500/20 bg-red-500/[0.01] p-6 rounded-xl space-y-4">
-                  <h3 className="text-xs font-bold text-red-400 font-mono flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
-                    VALORANT Settings
-                  </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">DPI</label>
-                      <input type="number" value={valDpi} onChange={e => setValDpi(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Sensitivity</label>
-                      <input type="number" step="0.001" value={valSens} onChange={e => setValSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Scoped Sens</label>
-                      <input type="number" step="0.1" value={valScopedSens} onChange={e => setValScopedSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Hz</label>
-                      <input type="number" value={valHz} onChange={e => setValHz(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Resolution</label>
-                      <input type="text" value={valRes} onChange={e => setValRes(e.target.value)} placeholder="e.g. 1920x1080" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Aspect Ratio</label>
-                      <input type="text" value={valAspect} onChange={e => setValAspect(e.target.value)} placeholder="e.g. 16:9" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Enemy Highlight Color</label>
-                      <select value={valEnemyHighlight} onChange={e => setValEnemyHighlight(e.target.value)} className="w-full h-9 bg-[#0F0F15] border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white focus:outline-none focus:border-accent/50">
-                        <option value="Red (Default)">Red (Default)</option>
-                        <option value="Purple">Purple</option>
-                        <option value="Yellow (Deuteranopia)">Yellow (Deuteranopia)</option>
-                        <option value="Yellow (Protanopia)">Yellow (Protanopia)</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="text-[10px] text-zinc-500 font-mono">
-                    Calculated VALORANT eDPI: <span className="text-red-400 font-bold">{((parseFloat(valDpi) || 0) * (parseFloat(valSens) || 0)).toFixed(2)}</span>
-                  </div>
-                </div>
-              )}
-
-              {/* CS2 Inputs */}
-              {gamesPlayed.cs2 && (
-                <div className="border border-amber-500/20 bg-amber-500/[0.01] p-6 rounded-xl space-y-4">
-                  <h3 className="text-xs font-bold text-amber-400 font-mono flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-                    CS2 Settings
-                  </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">DPI</label>
-                      <input type="number" value={csDpi} onChange={e => setCsDpi(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Sensitivity</label>
-                      <input type="number" step="0.001" value={csSens} onChange={e => setCsSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Zoom Sens</label>
-                      <input type="number" step="0.1" value={csZoomSens} onChange={e => setCsZoomSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Hz</label>
-                      <input type="number" value={csHz} onChange={e => setCsHz(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Resolution</label>
-                      <input type="text" value={csRes} onChange={e => setCsRes(e.target.value)} placeholder="e.g. 1280x960" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Aspect Ratio</label>
-                      <input type="text" value={csAspect} onChange={e => setCsAspect(e.target.value)} placeholder="e.g. 4:3" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                    </div>
-                  </div>
-                  <div className="text-[10px] text-zinc-500 font-mono">
-                    Calculated CS2 eDPI: <span className="text-amber-400 font-bold">{((parseFloat(csDpi) || 0) * (parseFloat(csSens) || 0)).toFixed(2)}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Block 3: Gear Selection */}
-          <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
-              3. Select My Gear
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <GearSearchSelect
-                label="Mouse"
-                options={gearOptions.mice}
-                selectedValue={selectedMouseId}
-                onChange={setSelectedMouseId}
-                placeholder="Type to search mouse..."
-              />
-
-              <GearSearchSelect
-                label="Keyboard"
-                options={gearOptions.keyboards}
-                selectedValue={selectedKeyboardId}
-                onChange={setSelectedKeyboardId}
-                placeholder="Type to search keyboard..."
-              />
-
-              <GearSearchSelect
-                label="Mousepad"
-                options={gearOptions.mousepads}
-                selectedValue={selectedMousepadId}
-                onChange={setSelectedMousepadId}
-                placeholder="Type to search mousepad..."
-              />
-
-              <GearSearchSelect
-                label="Headset"
-                options={gearOptions.headsets}
-                selectedValue={selectedHeadsetId}
-                onChange={setSelectedHeadsetId}
-                placeholder="Type to search headset..."
-              />
-            </div>
-          </div>
-
-          {/* Block 4: Social Media Links */}
-          <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
-              4. Social Media Links
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Discord Username</label>
-                <input type="text" value={discord} onChange={e => setDiscord(e.target.value)} placeholder="e.g. your_discord_username (optional)" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Facebook Page/Profile URL</label>
-                <input type="text" value={facebook} onChange={e => setFacebook(e.target.value)} placeholder="https://facebook.com/..." className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Instagram Profile URL</label>
-                <input type="text" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="https://instagram.com/..." className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Twitch Stream URL</label>
-                <input type="text" value={twitch} onChange={e => setTwitch(e.target.value)} placeholder="https://twitch.tv/..." className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-              </div>
-              <div className="space-y-1.5 flex-1 md:col-span-2">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">YouTube Channel URL</label>
-                <input type="text" value={youtube} onChange={e => setYoutube(e.target.value)} placeholder="https://youtube.com/..." className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-              </div>
-            </div>
-          </div>
-
-          {/* Form Actions */}
-          <div className="flex gap-4">
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-6 h-11 bg-accent text-accent-fg hover:bg-accent/90 disabled:opacity-50 text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase shadow-[0_0_20px_rgba(245,158,11,0.15)] active:scale-98 cursor-pointer flex-1 md:flex-none md:min-w-[150px]"
-            >
-              {saving ? 'Saving...' : 'Save Profile'}
-            </button>
-            {isProfileCreated && (
+        <div className="space-y-8 max-w-4xl mx-auto">
+          {/* Back button */}
+          {isProfileCreated && (
+            <div>
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="px-6 h-11 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 hover:text-white transition-colors duration-200 font-mono cursor-pointer"
               >
-                Cancel
+                ← BACK TO PROFILE VIEW
               </button>
-            )}
+            </div>
+          )}
+
+          <div className="border-b border-zinc-800/80 pb-4">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
+              Edit <span className="text-accent">Gamer Profile</span>
+            </h1>
+            <p className="text-xs text-zinc-500 font-mono mt-1">
+              Customize your setup, crosshair, sensitivity, and gear to display on your profile.
+            </p>
           </div>
-        </form>
+
+          <form onSubmit={handleSaveProfile} className="space-y-8">
+            {errorMsg && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono p-4 rounded-xl">
+                {errorMsg}
+              </div>
+            )}
+
+            {/* Block 1: Basic Information */}
+            <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
+                1. Basic Profile Info
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Username</label>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="e.g. your_gamertag"
+                    className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Full Name / Real Name</label>
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="e.g. John Doe (Optional)"
+                    className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
+                  />
+                </div>
+
+                <CountrySearchSelect
+                  label="Nationality / Country"
+                  options={countriesList}
+                  selectedValue={selectedCountryCode}
+                  onChange={setSelectedCountryCode}
+                  placeholder="Type to search country..."
+                />
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Birth Date</label>
+                  <input
+                    type="date"
+                    value={birthDate}
+                    onChange={(e) => setBirthDate(e.target.value)}
+                    className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1.5 md:col-span-2">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Profile Image URL</label>
+                  <input
+                    type="text"
+                    value={profileImgUrl}
+                    onChange={(e) => setProfileImgUrl(e.target.value)}
+                    placeholder="https://... (Direct image link)"
+                    className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1.5 md:col-span-2">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Bio / Description</label>
+                  <textarea
+                    rows={3}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Share a short bio about your playstyle, favorite roles, or accomplishments..."
+                    className="w-full bg-black/40 border border-zinc-800 rounded-xl p-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-sans resize-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Block 2: Game Settings */}
+            <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
+                2. Game Specific Settings
+              </h2>
+
+              <div className="space-y-6">
+                <div className="flex gap-6 items-center">
+                  <label className="flex items-center gap-2.5 text-xs text-white font-mono cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={gamesPlayed.valorant}
+                      onChange={(e) => setGamesPlayed(prev => ({ ...prev, valorant: e.target.checked }))}
+                      className="h-4 w-4 rounded border-zinc-800 text-accent focus:ring-accent accent-accent"
+                    />
+                    Plays VALORANT
+                  </label>
+                  <label className="flex items-center gap-2.5 text-xs text-white font-mono cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={gamesPlayed.cs2}
+                      onChange={(e) => setGamesPlayed(prev => ({ ...prev, cs2: e.target.checked }))}
+                      className="h-4 w-4 rounded border-zinc-800 text-accent focus:ring-accent accent-accent"
+                    />
+                    Plays CS2
+                  </label>
+                </div>
+
+                {/* VALORANT Inputs */}
+                {gamesPlayed.valorant && (
+                  <div className="border border-red-500/20 bg-red-500/[0.01] p-6 rounded-xl space-y-4">
+                    <h3 className="text-xs font-bold text-red-400 font-mono flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                      VALORANT Settings
+                    </h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">DPI</label>
+                        <input type="number" value={valDpi} onChange={e => setValDpi(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Sensitivity</label>
+                        <input type="number" step="0.001" value={valSens} onChange={e => setValSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Scoped Sens</label>
+                        <input type="number" step="0.1" value={valScopedSens} onChange={e => setValScopedSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Hz</label>
+                        <input type="number" value={valHz} onChange={e => setValHz(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Resolution</label>
+                        <input type="text" value={valRes} onChange={e => setValRes(e.target.value)} placeholder="e.g. 1920x1080" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Aspect Ratio</label>
+                        <input type="text" value={valAspect} onChange={e => setValAspect(e.target.value)} placeholder="e.g. 16:9" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Enemy Highlight Color</label>
+                        <select value={valEnemyHighlight} onChange={e => setValEnemyHighlight(e.target.value)} className="w-full h-9 bg-[#0F0F15] border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white focus:outline-none focus:border-accent/50">
+                          <option value="Red (Default)">Red (Default)</option>
+                          <option value="Purple">Purple</option>
+                          <option value="Yellow (Deuteranopia)">Yellow (Deuteranopia)</option>
+                          <option value="Yellow (Protanopia)">Yellow (Protanopia)</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Crosshair Profile Code</label>
+                        <input type="text" value={valCrosshairCode} onChange={e => setValCrosshairCode(e.target.value)} placeholder="0;P;c;5;o;1;d;1..." className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Rapid Trigger / Actuation</label>
+                        <input type="text" value={valRapidTrigger} onChange={e => setValRapidTrigger(e.target.value)} placeholder="e.g. 0.1mm" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                    </div>
+                    <div className="text-[10px] text-zinc-500 font-mono">
+                      Calculated VALORANT eDPI: <span className="text-red-400 font-bold">{((parseFloat(valDpi) || 0) * (parseFloat(valSens) || 0)).toFixed(2)}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* CS2 Inputs */}
+                {gamesPlayed.cs2 && (
+                  <div className="border border-amber-500/20 bg-amber-500/[0.01] p-6 rounded-xl space-y-4">
+                    <h3 className="text-xs font-bold text-amber-400 font-mono flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                      CS2 Settings
+                    </h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">DPI</label>
+                        <input type="number" value={csDpi} onChange={e => setCsDpi(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Sensitivity</label>
+                        <input type="number" step="0.001" value={csSens} onChange={e => setCsSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Zoom Sens</label>
+                        <input type="number" step="0.1" value={csZoomSens} onChange={e => setCsZoomSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Hz</label>
+                        <input type="number" value={csHz} onChange={e => setCsHz(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Resolution</label>
+                        <input type="text" value={csRes} onChange={e => setCsRes(e.target.value)} placeholder="e.g. 1280x960" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Aspect Ratio</label>
+                        <input type="text" value={csAspect} onChange={e => setCsAspect(e.target.value)} placeholder="e.g. 4:3" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
+                      </div>
+                    </div>
+                    <div className="text-[10px] text-zinc-500 font-mono">
+                      Calculated CS2 eDPI: <span className="text-amber-400 font-bold">{((parseFloat(csDpi) || 0) * (parseFloat(csSens) || 0)).toFixed(2)}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Block 3: Gear Selection */}
+            <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
+                3. Select My Gear
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <GearSearchSelect
+                  label="Mouse"
+                  options={gearOptions.mice}
+                  selectedValue={selectedMouseId}
+                  onChange={setSelectedMouseId}
+                  placeholder="Type to search mouse..."
+                />
+
+                <GearSearchSelect
+                  label="Keyboard"
+                  options={gearOptions.keyboards}
+                  selectedValue={selectedKeyboardId}
+                  onChange={setSelectedKeyboardId}
+                  placeholder="Type to search keyboard..."
+                />
+
+                <GearSearchSelect
+                  label="Mousepad"
+                  options={gearOptions.mousepads}
+                  selectedValue={selectedMousepadId}
+                  onChange={setSelectedMousepadId}
+                  placeholder="Type to search mousepad..."
+                />
+
+                <GearSearchSelect
+                  label="Headset"
+                  options={gearOptions.headsets}
+                  selectedValue={selectedHeadsetId}
+                  onChange={setSelectedHeadsetId}
+                  placeholder="Type to search headset..."
+                />
+              </div>
+            </div>
+
+            {/* Block 4: Social Media Links */}
+            <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
+                4. Social Media Links
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Twitter / X</label>
+                  <input type="text" value={twitter} onChange={e => setTwitter(e.target.value)} placeholder="@handle or URL" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Twitch</label>
+                  <input type="text" value={twitch} onChange={e => setTwitch(e.target.value)} placeholder="twitch_username" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Instagram</label>
+                  <input type="text" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="instagram_handle" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">YouTube</label>
+                  <input type="text" value={youtube} onChange={e => setYoutube(e.target.value)} placeholder="channel URL or @handle" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">TikTok</label>
+                  <input type="text" value={tiktok} onChange={e => setTiktok(e.target.value)} placeholder="@tiktok_handle" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Discord Username</label>
+                  <input type="text" value={discord} onChange={e => setDiscord(e.target.value)} placeholder="discord_tag" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
+                </div>
+              </div>
+            </div>
+
+            {/* Form Actions */}
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                disabled={saving}
+                className="px-6 h-11 bg-accent text-accent-fg hover:bg-accent/90 disabled:opacity-50 text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase shadow-[0_0_20px_rgba(245,158,11,0.15)] active:scale-98 cursor-pointer flex-1 md:flex-none md:min-w-[150px]"
+              >
+                {saving ? 'Saving...' : 'Save Profile'}
+              </button>
+              {isProfileCreated && (
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className="px-6 h-11 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
       ) : !isProfileCreated ? (
         /* ==================== UNCREATED PROFILE CALL-TO-ACTION ==================== */
         <div className="bg-[#12121A]/40 border border-dashed border-zinc-800 p-12 rounded-3xl flex flex-col items-center justify-center text-center space-y-6 max-w-xl mx-auto py-16 animate-in fade-in duration-300">
@@ -989,536 +1193,257 @@ export default function ProfilePage() {
           </button>
         </div>
       ) : (
-        /* ==================== CREATED PROFILE VIEW MODE ==================== */
-        <div className="space-y-12">
-          {/* Dashboard Main Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
-            {/* Column 1: Custom Gamer Card */}
-            <div className="lg:col-span-1 flex flex-col items-center space-y-6">
-              {/* Pro Player Styled Card */}
-              <div className="bg-card border border-zinc-800 rounded-2xl flex flex-col justify-between overflow-hidden shadow-[0_0_40px_rgba(245,158,11,0.04)] w-full max-w-[280px] h-[350px] relative">
-
-                {/* 1. Card Image / Placeholder */}
-                <div className="relative h-44 bg-[#0F0F15] flex items-center justify-center border-b border-zinc-800/80 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-accent/5 blur-2xl"></div>
-
-                  <span className="text-5xl font-black text-accent/35 font-display select-none">
-                    {username ? username[0].toUpperCase() : '?'}
-                  </span>
-
-                  {/* Corner Game Badges */}
-                  <div className="absolute top-3 right-3 flex flex-col gap-1 z-20">
-                    {gamesPlayed.valorant && (
-                      <span className="text-[7px] font-bold uppercase tracking-wider py-0.5 px-1.5 rounded bg-red-500/10 text-red-400 border border-red-500/20 font-mono text-center">
-                        VAL
-                      </span>
-                    )}
-                    {gamesPlayed.cs2 && (
-                      <span className="text-[7px] font-bold uppercase tracking-wider py-0.5 px-1.5 rounded bg-amber-500/10 text-amber-400 border border-accent/20 font-mono text-center">
-                        CS2
-                      </span>
-                    )}
-                  </div>
+        /* ==================== CREATED PROFILE VIEW MODE (Matching Player Page) ==================== */
+        <div className="space-y-10">
+          {/* ================================================ */}
+          {/* SECTION 1: PROFILE HEADER (Full Width Banner) */}
+          {/* ================================================ */}
+          <section className="relative z-10 bg-card backdrop-blur-[8px] border border-border-custom p-6 sm:p-8 rounded-2xl mb-10 hover:border-border-hover transition-all duration-300">
+            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+              <div className="flex flex-col md:flex-row md:items-start gap-6 flex-1 min-w-0">
+                {/* Avatar */}
+                <div className="w-32 h-32 md:w-40 md:h-40 min-w-32 min-h-32 md:min-w-40 md:min-h-40 max-w-32 max-h-32 md:max-w-40 md:max-h-40 aspect-square rounded-full bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shrink-0 shadow-[0_0_30px_rgba(245,158,11,0.05)]">
+                  {profileImgUrl ? (
+                    <img src={profileImgUrl} alt={username} className="h-full w-full object-cover" />
+                  ) : (
+                    username ? username[0].toUpperCase() : '?'
+                  )}
                 </div>
 
-                {/* 2. Card Info Details */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-extrabold text-[#FAFAFA] text-lg font-display line-clamp-1">
-                        {username}
-                      </h3>
-                      {selectedCountryCode && (
-                        <span className="text-[10px] text-zinc-500 font-bold font-sans tracking-wider">
-                          {selectedCountryCode}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="pt-2">
-                    <span className="block text-center text-[10px] font-bold uppercase tracking-wider px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 font-sans w-full">
+                {/* Info */}
+                <div className="flex-1 min-w-0 space-y-3">
+                  <div className="flex flex-wrap items-baseline gap-3">
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display flex items-center gap-3">
+                      {username}
+                    </h1>
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-lg font-sans tracking-wide border bg-zinc-800/40 border-zinc-700/30 text-zinc-300">
                       Community Member
                     </span>
                   </div>
-                </div>
-              </div>
 
-              {/* Social Media Link Buttons */}
-              <div className="w-full max-w-[280px] bg-card border border-zinc-800 p-5 rounded-2xl space-y-3">
-                <h4 className="text-[9px] font-bold uppercase tracking-wider text-zinc-500 font-sans">Social Networks</h4>
-                <div className="flex flex-col gap-2">
-                  {discord && (
-                    <div className="flex items-center gap-3 p-2 bg-black/35 rounded-xl text-xs font-sans border border-zinc-900">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#5865F2]"></span>
-                      <span className="text-zinc-500 text-[10px]">Discord</span>
-                      <span className="text-white font-bold">{discord}</span>
-                    </div>
-                  )}
-                  {facebook && (
-                    <a href={facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-sans border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#1877F2]"></span>
-                      <span className="text-zinc-500 text-[10px]">Facebook</span>
-                    </a>
-                  )}
-                  {instagram && (
-                    <a href={instagram} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-sans border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#E1306C]"></span>
-                      <span className="text-zinc-500 text-[10px]">Instagram</span>
-                    </a>
-                  )}
-                  {twitch && (
-                    <a href={twitch} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-sans border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#9146FF]"></span>
-                      <span className="text-zinc-500 text-[10px]">Twitch</span>
-                    </a>
-                  )}
-                  {youtube && (
-                    <a href={youtube} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2 bg-black/35 hover:bg-zinc-900/60 rounded-xl text-xs font-sans border border-zinc-900 text-left text-zinc-400 hover:text-white transition-colors">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#FF0000]"></span>
-                      <span className="text-zinc-500 text-[10px]">YouTube</span>
-                    </a>
-                  )}
-                  {!discord && !facebook && !instagram && !twitch && !youtube && (
-                    <span className="text-[10px] text-zinc-600 font-sans italic">No social links added</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Column 2 & 3: Configuration & Settings Details */}
-            <div className="lg:col-span-2 space-y-8">
-
-              {/* Game Settings Display Block */}
-              {gamesPlayed.valorant && (
-                <div className="bg-card border border-border-custom p-6 sm:p-8 rounded-2xl space-y-6">
-                  <h2 className="text-base font-bold text-white flex items-center gap-2 border-b border-border-custom pb-3 font-display">
-                    <span className="h-2 w-2 rounded-full bg-red-500"></span>
-                    VALORANT Game Settings
-                  </h2>
-                  <div className="flex flex-col gap-6">
-                    {/* Mouse Settings Block */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
-                        <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742c.089-.22.22-.43.39-.61l2.828-2.829a2.5 2.5 0 013.536 3.536l-2.828 2.828a2.5 2.5 0 01-3.536 0l-.39-.39m-.828-2.828l.39-.39a2.5 2.5 0 013.536 0l2.828 2.829a2.5 2.5 0 01-3.536 3.536l-2.828-2.828a2.5 2.5 0 010-3.536Z" />
-                        </svg>
-                        <span>Mouse Configuration</span>
-                      </div>
-
-                      {playerMouse && (
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#12121A]/60 border border-border-custom p-4 rounded-xl hover:border-border-hover/80 hover:bg-[#12121A]/80 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
-                          <div className="flex items-center gap-3">
-                            {playerMouse.image_url ? (
-                              <div className="relative w-12 h-12 rounded-lg bg-black/40 border border-white/10 p-1 flex items-center justify-center shrink-0">
-                                <img
-                                  src={playerMouse.image_url}
-                                  alt={playerMouse.name}
-                                  className="max-h-full max-w-full object-contain"
-                                />
-                              </div>
-                            ) : (
-                              <div className="w-12 h-12 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center shrink-0">
-                                <span className="text-lg">🖱️</span>
-                              </div>
-                            )}
-                            <div className="flex flex-col">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-sans">
-                                  {playerMouse.name.split(' ')[0]}
-                                </span>
-                                <span className="text-sm font-bold text-white font-display leading-tight">
-                                  {playerMouse.name}
-                                </span>
-                              </div>
-                              {playerMouse.estimated_price_thb && (
-                                <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
-                                  Est. Price: ฿{Number(playerMouse.estimated_price_thb).toLocaleString()}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {playerMouse.shopee_url && (
-                              <a href={playerMouse.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-sans">
-                                Shopee
-                              </a>
-                            )}
-                            {playerMouse.lazada_url && (
-                              <a href={playerMouse.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-sans">
-                                Lazada
-                              </a>
-                            )}
-                            {playerMouse.amazon_url && (
-                              <a href={playerMouse.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-sans">
-                                Amazon
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 pt-1">
-                        {/* DPI Highlight Card */}
-                        <div className="bg-accent/[0.04] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans block">DPI</span>
-                          <span className="text-base font-medium text-accent font-mono mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
-                            {valDpi || <span className="text-zinc-700 font-mono">—</span>}
-                          </span>
-                        </div>
-
-                        {/* Sensitivity Highlight Card */}
-                        <div className="bg-accent/[0.04] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans block">Sensitivity</span>
-                          <span className="text-base font-medium text-accent font-mono mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
-                            {valSens !== null && valSens !== '' ? parseFloat(valSens).toFixed(3) : <span className="text-zinc-700 font-mono">—</span>}
-                          </span>
-                        </div>
-
-                        {/* eDPI Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">eDPI</span>
-                          <span className="text-base font-medium text-white font-mono mt-0.5">
-                            {((parseFloat(valDpi) || 0) * (parseFloat(valSens) || 0)).toFixed(2)}
-                          </span>
-                        </div>
-
-                        {/* Hz Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Hz</span>
-                          <span className="text-base font-medium text-white font-mono mt-0.5">{valHz ? `${valHz} Hz` : <span className="text-zinc-700 font-mono">—</span>}</span>
-                        </div>
-
-                        {/* Scoped Sensitivity Card */}
-                        {valScopedSens && (
-                          <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Scoped Sens</span>
-                            <span className="text-base font-medium text-white font-mono mt-0.5">{valScopedSens}</span>
-                          </div>
+                  {/* Meta row */}
+                  <div className="flex flex-wrap items-center text-xs sm:text-sm text-zinc-400 font-sans gap-x-3 gap-y-1.5">
+                    {fullName && (
+                      <span className="font-semibold text-zinc-200">{fullName}</span>
+                    )}
+                    {fullName && (nationality || selectedCountryCode || birthDate) && (
+                      <span className="text-zinc-700 font-bold">•</span>
+                    )}
+                    {nationality && (
+                      <span className="flex items-center gap-1.5">
+                        {selectedCountryCode && (
+                          <img
+                            src={`https://flagcdn.com/16x12/${selectedCountryCode.toLowerCase()}.png`}
+                            alt={selectedCountryCode}
+                            className="w-4 h-3 object-cover rounded-[2px]"
+                          />
                         )}
-                      </div>
-                    </div>
-
-                    {/* Video Settings Block */}
-                    <div className="space-y-4 border-t border-white/5 pt-4">
-                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
-                        <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        <span>{nationality}</span>
+                      </span>
+                    )}
+                    {!nationality && selectedCountryCode && (
+                      <span className="flex items-center gap-1.5">
+                        <img
+                          src={`https://flagcdn.com/16x12/${selectedCountryCode.toLowerCase()}.png`}
+                          alt={selectedCountryCode}
+                          className="w-4 h-3 object-cover rounded-[2px]"
+                        />
+                        <span>{selectedCountryCode}</span>
+                      </span>
+                    )}
+                    {(nationality || selectedCountryCode) && birthDate && (
+                      <span className="text-zinc-700 font-bold">•</span>
+                    )}
+                    {birthDate && (
+                      <span className="flex items-center gap-1.5">
+                        <svg className="h-3.5 w-3.5 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                          <line x1="16" y1="2" x2="16" y2="6" />
+                          <line x1="8" y1="2" x2="8" y2="6" />
+                          <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
-                        <span>Video Configuration</span>
-                      </div>
-
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
-                        {/* Resolution Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Resolution</span>
-                          <span className="text-base font-medium text-white font-mono mt-0.5">{valRes || <span className="text-zinc-700 font-mono">—</span>}</span>
-                        </div>
-
-                        {/* Aspect Ratio Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Aspect Ratio</span>
-                          <span className="text-base font-medium text-white font-mono mt-0.5">{valAspect || <span className="text-zinc-700 font-mono">—</span>}</span>
-                        </div>
-
-                        {/* Enemy Highlight Color Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Enemy Highlight Color</span>
-                          <span className="text-base font-bold text-white font-display mt-0.5">
-                            {valEnemyHighlight || <span className="text-zinc-700 font-sans">—</span>}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Keyboard Configuration */}
-                    {playerKeyboard && hasAnyKeyboardSettings && (
-                      <div className="border-t border-white/5 pt-4 space-y-4">
-                        <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
-                          <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M11 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z" />
-                          </svg>
-                          <span>Keyboard Configuration</span>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#12121A]/60 border border-border-custom p-4 rounded-xl hover:border-border-hover/80 hover:bg-[#12121A]/80 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
-                          <div className="flex items-center gap-3">
-                            {playerKeyboard.image_url ? (
-                              <div className="relative w-12 h-12 rounded-lg bg-black/40 border border-white/10 p-1 flex items-center justify-center shrink-0">
-                                <img
-                                  src={playerKeyboard.image_url}
-                                  alt={playerKeyboard.name}
-                                  className="max-h-full max-w-full object-contain"
-                                />
-                              </div>
-                            ) : (
-                              <div className="w-12 h-12 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center shrink-0">
-                                <span className="text-lg">⌨️</span>
-                              </div>
-                            )}
-                            <div className="flex flex-col">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-sans">
-                                  {playerKeyboard.name.split(' ')[0]}
-                                </span>
-                                <span className="text-sm font-bold text-white font-display leading-tight">
-                                  {playerKeyboard.name}
-                                </span>
-                              </div>
-                              {playerKeyboard.estimated_price_thb && (
-                                <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
-                                  Est. Price: ฿{Number(playerKeyboard.estimated_price_thb).toLocaleString()}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {playerKeyboard.shopee_url && (
-                              <a href={playerKeyboard.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-sans">
-                                Shopee
-                              </a>
-                            )}
-                            {playerKeyboard.lazada_url && (
-                              <a href={playerKeyboard.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-sans">
-                                Lazada
-                              </a>
-                            )}
-                            {playerKeyboard.amazon_url && (
-                              <a href={playerKeyboard.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-sans">
-                                Amazon
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                        <span>
+                          {formatBirthDate(birthDate)}
+                          {calculateAge(birthDate) !== null && ` (${calculateAge(birthDate)} years old)`}
+                        </span>
+                      </span>
                     )}
                   </div>
-                </div>
-              )}
 
-              {gamesPlayed.cs2 && (
-                <div className="bg-card border border-border-custom p-6 sm:p-8 rounded-2xl space-y-6">
-                  <h2 className="text-base font-bold text-white flex items-center gap-2 border-b border-border-custom pb-3 font-display">
-                    <span className="h-2 w-2 rounded-full bg-amber-500"></span>
-                    CS2 Game Settings
-                  </h2>
-                  <div className="flex flex-col gap-6">
-                    {/* Mouse Settings Block */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
-                        <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742c.089-.22.22-.43.39-.61l2.828-2.829a2.5 2.5 0 013.536 3.536l-2.828 2.828a2.5 2.5 0 01-3.536 0l-.39-.39m-.828-2.828l.39-.39a2.5 2.5 0 013.536 0l2.828 2.829a2.5 2.5 0 01-3.536 3.536l-2.828-2.828a2.5 2.5 0 010-3.536Z" />
-                        </svg>
-                        <span>Mouse Configuration</span>
-                      </div>
-
-                      {playerMouse && (
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#12121A]/60 border border-border-custom p-4 rounded-xl hover:border-border-hover/80 hover:bg-[#12121A]/80 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
-                          <div className="flex items-center gap-3">
-                            {playerMouse.image_url ? (
-                              <div className="relative w-12 h-12 rounded-lg bg-black/40 border border-white/10 p-1 flex items-center justify-center shrink-0">
-                                <img
-                                  src={playerMouse.image_url}
-                                  alt={playerMouse.name}
-                                  className="max-h-full max-w-full object-contain"
-                                />
-                              </div>
-                            ) : (
-                              <div className="w-12 h-12 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center shrink-0">
-                                <span className="text-lg">🖱️</span>
-                              </div>
-                            )}
-                            <div className="flex flex-col">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-sans">
-                                  {playerMouse.name.split(' ')[0]}
-                                </span>
-                                <span className="text-sm font-bold text-white font-display leading-tight">
-                                  {playerMouse.name}
-                                </span>
-                              </div>
-                              {playerMouse.estimated_price_thb && (
-                                <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
-                                  Est. Price: ฿{Number(playerMouse.estimated_price_thb).toLocaleString()}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {playerMouse.shopee_url && (
-                              <a href={playerMouse.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-sans">
-                                Shopee
-                              </a>
-                            )}
-                            {playerMouse.lazada_url && (
-                              <a href={playerMouse.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-sans">
-                                Lazada
-                              </a>
-                            )}
-                            {playerMouse.amazon_url && (
-                              <a href={playerMouse.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-sans">
-                                Amazon
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 pt-1">
-                        {/* DPI Highlight Card */}
-                        <div className="bg-accent/[0.04] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans block">DPI</span>
-                          <span className="text-base font-medium text-accent font-mono mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
-                            {csDpi || <span className="text-zinc-700 font-mono">—</span>}
-                          </span>
-                        </div>
-
-                        {/* Sensitivity Highlight Card */}
-                        <div className="bg-accent/[0.04] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between shadow-[0_0_20px_rgba(245,158,11,0.02)]">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans block">Sensitivity</span>
-                          <span className="text-base font-medium text-accent font-mono mt-0.5 hover:scale-105 transition-transform origin-left duration-200">
-                            {csSens !== null && csSens !== '' ? parseFloat(csSens).toFixed(3) : <span className="text-zinc-700 font-mono">—</span>}
-                          </span>
-                        </div>
-
-                        {/* eDPI Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">eDPI</span>
-                          <span className="text-base font-medium text-white font-mono mt-0.5">
-                            {((parseFloat(csDpi) || 0) * (parseFloat(csSens) || 0)).toFixed(2)}
-                          </span>
-                        </div>
-
-                        {/* Hz Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Hz</span>
-                          <span className="text-base font-medium text-white font-mono mt-0.5">{csHz || <span className="text-zinc-700 font-mono">—</span>}</span>
-                        </div>
-
-                        {/* Zoom Sensitivity Card */}
-                        {csZoomSens && (
-                          <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Zoom Sens</span>
-                            <span className="text-base font-medium text-white font-mono mt-0.5">{csZoomSens}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Video Settings Block */}
-                    <div className="space-y-4 border-t border-white/5 pt-4">
-                      <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
-                        <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>Video Configuration</span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 pt-1">
-                        {/* Resolution Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Resolution</span>
-                          <span className="text-base font-medium text-white font-mono mt-0.5">{csRes || <span className="text-zinc-700 font-mono">—</span>}</span>
-                        </div>
-
-                        {/* Aspect Ratio Card */}
-                        <div className="bg-[#12121A]/30 border border-border-custom hover:border-border-hover/80 hover:bg-[#12121A]/50 p-3.5 rounded-xl transition-all duration-300 group/card min-h-[76px] flex flex-col justify-between">
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans block group-hover/card:text-zinc-400 transition-colors">Aspect Ratio</span>
-                          <span className="text-base font-medium text-white font-mono mt-0.5">{csAspect || <span className="text-zinc-700 font-mono">—</span>}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Keyboard Configuration */}
-                    {playerKeyboard && hasAnyKeyboardSettings && (
-                      <div className="border-t border-white/5 pt-4 space-y-4">
-                        <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 font-sans uppercase tracking-wider border-l-2 border-accent pl-2.5">
-                          <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M11 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z" />
-                          </svg>
-                          <span>Keyboard Configuration</span>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#12121A]/60 border border-border-custom p-4 rounded-xl hover:border-border-hover/80 hover:bg-[#12121A]/80 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
-                          <div className="flex items-center gap-3">
-                            {playerKeyboard.image_url ? (
-                              <div className="relative w-12 h-12 rounded-lg bg-black/40 border border-white/10 p-1 flex items-center justify-center shrink-0">
-                                <img
-                                  src={playerKeyboard.image_url}
-                                  alt={playerKeyboard.name}
-                                  className="max-h-full max-w-full object-contain"
-                                />
-                              </div>
-                            ) : (
-                              <div className="w-12 h-12 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center shrink-0">
-                                <span className="text-lg">⌨️</span>
-                              </div>
-                            )}
-                            <div className="flex flex-col">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-sans">
-                                  {playerKeyboard.name.split(' ')[0]}
-                                </span>
-                                <span className="text-sm font-bold text-white font-display leading-tight">
-                                  {playerKeyboard.name}
-                                </span>
-                              </div>
-                              {playerKeyboard.estimated_price_thb && (
-                                <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
-                                  Est. Price: ฿{Number(playerKeyboard.estimated_price_thb).toLocaleString()}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {playerKeyboard.shopee_url && (
-                              <a href={playerKeyboard.shopee_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-[#ee4d2d]/10 hover:bg-[#ee4d2d]/25 text-[#ee4d2d] border border-[#ee4d2d]/20 hover:border-[#ee4d2d]/50 transition-all duration-200 font-sans">
-                                Shopee
-                              </a>
-                            )}
-                            {playerKeyboard.lazada_url && (
-                              <a href={playerKeyboard.lazada_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/25 text-accent border border-accent/20 hover:border-accent/50 transition-all duration-200 font-sans">
-                                Lazada
-                              </a>
-                            )}
-                            {playerKeyboard.amazon_url && (
-                              <a href={playerKeyboard.amazon_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/12 text-white border border-white/10 hover:border-white/30 transition-all duration-200 font-sans">
-                                Amazon
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                  {/* Description / Bio */}
+                  <div className="border-l-2 border-zinc-700/50 pl-4 py-0.5 max-w-2xl pt-1">
+                    <p className="text-xs text-zinc-400 leading-relaxed italic font-sans">
+                      {description || "Community gamer profile. Tracking in-game sensitivity, crosshair setup, and hardware peripherals."}
+                    </p>
                   </div>
-                </div>
-              )}
-
-              {/* Equipment Gears List */}
-              <div className="space-y-8">
-                <div className="space-y-4">
-                  <h2 className="text-md font-bold text-white font-display">My Gear</h2>
-                  {remainingGears.length === 0 ? (
-                    <div className="bg-card border border-zinc-800 p-6 rounded-2xl text-center">
-                      <p className="text-xs text-zinc-500 font-mono italic">No gear setup selected yet. Click Edit Profile Card to select gears.</p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      {remainingGears.map((product) => (
-                        <GearCard key={product.id} product={product} />
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
 
-            </div>
-          </div>
+              {/* Social media logos & Actions */}
+              <div className="flex flex-wrap items-center gap-3 shrink-0 lg:ml-auto">
+                {/* Dynamic Social logos container */}
+                {(() => {
+                  const twitterLink = twitter;
+                  const twitchLink = twitch;
+                  const instagramLink = instagram;
+                  const youtubeLink = youtube;
+                  const tiktokLink = tiktok;
+                  const discordLink = discord;
 
-          {/* Favorites List section remains at bottom */}
-          <div className="border-t border-zinc-850 pt-10">
+                  const hasAnySocial = Boolean(twitterLink || twitchLink || instagramLink || youtubeLink || tiktokLink || discordLink);
+                  if (!hasAnySocial) return null;
+
+                  return (
+                    <div className="flex items-center gap-1 bg-[#12121A]/60 border border-border-custom px-2 py-1.5 rounded-xl">
+                      {/* Twitter / X */}
+                      {twitterLink && (
+                        <a
+                          href={formatSocialUrl(twitterLink, 'twitter')}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
+                          title="Twitter / X"
+                        >
+                          <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                          </svg>
+                        </a>
+                      )}
+
+                      {/* Twitch */}
+                      {twitchLink && (
+                        <a
+                          href={formatSocialUrl(twitchLink, 'twitch')}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#9146FF] hover:bg-[#9146FF]/10 rounded-lg transition-all duration-200"
+                          title="Twitch"
+                        >
+                          <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" fillRule="evenodd" clipRule="evenodd" />
+                          </svg>
+                        </a>
+                      )}
+
+                      {/* Instagram */}
+                      {instagramLink && (
+                        <a
+                          href={formatSocialUrl(instagramLink, 'instagram')}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#E1306C] hover:bg-[#E1306C]/10 rounded-lg transition-all duration-200"
+                          title="Instagram"
+                        >
+                          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01" />
+                          </svg>
+                        </a>
+                      )}
+
+                      {/* YouTube */}
+                      {youtubeLink && (
+                        <a
+                          href={formatSocialUrl(youtubeLink, 'youtube')}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#FF0000] hover:bg-[#FF0000]/10 rounded-lg transition-all duration-200"
+                          title="YouTube"
+                        >
+                          <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                          </svg>
+                        </a>
+                      )}
+
+                      {/* TikTok */}
+                      {tiktokLink && (
+                        <a
+                          href={formatSocialUrl(tiktokLink, 'tiktok')}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#25F4EE] hover:bg-[#25F4EE]/10 rounded-lg transition-all duration-200"
+                          title="TikTok"
+                        >
+                          <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+                          </svg>
+                        </a>
+                      )}
+
+                      {/* Discord */}
+                      {discordLink && (
+                        <div
+                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#5865F2] hover:bg-[#5865F2]/10 rounded-lg transition-all duration-200 cursor-pointer"
+                          title={`Discord: ${discordLink}`}
+                        >
+                          <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Edit Profile Button */}
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="px-4 py-2 bg-accent hover:bg-accent/90 text-black font-bold font-sans rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg shadow-accent/20 active:scale-95"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                  </svg>
+                  <span>EDIT PROFILE</span>
+                </button>
+
+                {/* Copy profile link */}
+                <button
+                  onClick={handleCopyProfileLink}
+                  className="px-4 py-2 bg-[#12121A]/80 hover:bg-[#1A1A24] border border-border-custom hover:border-accent/40 text-accent font-mono text-xs font-bold rounded-xl flex items-center gap-2 transition-all duration-200 cursor-pointer shadow-sm"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                  <span>{copied ? 'COPIED!' : 'COPY PROFILE LINK'}</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* ================================================ */}
+          {/* SECTION 2: PLAYER PROFILE CLIENT (Settings & Gear) */}
+          {/* ================================================ */}
+          {constructedSettingsData.length > 0 ? (
+            <PlayerProfileClient
+              player={profileDataForClient}
+              settingsData={constructedSettingsData}
+              gears={gearItems}
+              hardware={hardwareItems}
+              playerMouse={playerMouse}
+              playerKeyboard={playerKeyboard}
+              playerMonitor={playerMonitor}
+              showComments={false}
+            />
+          ) : (
+            <div className="bg-[#12121A]/50 border border-zinc-800 p-8 rounded-2xl text-center space-y-4">
+              <h3 className="text-lg font-bold text-white font-display">No Game Settings Configured Yet</h3>
+              <p className="text-xs text-zinc-400 font-mono max-w-md mx-auto">
+                You haven&apos;t added your sensitivity or game settings yet. Click &quot;Edit Profile&quot; above to add VALORANT or CS2 settings.
+              </p>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-5 py-2.5 bg-accent text-accent-fg font-mono text-xs font-bold rounded-xl tracking-wider uppercase cursor-pointer"
+              >
+                Configure Settings
+              </button>
+            </div>
+          )}
+
+          {/* ================================================ */}
+          {/* SECTION 3: FAVORITES PRO PLAYERS (Bookmarks) */}
+          {/* ================================================ */}
+          <div className="border-t border-zinc-800/80 pt-10">
             <div className="bg-[#12121A]/50 border border-zinc-800 p-6 rounded-2xl space-y-6">
               <div className="flex items-center justify-between border-b border-zinc-800/80 pb-4">
                 <div>
@@ -1539,16 +1464,15 @@ export default function ProfilePage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {favorites.map((player) => {
-                    const isRemoving = removingFavoriteIds.includes(player.id);
+                  {favorites.map((favPlayer) => {
+                    const isRemoving = removingFavoriteIds.includes(favPlayer.id);
                     return (
                       <Link
-                        key={player.id}
-                        href={`/players/${player.username}`}
-                        className={`bg-black/20 border border-zinc-800/80 p-4 rounded-xl flex items-center justify-between hover:border-accent/40 hover:bg-[#1A1A24]/30 group transition-all duration-[600ms] ease-out ${isRemoving
-                            ? 'opacity-0 scale-95 pointer-events-none'
-                            : ''
-                          }`}
+                        key={favPlayer.id}
+                        href={`/players/${favPlayer.username}`}
+                        className={`bg-black/20 border border-zinc-800/80 p-4 rounded-xl flex items-center justify-between hover:border-accent/40 hover:bg-[#1A1A24]/30 group transition-all duration-[600ms] ease-out ${
+                          isRemoving ? 'opacity-0 scale-95 pointer-events-none' : ''
+                        }`}
                         style={{
                           maxHeight: isRemoving ? '0px' : '200px',
                           paddingTop: isRemoving ? '0px' : '',
@@ -1561,38 +1485,38 @@ export default function ProfilePage() {
                       >
                         <div className="flex items-center gap-3">
                           <div className="h-9 w-9 rounded-full bg-[#1A1A24] border border-zinc-800 flex items-center justify-center font-bold text-accent text-xs overflow-hidden flex-shrink-0">
-                            {player.profile_img_url ? (
+                            {favPlayer.profile_img_url ? (
                               <img
-                                src={player.profile_img_url}
-                                alt={player.username}
+                                src={favPlayer.profile_img_url}
+                                alt={favPlayer.username}
                                 className="h-full w-full object-cover"
                                 onError={(e) => {
                                   (e.target as HTMLImageElement).src = '';
-                                  (e.target as HTMLImageElement).parentElement!.innerText = player.username[0].toUpperCase();
+                                  (e.target as HTMLImageElement).parentElement!.innerText = favPlayer.username[0].toUpperCase();
                                 }}
                               />
                             ) : (
-                              player.username[0].toUpperCase()
+                              favPlayer.username[0].toUpperCase()
                             )}
                           </div>
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1.5">
                               <span className="font-bold text-white text-xs group-hover:text-accent font-display transition-colors">
-                                {player.username}
+                                {favPlayer.username}
                               </span>
-                              {player.country_code && (
+                              {favPlayer.country_code && (
                                 <span className="text-[8px] text-zinc-500 font-sans font-semibold">
-                                  {player.country_code}
+                                  {favPlayer.country_code}
                                 </span>
                               )}
                             </div>
                             <div className="text-[10px] text-zinc-500 font-sans line-clamp-1">
-                              {player.team || 'Free Agent'}
+                              {favPlayer.team || 'Free Agent'}
                             </div>
                           </div>
                         </div>
                         <button
-                          onClick={(e) => handleRemoveFavorite(player.id, e)}
+                          onClick={(e) => handleRemoveFavorite(favPlayer.id, e)}
                           className="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-900/50 hover:bg-accent/15 border border-zinc-800 hover:border-accent/30 text-accent transition-all duration-200 cursor-pointer"
                           title="Remove Favorite"
                         >

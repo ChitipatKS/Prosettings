@@ -8,6 +8,8 @@ import { getTeamLogo, setCustomLogoMap } from '@/lib/teamLogos';
 type PlayerSimple = {
   id: number;
   username: string;
+  Full_name?: string | null;
+  full_name?: string | null;
   real_name?: string | null;
   profile_img_url?: string | null;
   team?: string | null;
@@ -199,7 +201,7 @@ export default function AdminTeamsPage() {
           const formattedMissing = missingPlayers.map(p => ({
             id: p.id,
             username: p.username,
-            real_name: p.real_name || null,
+            real_name: p.Full_name || p.full_name || p.real_name || null,
             team: t.name,
             profile_img_url: p.profile_img_url || null
           }));

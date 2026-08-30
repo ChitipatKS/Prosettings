@@ -116,12 +116,13 @@ export async function GET(request: NextRequest, context: RouteParams) {
       player: {
         id: player.id,
         username: player.username,
-        real_name: player.real_name,
+        real_name: player.Full_name || player.full_name || player.real_name || null,
         team: player.team,
         birth_date: player.birth_date,
         nationality: player.nationality,
         country_code: player.country_code,
         profile_img_url: player.profile_img_url,
+        social_links: player.social_links || {},
         created_at: player.created_at
       },
       settings: formattedSettings,

@@ -85,15 +85,17 @@ const SECTIONS: { id: string; label: string; icon: ReactNode }[] = [
   },
 ];
 
-export default function ProfileSidebar() {
+export default function ProfileSidebar({ showComments = true }: { showComments?: boolean }) {
   const [activeSection, setActiveSection] = useState<string>('mouse-settings');
   const isScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const sections = showComments ? SECTIONS : SECTIONS.filter(s => s.id !== 'comments');
+
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
 
-    SECTIONS.forEach(({ id }) => {
+    sections.forEach(({ id }) => {
       const element = document.getElementById(id);
       if (!element) return;
 
@@ -120,7 +122,7 @@ export default function ProfileSidebar() {
       observers.forEach((obs) => obs.disconnect());
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
-  }, []);
+  }, [sections]);
 
   const scrollToSection = useCallback((id: string) => {
     const element = document.getElementById(id);
@@ -146,7 +148,7 @@ export default function ProfileSidebar() {
           <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-600 font-mono mb-3 pl-3">
             On this page
           </p>
-          {SECTIONS.map(({ id, label, icon }) => {
+          {sections.map(({ id, label, icon }) => {
             const isActive = activeSection === id;
             return (
               <button

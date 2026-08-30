@@ -282,32 +282,41 @@ function TeamsContent() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {displayedPlayers.map((player) => (
-                      <Link
-                        key={player.settings_id}
-                        href={`/players/${player.username}`}
-                        className="bg-black/20 border border-border-custom p-4 rounded-2xl flex items-center justify-between hover:border-accent/40 hover:bg-[#1A1A24]/30 hover:scale-[1.01] transition-all duration-300 group"
-                      >
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-[#FAFAFA] text-sm group-hover:text-accent font-display transition-colors">
-                              {player.username}
-                            </span>
-                            {player.game_role && (
-                              <span className="text-[9px] text-zinc-500 font-mono tracking-wider font-semibold uppercase bg-white/5 px-1.5 py-0.5 rounded">
-                                {player.game_role}
+                    {displayedPlayers.map((player: any) => {
+                      const mouseSettings = player.mouse_settings || player.games?.[0]?.mouse_settings;
+                      const gameRole = player.game_role || player.games?.[0]?.role;
+                      const gameSlug = player.game_slug || player.games?.[0]?.slug || '';
+                      const gameName = player.game || player.games?.[0]?.name || '';
+
+                      return (
+                        <Link
+                          key={player.player_id || player.settings_id || player.username}
+                          href={`/players/${player.username}`}
+                          className="bg-black/20 border border-border-custom p-4 rounded-2xl flex items-center justify-between hover:border-accent/40 hover:bg-[#1A1A24]/30 hover:scale-[1.01] transition-all duration-300 group"
+                        >
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-[#FAFAFA] text-sm group-hover:text-accent font-display transition-colors">
+                                {player.username}
                               </span>
-                            )}
+                              {gameRole && (
+                                <span className="text-[9px] text-zinc-500 font-mono tracking-wider font-semibold uppercase bg-white/5 px-1.5 py-0.5 rounded">
+                                  {gameRole}
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[10px] text-zinc-400 font-mono">
+                              Sens: <span className="text-zinc-200">{mouseSettings?.sens ?? '—'}</span> | DPI: <span className="text-zinc-200">{mouseSettings?.dpi ?? '—'}</span>
+                            </div>
                           </div>
-                          <div className="text-[10px] text-zinc-400 font-mono">
-                            Sens: <span className="text-zinc-200">{player.mouse_settings.sens || '—'}</span> | DPI: <span className="text-zinc-200">{player.mouse_settings.dpi || '—'}</span>
-                          </div>
-                        </div>
-                        <span className={`text-[8px] font-bold uppercase tracking-wider py-0.5 px-2 rounded font-mono ${getGameBadgeClass(player.game_slug)}`}>
-                          {player.game}
-                        </span>
-                      </Link>
-                    ))}
+                          {gameName && (
+                            <span className={`text-[8px] font-bold uppercase tracking-wider py-0.5 px-2 rounded font-mono ${getGameBadgeClass(gameSlug)}`}>
+                              {gameName}
+                            </span>
+                          )}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>

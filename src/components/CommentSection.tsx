@@ -25,17 +25,21 @@ export default function CommentSection({ username }: CommentSectionProps) {
 
   // Fetch comments
   const fetchComments = async () => {
+    if (!username || username === 'User') {
+      setLoading(false);
+      return;
+    }
     try {
       setLoading(true);
-      const response = await fetch(`/api/players/${username}/comments`);
+      const response = await fetch(`/api/players/${encodeURIComponent(username)}/comments`);
       if (response.ok) {
         const data = await response.json();
         setComments(data.comments || []);
       } else {
-        console.error('Failed to fetch comments');
+        setComments([]);
       }
-    } catch (err) {
-      console.error('Error fetching comments:', err);
+    } catch {
+      setComments([]);
     } finally {
       setLoading(false);
     }

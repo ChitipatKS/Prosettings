@@ -58,11 +58,11 @@ export async function GET(request: NextRequest) {
       const searchVal = searchParams.get('search') || '';
       let query = supabase
         .from('players')
-        .select('id, username, real_name, team_id, team, profile_img_url, teams(name)')
+        .select('id, username, Full_name, team_id, team, profile_img_url, teams(name)')
         .order('username');
 
       if (searchVal.trim()) {
-        query = query.or(`username.ilike.%${searchVal.trim()}%,real_name.ilike.%${searchVal.trim()}%`);
+        query = query.or(`username.ilike.%${searchVal.trim()}%,Full_name.ilike.%${searchVal.trim()}%`);
       }
 
       const { data: dbPlayers, error } = await query;
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       const mappedPlayers = (dbPlayers || []).map((p: any) => ({
         id: p.id,
         username: p.username,
-        real_name: p.real_name,
+        real_name: p.Full_name || p.full_name || p.real_name || null,
         team_id: p.team_id,
         team: p.teams?.name || p.team,
         profile_img_url: p.profile_img_url
@@ -96,119 +96,118 @@ export async function GET(request: NextRequest) {
     const from = (page - 1) * limit;
     const to = from + limit - 1;
 
-    // คิวรีหลักเชื่อมตาราง player_game_settings เข้ากับ players และ games
-    let query = supabase.from('player_game_settings').select(`
+    // คิวรีหลักจากตาราง players พร้อมดึง player_game_settings และ games
+    let query = supabase.from('players').select(`
       id,
-      game_role,
-      mouse_dpi,
-      mouse_hz,
-      in_game_sens,
-      edpi,
-      resolution,
-      aspect_ratio,
-      refresh_rate,
-      settings_data,
-      players!inner (
-        id,
-        username,
-        real_name,
-        team,
-        team_id,
-        nationality,
-        country_code,
-        profile_img_url,
-        teams(name)
+      username,
+      Full_name,
+      team,
+      team_id,
+      nationality,
+      country_code,
+      profile_img_url,
+      teams (
+        name
       ),
-      games!inner (
+      player_game_settings (
         id,
-        name,
-        slug
+        game_role,
+        mouse_dpi,
+        mouse_hz,
+        in_game_sens,
+        edpi,
+        resolution,
+        aspect_ratio,
+        refresh_rate,
+        settings_data,
+        games (
+          id,
+          name,
+          slug
+        )
       )
-    `, { count: 'exact' });
+    `);
 
-    // ค้นหาโดยกรองจากชื่อในเกม (username), ชื่อจริง (real_name) หรือชื่อทีม (team) ของเพลเยอร์
+    // ค้นหาโดยกรองจากชื่อในเกม (username), ชื่อจริง (Full_name) หรือชื่อทีม (team) ของเพลเยอร์
     // พร้อมรองรับการแปลงตัวสะกด leet-speak (เช่น monesy -> m0nesy, simple -> s1mple)
     if (search) {
       const searchVariations = getSearchVariations(search.trim());
       const conditions: string[] = [];
       searchVariations.forEach(variation => {
         conditions.push(`username.ilike.%${variation}%`);
-        conditions.push(`real_name.ilike.%${variation}%`);
+        conditions.push(`Full_name.ilike.%${variation}%`);
         conditions.push(`team.ilike.%${variation}%`);
       });
-      query = query.or(conditions.join(','), { foreignTable: 'players' });
-    }
-
-    // กรองตามประเภทเกม (เช่น valorant, cs2)
-    if (game) {
-      query = query.eq('games.slug', game.toLowerCase());
+      query = query.or(conditions.join(','));
     }
 
     // กรองตามทีมสังกัด
     if (team) {
-      query = query.eq('players.team', team);
+      query = query.eq('team', team);
     }
 
     // กรองตามประเทศ
     if (country) {
-      query = query.eq('players.country_code', country.toUpperCase());
+      query = query.eq('country_code', country.toUpperCase());
     }
 
-    // กรองตามบทบาทตำแหน่งในเกม
-    if (role) {
-      query = query.ilike('game_role', `%${role}%`);
-    }
-
-    // เรียงทีมก่อนเพื่อให้คนที่อยู่ทีมเดียวกันอยู่ติดกัน แล้วค่อยเรียงชื่อผู้เล่น
+    // ดึงข้อมูลผู้เล่น
     const { data, error } = await query;
  
-     if (error) {
-       return NextResponse.json({ error: error.message }, { status: 500 });
-     }
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
  
-     // Group player settings by player ID to collapse multiple games into one profile card
-     const playersMap = new Map<number, any>();
+    // ปรับโครงสร้างข้อมูล
+    let formattedPlayers = (data as any || []).map((item: any) => {
+      const games = (item.player_game_settings || [])
+        .filter((s: any) => s.games)
+        .map((s: any) => ({
+          id: s.games.id,
+          name: s.games.name,
+          slug: s.games.slug,
+          role: s.game_role,
+          mouse_settings: {
+            dpi: s.mouse_dpi,
+            hz: s.mouse_hz,
+            sens: s.in_game_sens,
+            edpi: s.edpi
+          },
+          video_settings: {
+            resolution: s.resolution,
+            aspect_ratio: s.aspect_ratio,
+            refresh_rate: s.refresh_rate
+          },
+          game_specific_settings: s.settings_data
+        }));
 
-     for (const item of (data as any || [])) {
-       const pId = item.players.id;
-       const gameObj = {
-         id: item.games.id,
-         name: item.games.name,
-         slug: item.games.slug,
-         role: item.game_role,
-         mouse_settings: {
-           dpi: item.mouse_dpi,
-           hz: item.mouse_hz,
-           sens: item.in_game_sens,
-           edpi: item.edpi
-         },
-         video_settings: {
-           resolution: item.resolution,
-           aspect_ratio: item.aspect_ratio,
-           refresh_rate: item.refresh_rate
-         },
-         game_specific_settings: item.settings_data
-       };
+      return {
+        settings_id: item.player_game_settings?.[0]?.id || item.id,
+        player_id: item.id,
+        username: item.username,
+        real_name: item.Full_name || item.full_name || item.real_name || null,
+        team: item.teams?.name || item.team,
+        team_id: item.team_id,
+        nationality: item.nationality,
+        country_code: item.country_code,
+        profile_img_url: item.profile_img_url,
+        games
+      };
+    });
 
-       if (playersMap.has(pId)) {
-         playersMap.get(pId).games.push(gameObj);
-       } else {
-         playersMap.set(pId, {
-           settings_id: item.id,
-           player_id: pId,
-           username: item.players.username,
-           real_name: item.players.real_name,
-           team: item.players.teams?.name || item.players.team,
-           team_id: item.players.team_id,
-           nationality: item.players.nationality,
-           country_code: item.players.country_code,
-           profile_img_url: item.players.profile_img_url,
-           games: [gameObj]
-         });
-       }
-     }
+    // กรองตามเกม (ถ้าเลือกเกมเฉพาะ เช่น cs2, valorant)
+    if (game && game.toLowerCase() !== 'all') {
+      formattedPlayers = formattedPlayers.filter((p: any) =>
+        p.games.some((g: any) => g.slug.toLowerCase() === game.toLowerCase())
+      );
+    }
 
-     const formattedPlayers = Array.from(playersMap.values());
+    // กรองตาม role
+    if (role) {
+      formattedPlayers = formattedPlayers.filter((p: any) =>
+        p.games.some((g: any) => (g.role || '').toLowerCase().includes(role.toLowerCase()))
+      );
+    }
 
      // เรียงทีมก่อนเพื่อให้คนที่อยู่ทีมเดียวกันอยู่ติดกัน แล้วค่อยเรียงชื่อผู้เล่น (Free Agent อยู่ท้ายสุด)
      formattedPlayers.sort((a: any, b: any) => {

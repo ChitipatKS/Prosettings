@@ -1,0 +1,2483 @@
+{
+  "updated_at": "2026-08-30T18:36:52.658Z",
+  "source": "https://liquipedia.net/counterstrike/Valve_Regional_Standings",
+  "total_teams": 55,
+  "total_players": 275,
+  "teams": [
+    {
+      "rank": 1,
+      "name": "Team Spirit",
+      "points": 2016.2,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/8/80/Team_Spirit_2022_darkmode.png/43px-Team_Spirit_2022_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Team_Spirit",
+      "players": [
+        {
+          "username": "donk",
+          "team": "Team Spirit",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "magixx",
+          "team": "Team Spirit",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "sh1ro",
+          "team": "Team Spirit",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "tN1R",
+          "team": "Team Spirit",
+          "nationality": "Belarus",
+          "country_code": "BY",
+          "game": "cs2"
+        },
+        {
+          "username": "zont1x",
+          "team": "Team Spirit",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "name": "Team Falcons",
+      "points": 1931.2,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/8/83/Team_Falcons_2022_allmode.png/41px-Team_Falcons_2022_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Team_Falcons",
+      "players": [
+        {
+          "username": "karrigan",
+          "team": "Team Falcons",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "kyousuke",
+          "team": "Team Falcons",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "m0NESY",
+          "team": "Team Falcons",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "NiKo",
+          "team": "Team Falcons",
+          "nationality": "Bosnia and Herzegovina",
+          "country_code": "BA",
+          "game": "cs2"
+        },
+        {
+          "username": "TeSeS",
+          "team": "Team Falcons",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "name": "9z Team",
+      "points": 1889.8,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/9/9b/9z_Team_2024_darkmode.png/60px-9z_Team_2024_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/9z_Team",
+      "players": [
+        {
+          "username": "dgt",
+          "team": "9z Team",
+          "nationality": "Uruguay",
+          "country_code": "UY",
+          "game": "cs2"
+        },
+        {
+          "username": "HUASOPEEK",
+          "team": "9z Team",
+          "nationality": "Chile",
+          "country_code": "CL",
+          "game": "cs2"
+        },
+        {
+          "username": "luchov",
+          "team": "9z Team",
+          "nationality": "Argentina",
+          "country_code": "AR",
+          "game": "cs2"
+        },
+        {
+          "username": "max",
+          "team": "9z Team",
+          "nationality": "Uruguay",
+          "country_code": "UY",
+          "game": "cs2"
+        },
+        {
+          "username": "meyern",
+          "team": "9z Team",
+          "nationality": "Argentina",
+          "country_code": "AR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "name": "MOUZ",
+      "points": 1889.5,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/c/c2/MOUZ_2021_allmode.png/47px-MOUZ_2021_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/MOUZ",
+      "players": [
+        {
+          "username": "PR",
+          "team": "MOUZ",
+          "nationality": "Czechia",
+          "country_code": "CZ",
+          "game": "cs2"
+        },
+        {
+          "username": "Spinx",
+          "team": "MOUZ",
+          "nationality": "Israel",
+          "country_code": "IL",
+          "game": "cs2"
+        },
+        {
+          "username": "torzsi",
+          "team": "MOUZ",
+          "nationality": "Hungary",
+          "country_code": "HU",
+          "game": "cs2"
+        },
+        {
+          "username": "xelex",
+          "team": "MOUZ",
+          "nationality": "Hungary",
+          "country_code": "HU",
+          "game": "cs2"
+        },
+        {
+          "username": "xertioN",
+          "team": "MOUZ",
+          "nationality": "Israel",
+          "country_code": "IL",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "name": "Team Vitality",
+      "points": 1809.7,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/9/96/Team_Vitality_2023_darkmode.png/41px-Team_Vitality_2023_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Team_Vitality",
+      "players": [
+        {
+          "username": "apEX",
+          "team": "Team Vitality",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        },
+        {
+          "username": "flameZ",
+          "team": "Team Vitality",
+          "nationality": "Israel",
+          "country_code": "IL",
+          "game": "cs2"
+        },
+        {
+          "username": "mezii",
+          "team": "Team Vitality",
+          "nationality": "United Kingdom",
+          "country_code": "GB",
+          "game": "cs2"
+        },
+        {
+          "username": "ropz",
+          "team": "Team Vitality",
+          "nationality": "Estonia",
+          "country_code": "EE",
+          "game": "cs2"
+        },
+        {
+          "username": "ZywOo",
+          "team": "Team Vitality",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "name": "Natus Vincere",
+      "points": 1780.2,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/9/95/Natus_Vincere_2021_allmode.png/57px-Natus_Vincere_2021_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Natus_Vincere",
+      "players": [
+        {
+          "username": "Aleksib",
+          "team": "Natus Vincere",
+          "nationality": "Finland",
+          "country_code": "FI",
+          "game": "cs2"
+        },
+        {
+          "username": "b1t",
+          "team": "Natus Vincere",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "iM",
+          "team": "Natus Vincere",
+          "nationality": "Romania",
+          "country_code": "RO",
+          "game": "cs2"
+        },
+        {
+          "username": "makazze",
+          "team": "Natus Vincere",
+          "nationality": "Kosovo",
+          "country_code": "XK",
+          "game": "cs2"
+        },
+        {
+          "username": "w0nderful",
+          "team": "Natus Vincere",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "name": "Legacy",
+      "points": 1769.2,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/3/34/Legacy_allmode.png/49px-Legacy_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Legacy",
+      "players": [
+        {
+          "username": "arT",
+          "team": "Legacy",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "dumau",
+          "team": "Legacy",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "latto",
+          "team": "Legacy",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "n1ssim",
+          "team": "Legacy",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "saadzin",
+          "team": "Legacy",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "name": "FURIA",
+      "points": 1756.9,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/a/aa/FURIA_Esports_allmode.png/51px-FURIA_Esports_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/FURIA",
+      "players": [
+        {
+          "username": "FalleN",
+          "team": "FURIA",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "KSCERATO",
+          "team": "FURIA",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "molodoy",
+          "team": "FURIA",
+          "nationality": "Kazakhstan",
+          "country_code": "KZ",
+          "game": "cs2"
+        },
+        {
+          "username": "YEKINDAR",
+          "team": "FURIA",
+          "nationality": "Latvia",
+          "country_code": "LV",
+          "game": "cs2"
+        },
+        {
+          "username": "yuurih",
+          "team": "FURIA",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "name": "BetBoom Team",
+      "points": 1751.4,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/5/5b/BetBoom_Team_2024_allmode.png/56px-BetBoom_Team_2024_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/BetBoom_Team",
+      "players": [
+        {
+          "username": "Boombl4",
+          "team": "BetBoom Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "d1Ledez",
+          "team": "BetBoom Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "FL4MUS",
+          "team": "BetBoom Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "Magnojez",
+          "team": "BetBoom Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "zorte",
+          "team": "BetBoom Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "name": "FaZe Clan",
+      "points": 1723.7,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/c/c5/FaZe_Esports_2026_darkmode.png/59px-FaZe_Esports_2026_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/FaZe_Clan",
+      "players": [
+        {
+          "username": "frozen",
+          "team": "FaZe Clan",
+          "nationality": "Slovakia",
+          "country_code": "SK",
+          "game": "cs2"
+        },
+        {
+          "username": "JBOEN",
+          "team": "FaZe Clan",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "jcobbb",
+          "team": "FaZe Clan",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "Neityu",
+          "team": "FaZe Clan",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        },
+        {
+          "username": "Twistzz",
+          "team": "FaZe Clan",
+          "nationality": "Canada",
+          "country_code": "CA",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 11,
+      "name": "PARIVISION",
+      "points": 1689.2,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/9/9d/PARIVISION_allmode.png/56px-PARIVISION_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/PARIVISION",
+      "players": [
+        {
+          "username": "HObbit",
+          "team": "PARIVISION",
+          "nationality": "Kazakhstan",
+          "country_code": "KZ",
+          "game": "cs2"
+        },
+        {
+          "username": "Jame",
+          "team": "PARIVISION",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "slaxejezzz",
+          "team": "PARIVISION",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "xiELO",
+          "team": "PARIVISION",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "zweih",
+          "team": "PARIVISION",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 12,
+      "name": "G2 Esports",
+      "points": 1683.5,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/c/cd/G2_Esports_2019_darkmode.png/44px-G2_Esports_2019_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/G2_Esports",
+      "players": [
+        {
+          "username": "HeavyGod",
+          "team": "G2 Esports",
+          "nationality": "Israel",
+          "country_code": "IL",
+          "game": "cs2"
+        },
+        {
+          "username": "huNter-",
+          "team": "G2 Esports",
+          "nationality": "Bosnia and Herzegovina",
+          "country_code": "BA",
+          "game": "cs2"
+        },
+        {
+          "username": "matys",
+          "team": "G2 Esports",
+          "nationality": "Slovakia",
+          "country_code": "SK",
+          "game": "cs2"
+        },
+        {
+          "username": "NertZ",
+          "team": "G2 Esports",
+          "nationality": "Israel",
+          "country_code": "IL",
+          "game": "cs2"
+        },
+        {
+          "username": "SunPayus",
+          "team": "G2 Esports",
+          "nationality": "Spain",
+          "country_code": "ES",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 13,
+      "name": "Aurora Gaming",
+      "points": 1676.7,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/1/1c/Aurora_Gaming_2025_allmode.png/50px-Aurora_Gaming_2025_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Aurora_Gaming",
+      "players": [
+        {
+          "username": "Jimpphat",
+          "team": "Aurora Gaming",
+          "nationality": "Finland",
+          "country_code": "FI",
+          "game": "cs2"
+        },
+        {
+          "username": "kyxsan",
+          "team": "Aurora Gaming",
+          "nationality": "North Macedonia",
+          "country_code": "MK",
+          "game": "cs2"
+        },
+        {
+          "username": "Wicadia",
+          "team": "Aurora Gaming",
+          "nationality": "Turkey",
+          "country_code": "TR",
+          "game": "cs2"
+        },
+        {
+          "username": "woxic",
+          "team": "Aurora Gaming",
+          "nationality": "Turkey",
+          "country_code": "TR",
+          "game": "cs2"
+        },
+        {
+          "username": "XANTARES",
+          "team": "Aurora Gaming",
+          "nationality": "Turkey",
+          "country_code": "TR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 14,
+      "name": "Alliance",
+      "points": 1641.8,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/3/3a/Alliance_2024_allmode.png/70px-Alliance_2024_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Alliance",
+      "players": [
+        {
+          "username": "avid",
+          "team": "Alliance",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "bobeksde",
+          "team": "Alliance",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "eraa",
+          "team": "Alliance",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "twist",
+          "team": "Alliance",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "upE",
+          "team": "Alliance",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 15,
+      "name": "FUT Esports",
+      "points": 1641.4,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/0/08/Futbolist_2021_darkmode.png/26px-Futbolist_2021_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/FUT_Esports",
+      "players": [
+        {
+          "username": "cmtry",
+          "team": "FUT Esports",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "dem0n",
+          "team": "FUT Esports",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "dziugss",
+          "team": "FUT Esports",
+          "nationality": "Lithuania",
+          "country_code": "LT",
+          "game": "cs2"
+        },
+        {
+          "username": "Krabeni",
+          "team": "FUT Esports",
+          "nationality": "Kosovo",
+          "country_code": "XK",
+          "game": "cs2"
+        },
+        {
+          "username": "lauNX",
+          "team": "FUT Esports",
+          "nationality": "Romania",
+          "country_code": "RO",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 16,
+      "name": "The MongolZ",
+      "points": 1629.8,
+      "region": "AS",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/2/2b/The_MongolZ_2024_03_allmode.png/39px-The_MongolZ_2024_03_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/The_MongolZ",
+      "players": [
+        {
+          "username": "910",
+          "team": "The MongolZ",
+          "nationality": "Mongolia",
+          "country_code": "MN",
+          "game": "cs2"
+        },
+        {
+          "username": "bLitz",
+          "team": "The MongolZ",
+          "nationality": "Mongolia",
+          "country_code": "MN",
+          "game": "cs2"
+        },
+        {
+          "username": "cobrazera",
+          "team": "The MongolZ",
+          "nationality": "Mongolia",
+          "country_code": "MN",
+          "game": "cs2"
+        },
+        {
+          "username": "mzinho",
+          "team": "The MongolZ",
+          "nationality": "Mongolia",
+          "country_code": "MN",
+          "game": "cs2"
+        },
+        {
+          "username": "Techno4K",
+          "team": "The MongolZ",
+          "nationality": "Mongolia",
+          "country_code": "MN",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 17,
+      "name": "Team Liquid",
+      "points": 1627.8,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/5/59/Team_Liquid_2024_darkmode.png/44px-Team_Liquid_2024_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Team_Liquid",
+      "players": [
+        {
+          "username": "EliGE",
+          "team": "Team Liquid",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        },
+        {
+          "username": "JT",
+          "team": "Team Liquid",
+          "nationality": "South Africa",
+          "country_code": "ZA",
+          "game": "cs2"
+        },
+        {
+          "username": "Jorko",
+          "team": "Team Liquid",
+          "nationality": "Bulgaria",
+          "country_code": "BG",
+          "game": "cs2"
+        },
+        {
+          "username": "malbsMd",
+          "team": "Team Liquid",
+          "nationality": "Guatemala",
+          "country_code": "GT",
+          "game": "cs2"
+        },
+        {
+          "username": "NAF",
+          "team": "Team Liquid",
+          "nationality": "Canada",
+          "country_code": "CA",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 18,
+      "name": "BIG",
+      "points": 1625.7,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/6/69/BIG_2020_darkmode.png/35px-BIG_2020_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/BIG",
+      "players": [
+        {
+          "username": "blameF",
+          "team": "BIG",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "faveN",
+          "team": "BIG",
+          "nationality": "Germany",
+          "country_code": "DE",
+          "game": "cs2"
+        },
+        {
+          "username": "gr1ks",
+          "team": "BIG",
+          "nationality": "Belarus",
+          "country_code": "BY",
+          "game": "cs2"
+        },
+        {
+          "username": "JDC",
+          "team": "BIG",
+          "nationality": "Germany",
+          "country_code": "DE",
+          "game": "cs2"
+        },
+        {
+          "username": "tabseN",
+          "team": "BIG",
+          "nationality": "Germany",
+          "country_code": "DE",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 19,
+      "name": "MIBR",
+      "points": 1624.4,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/7/72/MIBR_2018_darkmode.png/100px-MIBR_2018_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/MIBR",
+      "players": [
+        {
+          "username": "brnz4n",
+          "team": "MIBR",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "insani",
+          "team": "MIBR",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "LNZ",
+          "team": "MIBR",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "nqz",
+          "team": "MIBR",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "venomzera",
+          "team": "MIBR",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 20,
+      "name": "Astralis",
+      "points": 1578.8,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/3/3d/Astralis_2020_allmode.png/41px-Astralis_2020_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Astralis",
+      "players": [
+        {
+          "username": "HooXi",
+          "team": "Astralis",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "jabbi",
+          "team": "Astralis",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "phzy",
+          "team": "Astralis",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "ryu",
+          "team": "Astralis",
+          "nationality": "Lithuania",
+          "country_code": "LT",
+          "game": "cs2"
+        },
+        {
+          "username": "Staehr",
+          "team": "Astralis",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 21,
+      "name": "TYLOO",
+      "points": 1577.2,
+      "region": "AS",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/5/5f/TyLoo_2016_allmode.png/56px-TyLoo_2016_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/TYLOO",
+      "players": [
+        {
+          "username": "JamYoung",
+          "team": "TYLOO",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        },
+        {
+          "username": "Jee",
+          "team": "TYLOO",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        },
+        {
+          "username": "Mercury",
+          "team": "TYLOO",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        },
+        {
+          "username": "Moseyuh",
+          "team": "TYLOO",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        },
+        {
+          "username": "Zero",
+          "team": "TYLOO",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 22,
+      "name": "IC Esports",
+      "points": 1569.5,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/c/c6/Inner_Circle_2025_allmode.png/43px-Inner_Circle_2025_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/IC_Esports",
+      "players": [
+        {
+          "username": "cptkurtka023",
+          "team": "IC Esports",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "Dawy",
+          "team": "IC Esports",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "headtr1ck",
+          "team": "IC Esports",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "onic",
+          "team": "IC Esports",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "zeRRoFIX",
+          "team": "IC Esports",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 23,
+      "name": "B8",
+      "points": 1564,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/a/a6/B8_darkmode.png/42px-B8_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/B8",
+      "players": [
+        {
+          "username": "alex666",
+          "team": "B8",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "esenthial",
+          "team": "B8",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "kensizor",
+          "team": "B8",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "npl",
+          "team": "B8",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "s1zzi",
+          "team": "B8",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 24,
+      "name": "GamerLegion",
+      "points": 1531.1,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/2/21/GamerLegion_2026_allmode.png/49px-GamerLegion_2026_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/GamerLegion",
+      "players": [
+        {
+          "username": "hypex",
+          "team": "GamerLegion",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "PR",
+          "team": "GamerLegion",
+          "nationality": "Czechia",
+          "country_code": "CZ",
+          "game": "cs2"
+        },
+        {
+          "username": "REZ",
+          "team": "GamerLegion",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "Snax",
+          "team": "GamerLegion",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "Tauson",
+          "team": "GamerLegion",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 25,
+      "name": "HEROIC",
+      "points": 1519.5,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/0/0d/HEROIC_2024_allmode.png/57px-HEROIC_2024_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/HEROIC",
+      "players": [
+        {
+          "username": "Brollan",
+          "team": "HEROIC",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "Chr1zN",
+          "team": "HEROIC",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "Martinez",
+          "team": "HEROIC",
+          "nationality": "Spain",
+          "country_code": "ES",
+          "game": "cs2"
+        },
+        {
+          "username": "nilo",
+          "team": "HEROIC",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "susp",
+          "team": "HEROIC",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 26,
+      "name": "100 Thieves",
+      "points": 1508.5,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/7/78/100_Thieves_darkmode.png/64px-100_Thieves_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/100_Thieves",
+      "players": [
+        {
+          "username": "dev1ce",
+          "team": "100 Thieves",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "Gizmy",
+          "team": "100 Thieves",
+          "nationality": "United Kingdom",
+          "country_code": "GB",
+          "game": "cs2"
+        },
+        {
+          "username": "poiii",
+          "team": "100 Thieves",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "rain",
+          "team": "100 Thieves",
+          "nationality": "Norway",
+          "country_code": "NO",
+          "game": "cs2"
+        },
+        {
+          "username": "sirah",
+          "team": "100 Thieves",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 27,
+      "name": "HOTU",
+      "points": 1507.7,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/2/27/HOTU_2022_darkmode.png/50px-HOTU_2022_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/HOTU",
+      "players": [
+        {
+          "username": "dwushka",
+          "team": "HOTU",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "frontales",
+          "team": "HOTU",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "kade0",
+          "team": "HOTU",
+          "nationality": "Kazakhstan",
+          "country_code": "KZ",
+          "game": "cs2"
+        },
+        {
+          "username": "mizu",
+          "team": "HOTU",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "n0rb3r7",
+          "team": "HOTU",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 28,
+      "name": "magic",
+      "points": 1507.1,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/c/ce/Magic_%28Russian_team%29_allmode.png/86px-Magic_%28Russian_team%29_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Magic",
+      "players": [
+        {
+          "username": "AW",
+          "team": "magic",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "MaSvAl",
+          "team": "magic",
+          "nationality": "Belarus",
+          "country_code": "BY",
+          "game": "cs2"
+        },
+        {
+          "username": "mo0N",
+          "team": "magic",
+          "nationality": "Kazakhstan",
+          "country_code": "KZ",
+          "game": "cs2"
+        },
+        {
+          "username": "sFade8",
+          "team": "magic",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "tenzy",
+          "team": "magic",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 29,
+      "name": "DENDELE CS",
+      "points": 1500.3,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/8/87/DENDELE_CS_allmode.png/38px-DENDELE_CS_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/DENDELE_CS",
+      "players": [
+        {
+          "username": "doc",
+          "team": "DENDELE CS",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "gafolo",
+          "team": "DENDELE CS",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "koala",
+          "team": "DENDELE CS",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "maxxkor",
+          "team": "DENDELE CS",
+          "nationality": "Argentina",
+          "country_code": "AR",
+          "game": "cs2"
+        },
+        {
+          "username": "rdnzao",
+          "team": "DENDELE CS",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 30,
+      "name": "Ninjas in Pyjamas",
+      "points": 1498.6,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/b/b7/Ninjas_in_Pyjamas_2021_darkmode.png/50px-Ninjas_in_Pyjamas_2021_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Ninjas_in_Pyjamas",
+      "players": [
+        {
+          "username": "n0te",
+          "team": "Ninjas in Pyjamas",
+          "nationality": "Belgium",
+          "country_code": "BE",
+          "game": "cs2"
+        },
+        {
+          "username": "sjuush",
+          "team": "Ninjas in Pyjamas",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "Snappi",
+          "team": "Ninjas in Pyjamas",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "stavn",
+          "team": "Ninjas in Pyjamas",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "xKacpersky",
+          "team": "Ninjas in Pyjamas",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 31,
+      "name": "EYEBALLERS",
+      "points": 1497,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/6/68/EYEBALLERS_2023_allmode.png/35px-EYEBALLERS_2023_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/EYEBALLERS",
+      "players": [
+        {
+          "username": "dex",
+          "team": "EYEBALLERS",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "JW",
+          "team": "EYEBALLERS",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "KRIMZ",
+          "team": "EYEBALLERS",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "maxster",
+          "team": "EYEBALLERS",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "Ro1f",
+          "team": "EYEBALLERS",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 32,
+      "name": "K27",
+      "points": 1481.4,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/c/c0/K27_allmode.png/100px-K27_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/K27",
+      "players": [
+        {
+          "username": "clax",
+          "team": "K27",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "kashl1d",
+          "team": "K27",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "qw1nk1",
+          "team": "K27",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "X5G7V",
+          "team": "K27",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "xeedo",
+          "team": "K27",
+          "nationality": "Belarus",
+          "country_code": "BY",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 33,
+      "name": "Luminosity Gaming",
+      "points": 1463.3,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/a/a2/Luminosity_Gaming_2018_allmode.png/50px-Luminosity_Gaming_2018_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Luminosity_Gaming",
+      "players": [
+        {
+          "username": "AZUWU",
+          "team": "Luminosity Gaming",
+          "nationality": "United Kingdom",
+          "country_code": "GB",
+          "game": "cs2"
+        },
+        {
+          "username": "afro",
+          "team": "Luminosity Gaming",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        },
+        {
+          "username": "Bymas",
+          "team": "Luminosity Gaming",
+          "nationality": "Lithuania",
+          "country_code": "LT",
+          "game": "cs2"
+        },
+        {
+          "username": "Gizmy",
+          "team": "Luminosity Gaming",
+          "nationality": "United Kingdom",
+          "country_code": "GB",
+          "game": "cs2"
+        },
+        {
+          "username": "Rainwaker",
+          "team": "Luminosity Gaming",
+          "nationality": "Bulgaria",
+          "country_code": "BG",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 34,
+      "name": "paiN Gaming",
+      "points": 1459.4,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/d/d3/PaiN_Gaming_2023_darkmode.png/75px-PaiN_Gaming_2023_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/PaiN_Gaming",
+      "players": [
+        {
+          "username": "biguzera",
+          "team": "paiN Gaming",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "piriajr",
+          "team": "paiN Gaming",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "saffee",
+          "team": "paiN Gaming",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "snow",
+          "team": "paiN Gaming",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        },
+        {
+          "username": "v$m",
+          "team": "paiN Gaming",
+          "nationality": "Brazil",
+          "country_code": "BR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 35,
+      "name": "3DMAX",
+      "points": 1451.7,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/e/ee/3DMAX_2024_allmode.png/36px-3DMAX_2024_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/3DMAX",
+      "players": [
+        {
+          "username": "Graviti",
+          "team": "3DMAX",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        },
+        {
+          "username": "Kursy",
+          "team": "3DMAX",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        },
+        {
+          "username": "Lucky",
+          "team": "3DMAX",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        },
+        {
+          "username": "Maka",
+          "team": "3DMAX",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        },
+        {
+          "username": "misutaaa",
+          "team": "3DMAX",
+          "nationality": "France",
+          "country_code": "FR",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 36,
+      "name": "Virtus.pro",
+      "points": 1440.8,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/c/c0/Virtus.pro_2019_allmode.png/51px-Virtus.pro_2019_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Virtus.pro",
+      "players": [
+        {
+          "username": "AquaRS",
+          "team": "Virtus.pro",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "b1st",
+          "team": "Virtus.pro",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "F0R3VER",
+          "team": "Virtus.pro",
+          "nationality": "Kazakhstan",
+          "country_code": "KZ",
+          "game": "cs2"
+        },
+        {
+          "username": "mir",
+          "team": "Virtus.pro",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "tO0RO",
+          "team": "Virtus.pro",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 37,
+      "name": "Lynn Vision Gaming",
+      "points": 1436,
+      "region": "AS",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/e/e7/Lynn_Vision_Gaming_2024_allmode.png/74px-Lynn_Vision_Gaming_2024_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Lynn_Vision_Gaming",
+      "players": [
+        {
+          "username": "C4LLM3SU3",
+          "team": "Lynn Vision Gaming",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        },
+        {
+          "username": "EmiliaQAQ",
+          "team": "Lynn Vision Gaming",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        },
+        {
+          "username": "Starry",
+          "team": "Lynn Vision Gaming",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        },
+        {
+          "username": "westmelon",
+          "team": "Lynn Vision Gaming",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        },
+        {
+          "username": "z4kr",
+          "team": "Lynn Vision Gaming",
+          "nationality": "China",
+          "country_code": "CN",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 38,
+      "name": "Fnatic",
+      "points": 1432.9,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/f/f9/Fnatic_2020_allmode.png/77px-Fnatic_2020_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Fnatic",
+      "players": [
+        {
+          "username": "cairne",
+          "team": "Fnatic",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "fear",
+          "team": "Fnatic",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "jackasmo",
+          "team": "Fnatic",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "jambo",
+          "team": "Fnatic",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "mazay",
+          "team": "Fnatic",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 39,
+      "name": "1w Team",
+      "points": 1423.2,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/5/5c/1win_Team_2024_allmode.png/100px-1win_Team_2024_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/1w_Team",
+      "players": [
+        {
+          "username": "ArtFr0st",
+          "team": "1w Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "Ax1Le",
+          "team": "1w Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "BELCHONOKK",
+          "team": "1w Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "fame",
+          "team": "1w Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "nafany",
+          "team": "1w Team",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 40,
+      "name": "Team Nemesis",
+      "points": 1418.7,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/5/5a/Team_Nem_darkmode.png/56px-Team_Nem_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Team_Nemesis",
+      "players": [
+        {
+          "username": "mag1k3Y",
+          "team": "Team Nemesis",
+          "nationality": "Kazakhstan",
+          "country_code": "KZ",
+          "game": "cs2"
+        },
+        {
+          "username": "r3salt",
+          "team": "Team Nemesis",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "SELLTER",
+          "team": "Team Nemesis",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "Sdaim",
+          "team": "Team Nemesis",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "tex1y",
+          "team": "Team Nemesis",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 41,
+      "name": "Sashi Esport",
+      "points": 1403.2,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/e/e3/Sashi_Esport_2023_allmode.png/37px-Sashi_Esport_2023_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Sashi_Esport",
+      "players": [
+        {
+          "username": "acoR",
+          "team": "Sashi Esport",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "Anlelele",
+          "team": "Sashi Esport",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "Cabbi",
+          "team": "Sashi Esport",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "MistR",
+          "team": "Sashi Esport",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "Zyphon",
+          "team": "Sashi Esport",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 42,
+      "name": "Acend",
+      "points": 1388,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/7/7d/Acend_allmode.png/100px-Acend_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Acend",
+      "players": [
+        {
+          "username": "h4rn",
+          "team": "Acend",
+          "nationality": "Bulgaria",
+          "country_code": "BG",
+          "game": "cs2"
+        },
+        {
+          "username": "KalubeR",
+          "team": "Acend",
+          "nationality": "Bulgaria",
+          "country_code": "BG",
+          "game": "cs2"
+        },
+        {
+          "username": "REDSTAR",
+          "team": "Acend",
+          "nationality": "Bulgaria",
+          "country_code": "BG",
+          "game": "cs2"
+        },
+        {
+          "username": "SPELLAN",
+          "team": "Acend",
+          "nationality": "Bulgaria",
+          "country_code": "BG",
+          "game": "cs2"
+        },
+        {
+          "username": "Skrimo",
+          "team": "Acend",
+          "nationality": "Bulgaria",
+          "country_code": "BG",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 43,
+      "name": "Betclic Apogee Esports",
+      "points": 1387.8,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/9/9d/Betclic_Apogee_Esports_darkmode.png/53px-Betclic_Apogee_Esports_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Betclic_Apogee_Esports",
+      "players": [
+        {
+          "username": "Demho",
+          "team": "Betclic Apogee Esports",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "Ex1st",
+          "team": "Betclic Apogee Esports",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "fr3nd",
+          "team": "Betclic Apogee Esports",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "Prism",
+          "team": "Betclic Apogee Esports",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "Qlocuu",
+          "team": "Betclic Apogee Esports",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 44,
+      "name": "Echo",
+      "points": 1378.5,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/1/14/Echo_darkmode.png/49px-Echo_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/index.php?title=Echo&action=edit&redlink=1",
+      "players": [
+        {
+          "username": "Boye",
+          "team": "Echo",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "IceBerg",
+          "team": "Echo",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "Leakz",
+          "team": "Echo",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "NickyB",
+          "team": "Echo",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "salazar",
+          "team": "Echo",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 45,
+      "name": "FOKUS",
+      "points": 1374.7,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/1/12/FOKUS_allmode.png/37px-FOKUS_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/FOKUS",
+      "players": [
+        {
+          "username": "Banjo",
+          "team": "FOKUS",
+          "nationality": "Finland",
+          "country_code": "FI",
+          "game": "cs2"
+        },
+        {
+          "username": "jocab",
+          "team": "FOKUS",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "Matheos",
+          "team": "FOKUS",
+          "nationality": "Croatia",
+          "country_code": null,
+          "game": "cs2"
+        },
+        {
+          "username": "podi",
+          "team": "FOKUS",
+          "nationality": "Finland",
+          "country_code": "FI",
+          "game": "cs2"
+        },
+        {
+          "username": "ztr",
+          "team": "FOKUS",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 46,
+      "name": "JiJieHao",
+      "points": 1373.3,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/3/30/JiJieHao_International_allmode.png/58px-JiJieHao_International_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/JiJieHao",
+      "players": [
+        {
+          "username": "0SAMAS",
+          "team": "JiJieHao",
+          "nationality": "Palestine",
+          "country_code": null,
+          "game": "cs2"
+        },
+        {
+          "username": "bibu",
+          "team": "JiJieHao",
+          "nationality": "Iraq",
+          "country_code": null,
+          "game": "cs2"
+        },
+        {
+          "username": "CacaNito",
+          "team": "JiJieHao",
+          "nationality": "North Macedonia",
+          "country_code": "MK",
+          "game": "cs2"
+        },
+        {
+          "username": "m1N1",
+          "team": "JiJieHao",
+          "nationality": "Lebanon",
+          "country_code": null,
+          "game": "cs2"
+        },
+        {
+          "username": "sinnopsyy",
+          "team": "JiJieHao",
+          "nationality": "Kosovo",
+          "country_code": "XK",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 47,
+      "name": "Wildcard",
+      "points": 1370.7,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/7/77/Wildcard_2024_darkmode.png/42px-Wildcard_2024_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Wildcard",
+      "players": [
+        {
+          "username": "Cxzi",
+          "team": "Wildcard",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        },
+        {
+          "username": "HexT",
+          "team": "Wildcard",
+          "nationality": "Canada",
+          "country_code": "CA",
+          "game": "cs2"
+        },
+        {
+          "username": "mhL",
+          "team": "Wildcard",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "nEMANHA",
+          "team": "Wildcard",
+          "nationality": "Serbia",
+          "country_code": "RS",
+          "game": "cs2"
+        },
+        {
+          "username": "reck",
+          "team": "Wildcard",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 48,
+      "name": "Nuclear TigeRES",
+      "points": 1365.1,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/2/2c/Nuclear_TigeRES_darkmode.png/70px-Nuclear_TigeRES_darkmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Nuclear_TigeRES",
+      "players": [
+        {
+          "username": "ayuki",
+          "team": "Nuclear TigeRES",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "flouzer",
+          "team": "Nuclear TigeRES",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "m1QUSE",
+          "team": "Nuclear TigeRES",
+          "nationality": "Belarus",
+          "country_code": "BY",
+          "game": "cs2"
+        },
+        {
+          "username": "senka",
+          "team": "Nuclear TigeRES",
+          "nationality": "Belarus",
+          "country_code": "BY",
+          "game": "cs2"
+        },
+        {
+          "username": "z1k4",
+          "team": "Nuclear TigeRES",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 49,
+      "name": "BC.Game Esports",
+      "points": 1357.3,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/f/f4/BC.Game_Esports_nov_2025_allmode.png/50px-BC.Game_Esports_nov_2025_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/BC.Game_Esports",
+      "players": [
+        {
+          "username": "electroNic",
+          "team": "BC.Game Esports",
+          "nationality": "Russia",
+          "country_code": "RU",
+          "game": "cs2"
+        },
+        {
+          "username": "Magisk",
+          "team": "BC.Game Esports",
+          "nationality": "Denmark",
+          "country_code": "DK",
+          "game": "cs2"
+        },
+        {
+          "username": "mzinho",
+          "team": "BC.Game Esports",
+          "nationality": "Mongolia",
+          "country_code": "MN",
+          "game": "cs2"
+        },
+        {
+          "username": "s1mple",
+          "team": "BC.Game Esports",
+          "nationality": "Ukraine",
+          "country_code": "UA",
+          "game": "cs2"
+        },
+        {
+          "username": "Senzu",
+          "team": "BC.Game Esports",
+          "nationality": "Mongolia",
+          "country_code": "MN",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 50,
+      "name": "INFINITE",
+      "points": 1352,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/1/12/Infinite_Gaming_allmode.png/100px-Infinite_Gaming_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/INFINITE",
+      "players": [
+        {
+          "username": "Blytz",
+          "team": "INFINITE",
+          "nationality": "Romania",
+          "country_code": "RO",
+          "game": "cs2"
+        },
+        {
+          "username": "Dytor",
+          "team": "INFINITE",
+          "nationality": "Czechia",
+          "country_code": "CZ",
+          "game": "cs2"
+        },
+        {
+          "username": "kreaz",
+          "team": "INFINITE",
+          "nationality": "Sweden",
+          "country_code": "SE",
+          "game": "cs2"
+        },
+        {
+          "username": "sl3nd",
+          "team": "INFINITE",
+          "nationality": "Hungary",
+          "country_code": "HU",
+          "game": "cs2"
+        },
+        {
+          "username": "volt",
+          "team": "INFINITE",
+          "nationality": "Romania",
+          "country_code": "RO",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 51,
+      "name": "M80",
+      "points": 1350.3,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/5/55/M80_2023_allmode.png/44px-M80_2023_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/M80",
+      "players": [
+        {
+          "username": "JBa",
+          "team": "M80",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        },
+        {
+          "username": "Lake",
+          "team": "M80",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        },
+        {
+          "username": "s1n",
+          "team": "M80",
+          "nationality": "Germany",
+          "country_code": "DE",
+          "game": "cs2"
+        },
+        {
+          "username": "slaxz-",
+          "team": "M80",
+          "nationality": "Germany",
+          "country_code": "DE",
+          "game": "cs2"
+        },
+        {
+          "username": "Swisher",
+          "team": "M80",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 52,
+      "name": "FlyQuest",
+      "points": 1336.1,
+      "region": "AS",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/b/b2/FlyQuest_2021_allmode.png/51px-FlyQuest_2021_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/FlyQuest",
+      "players": [
+        {
+          "username": "Gratisfaction",
+          "team": "FlyQuest",
+          "nationality": "New Zealand",
+          "country_code": "NZ",
+          "game": "cs2"
+        },
+        {
+          "username": "INS",
+          "team": "FlyQuest",
+          "nationality": "Australia",
+          "country_code": "AU",
+          "game": "cs2"
+        },
+        {
+          "username": "jks",
+          "team": "FlyQuest",
+          "nationality": "Australia",
+          "country_code": "AU",
+          "game": "cs2"
+        },
+        {
+          "username": "nettik",
+          "team": "FlyQuest",
+          "nationality": "New Zealand",
+          "country_code": "NZ",
+          "game": "cs2"
+        },
+        {
+          "username": "Vexite",
+          "team": "FlyQuest",
+          "nationality": "Australia",
+          "country_code": "AU",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 53,
+      "name": "Iberian Soul",
+      "points": 1326,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/b/bf/Iberian_Soul_allmode.png/37px-Iberian_Soul_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/Iberian_Soul",
+      "players": [
+        {
+          "username": "alex",
+          "team": "Iberian Soul",
+          "nationality": "Spain",
+          "country_code": "ES",
+          "game": "cs2"
+        },
+        {
+          "username": "CRUC1AL",
+          "team": "Iberian Soul",
+          "nationality": "Netherlands",
+          "country_code": "NL",
+          "game": "cs2"
+        },
+        {
+          "username": "dav1g",
+          "team": "Iberian Soul",
+          "nationality": "Spain",
+          "country_code": "ES",
+          "game": "cs2"
+        },
+        {
+          "username": "mopoz",
+          "team": "Iberian Soul",
+          "nationality": "Spain",
+          "country_code": "ES",
+          "game": "cs2"
+        },
+        {
+          "username": "sausol",
+          "team": "Iberian Soul",
+          "nationality": "Spain",
+          "country_code": "ES",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 54,
+      "name": "NRG",
+      "points": 1312.5,
+      "region": "AM",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/1/16/NRG_2024_allmode.png/100px-NRG_2024_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/NRG",
+      "players": [
+        {
+          "username": "Grim",
+          "team": "NRG",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        },
+        {
+          "username": "hallzerk",
+          "team": "NRG",
+          "nationality": "Norway",
+          "country_code": "NO",
+          "game": "cs2"
+        },
+        {
+          "username": "Jeorge",
+          "team": "NRG",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        },
+        {
+          "username": "nitr0",
+          "team": "NRG",
+          "nationality": "United States",
+          "country_code": "US",
+          "game": "cs2"
+        },
+        {
+          "username": "Sonic",
+          "team": "NRG",
+          "nationality": "South Africa",
+          "country_code": "ZA",
+          "game": "cs2"
+        }
+      ]
+    },
+    {
+      "rank": 55,
+      "name": "SINNERS Esports",
+      "points": 1260.3,
+      "region": "EU",
+      "logo_url": "https://liquipedia.net/commons/images/thumb/4/4f/SINNERS_Esports_allmode.png/39px-SINNERS_Esports_allmode.png",
+      "liquipedia_url": "https://liquipedia.net/counterstrike/SINNERS_Esports",
+      "players": [
+        {
+          "username": "beastik",
+          "team": "SINNERS Esports",
+          "nationality": "Czechia",
+          "country_code": "CZ",
+          "game": "cs2"
+        },
+        {
+          "username": "kisserek",
+          "team": "SINNERS Esports",
+          "nationality": "Poland",
+          "country_code": "PL",
+          "game": "cs2"
+        },
+        {
+          "username": "MoDo",
+          "team": "SINNERS Esports",
+          "nationality": "Romania",
+          "country_code": "RO",
+          "game": "cs2"
+        },
+        {
+          "username": "SHOCK",
+          "team": "SINNERS Esports",
+          "nationality": "Czechia",
+          "country_code": "CZ",
+          "game": "cs2"
+        },
+        {
+          "username": "stressarN",
+          "team": "SINNERS Esports",
+          "nationality": "North Macedonia",
+          "country_code": "MK",
+          "game": "cs2"
+        }
+      ]
+    }
+  ]
+}

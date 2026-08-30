@@ -110,6 +110,27 @@ function renderGameLogo(slug: string) {
 }
 
 
+// Helper to format social media link cleanly
+function formatSocialUrl(url: string | null | undefined, platform: 'twitter' | 'twitch' | 'instagram' | 'youtube' | 'tiktok') {
+  if (!url) return '#';
+  const clean = url.trim();
+  if (clean.startsWith('http://') || clean.startsWith('https://')) {
+    return clean;
+  }
+  const baseMap: Record<string, string> = {
+    twitter: 'https://x.com/',
+    twitch: 'https://twitch.tv/',
+    instagram: 'https://instagram.com/',
+    youtube: 'https://youtube.com/',
+    tiktok: 'https://tiktok.com/@',
+  };
+  const sanitized = clean.replace(/^@/, '');
+  if (clean.includes('.')) {
+    return `https://${clean}`;
+  }
+  return `${baseMap[platform]}${sanitized}`;
+}
+
 // Helper to calculate age from birth date string
 function calculateAge(dateStr: string | null): number | null {
   if (!dateStr) return null;
@@ -357,6 +378,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
 
   const isValorant = (primarySettings?.games as any)?.slug === 'valorant';
   const brandColors = getTeamBrandColors(player.team);
+  const realName = player.Full_name || player.full_name || player.real_name;
 
   return (
     <div className="relative flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -408,10 +430,10 @@ export default async function PlayerProfilePage({ params }: PageProps) {
 
               {/* Meta row */}
               <div className="flex flex-wrap items-center text-xs sm:text-sm text-zinc-400 font-sans gap-x-3 gap-y-1.5">
-                {player.real_name && (
-                  <span className="font-semibold text-zinc-200">{player.real_name}</span>
+                {realName && (
+                  <span className="font-semibold text-zinc-200">{realName}</span>
                 )}
-                {player.real_name && (player.nationality || player.country_code || player.birth_date) && (
+                {realName && (player.nationality || player.country_code || player.birth_date) && (
                   <span className="text-zinc-700 font-bold">•</span>
                 )}
                 {player.nationality && (
@@ -466,39 +488,100 @@ export default async function PlayerProfilePage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Social media logos placeholder & Copy profile URL */}
+          {/* Social media logos & Copy profile URL */}
           <div className="flex flex-wrap items-center gap-3 shrink-0 lg:ml-auto">
-            {/* Social logos */}
-            <div className="flex items-center gap-1 bg-[#12121A]/60 border border-border-custom px-2 py-1.5 rounded-xl">
-              <a
-                href="#"
-                className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-                title="X"
-              >
-                <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              </a>
-              <a
-                href="#"
-                className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#E1306C] hover:bg-[#E1306C]/10 rounded-lg transition-all duration-200"
-                title="Instagram"
-              >
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01" />
-                </svg>
-              </a>
-              <a
-                href="#"
-                className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#9146FF] hover:bg-[#9146FF]/10 rounded-lg transition-all duration-200"
-                title="Twitch"
-              >
-                <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" fillRule="evenodd" clipRule="evenodd" />
-                </svg>
-              </a>
-            </div>
+            {/* Dynamic Social logos container */}
+            {(() => {
+              const socials = (player as any).social_links || {};
+              const twitterLink = socials.twitter || socials.x;
+              const twitchLink = socials.twitch;
+              const instagramLink = socials.instagram;
+              const youtubeLink = socials.youtube;
+              const tiktokLink = socials.tiktok;
+
+              const hasAnySocial = Boolean(twitterLink || twitchLink || instagramLink || youtubeLink || tiktokLink);
+              if (!hasAnySocial) return null;
+
+              return (
+                <div className="flex items-center gap-1 bg-[#12121A]/60 border border-border-custom px-2 py-1.5 rounded-xl">
+                  {/* Twitter / X */}
+                  {twitterLink && (
+                    <a
+                      href={formatSocialUrl(twitterLink, 'twitter')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
+                      title="Twitter / X"
+                    >
+                      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                    </a>
+                  )}
+
+                  {/* Twitch */}
+                  {twitchLink && (
+                    <a
+                      href={formatSocialUrl(twitchLink, 'twitch')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#9146FF] hover:bg-[#9146FF]/10 rounded-lg transition-all duration-200"
+                      title="Twitch"
+                    >
+                      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" fillRule="evenodd" clipRule="evenodd" />
+                      </svg>
+                    </a>
+                  )}
+
+                  {/* Instagram */}
+                  {instagramLink && (
+                    <a
+                      href={formatSocialUrl(instagramLink, 'instagram')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#E1306C] hover:bg-[#E1306C]/10 rounded-lg transition-all duration-200"
+                      title="Instagram"
+                    >
+                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01" />
+                      </svg>
+                    </a>
+                  )}
+
+                  {/* YouTube */}
+                  {youtubeLink && (
+                    <a
+                      href={formatSocialUrl(youtubeLink, 'youtube')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#FF0000] hover:bg-[#FF0000]/10 rounded-lg transition-all duration-200"
+                      title="YouTube"
+                    >
+                      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                      </svg>
+                    </a>
+                  )}
+
+                  {/* TikTok */}
+                  {tiktokLink && (
+                    <a
+                      href={formatSocialUrl(tiktokLink, 'tiktok')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#00F2FE] hover:bg-[#00F2FE]/10 rounded-lg transition-all duration-200"
+                      title="TikTok"
+                    >
+                      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.27 1.76-.23 1.02.14 2.16.92 2.85.8.72 1.95.91 2.97.62.91-.25 1.67-.98 1.9-1.9.15-.6.18-1.24.18-1.87V.02z" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Copy profile URL button */}
             <CopyProfileUrlButton />

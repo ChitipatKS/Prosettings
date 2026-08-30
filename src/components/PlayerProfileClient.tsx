@@ -156,6 +156,7 @@ type PlayerProfileClientProps = {
   playerMouse: any;
   playerKeyboard: any;
   playerMonitor: any;
+  showComments?: boolean;
 };
 
 export default function PlayerProfileClient({
@@ -165,7 +166,8 @@ export default function PlayerProfileClient({
   hardware,
   playerMouse,
   playerKeyboard,
-  playerMonitor
+  playerMonitor,
+  showComments = true
 }: PlayerProfileClientProps) {
   const [selectedGameId, setSelectedGameId] = useState<number>(settingsData[0]?.games?.id || 0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -274,8 +276,8 @@ export default function PlayerProfileClient({
 
                 {/* Stats grid */}
                 <div className="grid grid-cols-2 gap-2.5">
-                  <StatHighlight label="DPI" value={activeSettings?.mouse_dpi} accent />
-                  <StatHighlight label="Sensitivity" value={activeSettings?.in_game_sens !== null && activeSettings?.in_game_sens !== undefined ? Number(activeSettings.in_game_sens).toFixed(3) : null} accent />
+                  <StatHighlight label="DPI" value={activeSettings?.mouse_dpi} />
+                  <StatHighlight label="Sensitivity" value={activeSettings?.in_game_sens !== null && activeSettings?.in_game_sens !== undefined ? Number(activeSettings.in_game_sens).toFixed(3) : null} />
                   <StatHighlight label="eDPI" value={activeSettings?.edpi} />
                   <StatHighlight label="Hz" value={activeSettings?.mouse_hz ? `${activeSettings.mouse_hz}` : null} />
                   {isValorant && settingsJson.scoped_sens && (
@@ -576,15 +578,17 @@ export default function PlayerProfileClient({
           </div>
 
           {/* ================================================ */}
-          {/* SECTION 6: COMMENTS */}
+          {/* SECTION 6: COMMENTS (Only on Pro Player pages) */}
           {/* ================================================ */}
-          <div id="comments" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 sm:p-6 rounded-2xl">
-            <CommentSection username={player.username} />
-          </div>
+          {showComments && (
+            <div id="comments" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 sm:p-6 rounded-2xl">
+              <CommentSection username={player.username} />
+            </div>
+          )}
         </div>
 
         {/* ======= RIGHT SIDEBAR (Desktop only) ======= */}
-        <ProfileSidebar />
+        <ProfileSidebar showComments={showComments} />
       </div>
     </div>
   );

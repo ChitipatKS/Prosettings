@@ -24,6 +24,10 @@ export default function AdminPlayersList() {
   const [totalCount, setTotalCount] = useState(0);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isSelectMode, setIsSelectMode] = useState(false);
+  const [isBatchDeleting, setIsBatchDeleting] = useState(false);
+
   // Custom confirmation dialog state
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -63,7 +67,7 @@ export default function AdminPlayersList() {
       const from = (page - 1) * limit;
       const to = from + limit - 1;
  
-      let selectStr = 'id, username, real_name, team, country_code, profile_img_url, created_at';
+      let selectStr = 'id, username, Full_name, team, country_code, profile_img_url, created_at';
       if (selectedGame !== 'all') {
         selectStr += ', player_game_settings!inner(game_id)';
       }
@@ -73,7 +77,7 @@ export default function AdminPlayersList() {
         .select(selectStr, { count: 'exact' });
  
       if (search.trim()) {
-        query = query.or(`username.ilike.%${search}%,real_name.ilike.%${search}%,team.ilike.%${search}%`);
+        query = query.or(`username.ilike.%${search}%,Full_name.ilike.%${search}%,team.ilike.%${search}%`);
       }
 
       if (selectedGame === 'valorant') {
@@ -90,7 +94,16 @@ export default function AdminPlayersList() {
       if (error) throw error;
  
       if (data) {
-        setPlayers(data as any as PlayerListItem[]);
+        const mapped = (data as any[]).map((p: any) => ({
+          id: p.id,
+          username: p.username,
+          real_name: p.Full_name || p.full_name || p.real_name || null,
+          team: p.team,
+          country_code: p.country_code,
+          profile_img_url: p.profile_img_url,
+          created_at: p.created_at
+        }));
+        setPlayers(mapped);
         setTotalCount(count || 0);
         setTotalPages(Math.ceil((count || 0) / limit) || 1);
       }
@@ -110,6 +123,7 @@ export default function AdminPlayersList() {
     return () => clearTimeout(timer);
   }, [page, search, selectedGame]);
 
+  // Handle single player deletion
   const handleDeletePlayer = async (id: number, username: string) => {
     showConfirm(
       'Confirm Player Deletion',
@@ -119,6 +133,7 @@ export default function AdminPlayersList() {
           setDeletingId(id);
           // Optimistically remove from state
           setPlayers(prev => prev.filter(p => p.id !== id));
+          setSelectedIds(prev => prev.filter(item => item !== id));
 
           // 1. Delete player game settings
           const { error: settingsError } = await supabase
@@ -166,6 +181,87 @@ export default function AdminPlayersList() {
     );
   };
 
+  // Handle multi-select checkboxes
+  const handleToggleSelect = (id: number) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAllCurrentPage = () => {
+    const pageIds = players.map(p => p.id);
+    const isAllPageSelected = pageIds.length > 0 && pageIds.every(id => selectedIds.includes(id));
+
+    if (isAllPageSelected) {
+      // Unselect all on current page
+      setSelectedIds(prev => prev.filter(id => !pageIds.includes(id)));
+    } else {
+      // Select all on current page
+      setSelectedIds(prev => Array.from(new Set([...prev, ...pageIds])));
+    }
+  };
+
+  // Handle bulk / batch delete
+  const handleBatchDelete = () => {
+    if (selectedIds.length === 0) return;
+
+    showConfirm(
+      'Confirm Bulk Deletion',
+      `Are you sure you want to permanently delete ${selectedIds.length} selected player(s)? This will delete all their game settings, gear references, and comments.`,
+      async () => {
+        try {
+          setIsBatchDeleting(true);
+          const idsToDelete = [...selectedIds];
+
+          // Optimistically remove from state
+          setPlayers(prev => prev.filter(p => !idsToDelete.includes(p.id)));
+
+          // 1. Delete game settings
+          await supabase
+            .from('player_game_settings')
+            .delete()
+            .in('player_id', idsToDelete);
+
+          // 2. Delete gear references
+          await supabase
+            .from('player_products')
+            .delete()
+            .in('player_id', idsToDelete);
+
+          // 3. Delete favorites
+          await supabase
+            .from('user_favorites')
+            .delete()
+            .in('player_id', idsToDelete);
+
+          // 4. Delete players
+          const { error: batchErr } = await supabase
+            .from('players')
+            .delete()
+            .in('id', idsToDelete);
+
+          if (batchErr) throw batchErr;
+
+          setSelectedIds([]);
+          loadPlayers(true);
+        } catch (err: any) {
+          loadPlayers();
+          showConfirm(
+            'Batch Deletion Error',
+            `Error deleting selected players: ${err.message}`,
+            () => {},
+            true
+          );
+        } finally {
+          setIsBatchDeleting(false);
+        }
+      }
+    );
+  };
+
+  const allOnPageSelected = players.length > 0 && players.every(p => selectedIds.includes(p.id));
+  const someOnPageSelected = players.some(p => selectedIds.includes(p.id));
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       
@@ -179,13 +275,86 @@ export default function AdminPlayersList() {
             Create, update, and delete eSports athletes profiles. Total: {totalCount} players
           </p>
         </div>
-        <Link
-          href="/admin/players/new"
-          className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-accent-fg font-bold text-xs font-sans rounded-xl tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(245,158,11,0.15)] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] active:scale-98 text-center"
-        >
-          + Add New Player
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setIsSelectMode(!isSelectMode);
+              if (isSelectMode) setSelectedIds([]);
+            }}
+            className={`px-4 py-2.5 font-bold text-xs font-sans rounded-xl tracking-wider uppercase transition-all flex items-center gap-2 cursor-pointer border ${
+              isSelectMode || selectedIds.length > 0
+                ? 'bg-accent/15 border-accent text-accent shadow-[0_0_15px_rgba(245,158,11,0.2)]'
+                : 'bg-black/30 border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-white'
+            }`}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+            <span>{isSelectMode || selectedIds.length > 0 ? 'Exit Select' : 'Select'}</span>
+          </button>
+
+          <Link
+            href="/admin/players/new"
+            className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-accent-fg font-bold text-xs font-sans rounded-xl tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(245,158,11,0.15)] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] active:scale-98 text-center"
+          >
+            + Add New Player
+          </Link>
+        </div>
       </div>
+
+      {/* Batch Action Floating Banner */}
+      {(isSelectMode || selectedIds.length > 0) && (
+        <div className="bg-gradient-to-r from-amber-500/10 via-[#1A1A24] to-red-500/10 border border-amber-500/30 p-3.5 sm:p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-xl backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-accent/20 border border-accent/40 flex items-center justify-center text-accent font-bold font-mono text-xs">
+              {selectedIds.length}
+            </div>
+            <div>
+              <span className="text-xs font-bold text-white font-display">
+                {selectedIds.length} {selectedIds.length === 1 ? 'player' : 'players'} selected
+              </span>
+              <p className="text-[10px] text-zinc-400 font-mono">
+                Click checkboxes to select or deselect players for bulk operations
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 ml-auto">
+            <button
+              type="button"
+              onClick={handleSelectAllCurrentPage}
+              className="px-3.5 py-1.5 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-zinc-300 hover:text-white rounded-lg text-[10px] font-bold font-mono uppercase tracking-wider transition-all cursor-pointer"
+            >
+              {allOnPageSelected ? 'Deselect Page' : 'Select All Page'}
+            </button>
+
+            {selectedIds.length > 0 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setSelectedIds([])}
+                  className="px-3.5 py-1.5 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white rounded-lg text-[10px] font-bold font-mono uppercase tracking-wider transition-all cursor-pointer"
+                >
+                  Clear All
+                </button>
+
+                <button
+                  type="button"
+                  disabled={isBatchDeleting}
+                  onClick={handleBatchDelete}
+                  className="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded-lg text-[10px] font-bold font-mono uppercase tracking-wider shadow-lg shadow-red-600/20 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  <span>{isBatchDeleting ? 'Deleting...' : `Delete (${selectedIds.length})`}</span>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Search Filter Bar */}
       <div className="bg-[#12121A]/70 border border-zinc-800/80 p-4 rounded-xl flex flex-col sm:flex-row gap-4 items-center justify-between">
@@ -252,6 +421,22 @@ export default function AdminPlayersList() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-black/30 border-b border-zinc-800 text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono">
+                  {(isSelectMode || selectedIds.length > 0) && (
+                    <th className="px-4 py-4 w-12 text-center">
+                      <input
+                        type="checkbox"
+                        checked={allOnPageSelected}
+                        ref={(input) => {
+                          if (input) {
+                            input.indeterminate = !allOnPageSelected && someOnPageSelected;
+                          }
+                        }}
+                        onChange={handleSelectAllCurrentPage}
+                        className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-accent focus:ring-accent cursor-pointer accent-amber-500"
+                        title="Select/Deselect All on this page"
+                      />
+                    </th>
+                  )}
                   <th className="px-6 py-4">Player</th>
                   <th className="px-6 py-4">Real Name</th>
                   <th className="px-6 py-4">Team</th>
@@ -260,52 +445,80 @@ export default function AdminPlayersList() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-900 text-xs text-zinc-300">
-                {players.map((player) => (
-                  <tr key={player.id} className="hover:bg-white/[0.01] transition-colors">
-                    <td className="px-6 py-4">
-                      <span className="font-extrabold text-white text-sm font-display">{player.username}</span>
-                    </td>
-                    <td className="px-6 py-4 font-mono font-medium text-zinc-400">
-                      {player.real_name || '—'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="px-2 py-1 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 font-mono font-semibold uppercase text-[10px]">
-                        {player.team || 'Free Agent'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      {player.country_code ? (
-                        <div className="flex items-center gap-1.5">
-                          <img
-                            src={`https://flagcdn.com/16x12/${player.country_code.toLowerCase()}.png`}
-                            alt={player.country_code}
-                            className="w-4 h-3 object-cover rounded-[2px]"
+                {players.map((player) => {
+                  const isSelected = selectedIds.includes(player.id);
+                  return (
+                    <tr
+                      key={player.id}
+                      onClick={() => {
+                        if (isSelectMode) {
+                          handleToggleSelect(player.id);
+                        }
+                      }}
+                      className={`transition-colors ${
+                        isSelected
+                          ? 'bg-amber-500/[0.08] hover:bg-amber-500/[0.12]'
+                          : 'hover:bg-white/[0.01]'
+                      } ${isSelectMode ? 'cursor-pointer' : ''}`}
+                    >
+                      {(isSelectMode || selectedIds.length > 0) && (
+                        <td
+                          className="px-4 py-4 text-center"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleToggleSelect(player.id)}
+                            className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-accent focus:ring-accent cursor-pointer accent-amber-500"
                           />
-                          <span className="font-mono text-zinc-400">{player.country_code}</span>
-                        </div>
-                      ) : (
-                        <span className="text-zinc-600 font-mono">—</span>
+                        </td>
                       )}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-3">
-                        <Link
-                          href={`/admin/players/${player.id}/edit`}
-                          className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 rounded-lg text-[10px] font-bold text-zinc-300 transition-colors uppercase font-sans"
-                        >
-                          Edit
-                        </Link>
-                        <button
-                          disabled={deletingId === player.id}
-                          onClick={() => handleDeletePlayer(player.id, player.username)}
-                          className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/25 border border-red-500/20 hover:border-red-500/50 rounded-lg text-[10px] font-bold text-red-400 transition-colors uppercase font-sans cursor-pointer disabled:opacity-50"
-                        >
-                          {deletingId === player.id ? 'Deleting...' : 'Delete'}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      <td className="px-6 py-4">
+                        <span className="font-extrabold text-white text-sm font-display">{player.username}</span>
+                      </td>
+                      <td className="px-6 py-4 font-mono font-medium text-zinc-400">
+                        {player.real_name || '—'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="px-2 py-1 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 font-mono font-semibold uppercase text-[10px]">
+                          {player.team || 'Free Agent'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        {player.country_code ? (
+                          <div className="flex items-center gap-1.5">
+                            <img
+                              src={`https://flagcdn.com/16x12/${player.country_code.toLowerCase()}.png`}
+                              alt={player.country_code}
+                              className="w-4 h-3 object-cover rounded-[2px]"
+                            />
+                            <span className="font-mono text-zinc-400">{player.country_code}</span>
+                          </div>
+                        ) : (
+                          <span className="text-zinc-600 font-mono">—</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center justify-end gap-3">
+                          <Link
+                            href={`/admin/players/${player.id}/edit`}
+                            className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 rounded-lg text-[10px] font-bold text-zinc-300 transition-colors uppercase font-sans"
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            disabled={deletingId === player.id}
+                            onClick={() => handleDeletePlayer(player.id, player.username)}
+                            className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/25 border border-red-500/20 hover:border-red-500/50 rounded-lg text-[10px] font-bold text-red-400 transition-colors uppercase font-sans cursor-pointer disabled:opacity-50"
+                          >
+                            {deletingId === player.id ? 'Deleting...' : 'Delete'}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

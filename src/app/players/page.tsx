@@ -320,13 +320,23 @@ function CountrySearchSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full h-11 bg-black/40 border border-border-custom hover:border-zinc-700 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold text-zinc-300 transition-all"
+        className="w-full h-11 bg-black/40 border border-border-custom hover:border-zinc-700 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold text-zinc-300 transition-all cursor-pointer"
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-19m0 0a5 5 0 005 5h4a5 5 0 015-5h2v10H9a5 5 0 00-5 5H3" />
-          </svg>
-          <span className="truncate">{displayValue}</span>
+          {selectedCountry ? (
+            <img
+              src={`https://flagcdn.com/16x12/${selectedCountry.code.toLowerCase()}.png`}
+              alt={selectedCountry.code}
+              className="w-4 h-3 object-cover rounded-[2px] shrink-0"
+            />
+          ) : (
+            <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-19m0 0a5 5 0 005 5h4a5 5 0 015-5h2v10H9a5 5 0 00-5 5H3" />
+            </svg>
+          )}
+          <span className="truncate">
+            {selectedCountry ? `${selectedCountry.name} (${selectedCountry.code})` : 'All Nations'}
+          </span>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           {selectedValue && selectedValue !== 'all' && (
@@ -371,7 +381,7 @@ function CountrySearchSelect({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search..."
               autoFocus
-              className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all"
+              className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-mono"
             />
           </div>
 
@@ -391,7 +401,9 @@ function CountrySearchSelect({
                   : 'text-zinc-400 hover:bg-zinc-800/30 hover:text-white'
               }`}
             >
-              <span className="text-sm shrink-0">🏳️</span>
+              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-19m0 0a5 5 0 005 5h4a5 5 0 015-5h2v10H9a5 5 0 00-5 5H3" />
+              </svg>
               <span>All Nations</span>
             </div>
 
@@ -402,7 +414,6 @@ function CountrySearchSelect({
             ) : (
               filteredOptions.map((country) => {
                 const isSelected = country.code === selectedValue;
-                const flag = getFlagEmoji(country.code);
                 return (
                   <div
                     key={country.code}
@@ -417,7 +428,14 @@ function CountrySearchSelect({
                         : 'text-zinc-300 hover:bg-zinc-800/30 hover:text-white'
                     }`}
                   >
-                    <span className="text-sm shrink-0">{flag}</span>
+                    <img
+                      src={`https://flagcdn.com/20x15/${country.code.toLowerCase()}.png`}
+                      alt={country.code}
+                      className="w-5 h-3.5 object-cover rounded-[2px] shrink-0 shadow-sm"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
                     <span>{country.name} ({country.code})</span>
                   </div>
                 );

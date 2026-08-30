@@ -206,6 +206,13 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
   const [description, setDescription] = useState('');
   const [profileImgUrl, setProfileImgUrl] = useState('');
 
+  // Social Links State
+  const [twitterUrl, setTwitterUrl] = useState('');
+  const [twitchUrl, setTwitchUrl] = useState('');
+  const [instagramUrl, setInstagramUrl] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [tiktokUrl, setTiktokUrl] = useState('');
+
   // Image Upload State
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -346,13 +353,20 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
           if (!player) throw new Error('Player not found.');
 
           setUsername(player.username || '');
-          setRealName(player.real_name || '');
+          setRealName(player.Full_name || player.full_name || player.real_name || '');
           setTeam(player.team || '');
           setTeamId(player.team_id || null);
           setCountryCode(player.country_code || '');
           setBirthDate(player.birth_date || '');
           setDescription(player.description || '');
           setProfileImgUrl(player.profile_img_url || '');
+
+          const socials = player.social_links || {};
+          setTwitterUrl(socials.twitter || socials.x || '');
+          setTwitchUrl(socials.twitch || '');
+          setInstagramUrl(socials.instagram || '');
+          setYoutubeUrl(socials.youtube || '');
+          setTiktokUrl(socials.tiktok || '');
 
           // Fetch player gear/products first to get the monitor name
           const { data: playerProducts, error: productsErr } = await supabase
@@ -520,20 +534,29 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
     try {
       let savedPlayerId = playerId;
 
+      const socialLinksPayload = {
+        twitter: twitterUrl.trim() || null,
+        twitch: twitchUrl.trim() || null,
+        instagram: instagramUrl.trim() || null,
+        youtube: youtubeUrl.trim() || null,
+        tiktok: tiktokUrl.trim() || null
+      };
+
       // 1. Insert or Update player info
       if (isEdit && playerId) {
         const { error } = await supabase
           .from('players')
           .update({
             username: username.trim(),
-            real_name: realName.trim() || null,
+            Full_name: realName.trim() || null,
             team: team.trim() || null,
             team_id: teamId,
             nationality: nationality || null,
             country_code: countryCode || null,
             birth_date: birthDate || null,
             description: description.trim() || null,
-            profile_img_url: profileImgUrl || null
+            profile_img_url: profileImgUrl || null,
+            social_links: socialLinksPayload
           })
           .eq('id', playerId);
 
@@ -543,14 +566,15 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
           .from('players')
           .insert({
             username: username.trim(),
-            real_name: realName.trim() || null,
+            Full_name: realName.trim() || null,
             team: team.trim() || null,
             team_id: teamId,
             nationality: nationality || null,
             country_code: countryCode || null,
             birth_date: birthDate || null,
             description: description.trim() || null,
-            profile_img_url: profileImgUrl || null
+            profile_img_url: profileImgUrl || null,
+            social_links: socialLinksPayload
           })
           .select('id')
           .single();
@@ -937,6 +961,104 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
               rows={3}
               className="w-full bg-black/40 border border-zinc-800 rounded-lg p-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
             />
+          </div>
+
+          {/* Social Media Links Sub-grid */}
+          <div className="md:col-span-3 pt-3 border-t border-zinc-850 space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] font-bold uppercase tracking-wider text-accent font-mono">
+                Social Media Links (Optional)
+              </label>
+              <span className="text-[9px] text-zinc-500 font-mono">Enter URL or handle</span>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {/* X / Twitter */}
+              <div className="space-y-1">
+                <label className="text-[9px] font-semibold text-zinc-400 font-mono flex items-center gap-1.5">
+                  <svg className="w-3 h-3 text-zinc-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                  Twitter / X
+                </label>
+                <input
+                  type="text"
+                  value={twitterUrl}
+                  onChange={(e) => setTwitterUrl(e.target.value)}
+                  placeholder="https://x.com/username"
+                  className="w-full h-9 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
+                />
+              </div>
+
+              {/* Twitch */}
+              <div className="space-y-1">
+                <label className="text-[9px] font-semibold text-zinc-400 font-mono flex items-center gap-1.5">
+                  <svg className="w-3 h-3 text-[#9146FF]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" fillRule="evenodd" clipRule="evenodd" />
+                  </svg>
+                  Twitch
+                </label>
+                <input
+                  type="text"
+                  value={twitchUrl}
+                  onChange={(e) => setTwitchUrl(e.target.value)}
+                  placeholder="https://twitch.tv/username"
+                  className="w-full h-9 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
+                />
+              </div>
+
+              {/* Instagram */}
+              <div className="space-y-1">
+                <label className="text-[9px] font-semibold text-zinc-400 font-mono flex items-center gap-1.5">
+                  <svg className="w-3 h-3 text-[#E1306C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01" />
+                  </svg>
+                  Instagram
+                </label>
+                <input
+                  type="text"
+                  value={instagramUrl}
+                  onChange={(e) => setInstagramUrl(e.target.value)}
+                  placeholder="https://instagram.com/username"
+                  className="w-full h-9 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
+                />
+              </div>
+
+              {/* YouTube */}
+              <div className="space-y-1">
+                <label className="text-[9px] font-semibold text-zinc-400 font-mono flex items-center gap-1.5">
+                  <svg className="w-3 h-3 text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                  </svg>
+                  YouTube
+                </label>
+                <input
+                  type="text"
+                  value={youtubeUrl}
+                  onChange={(e) => setYoutubeUrl(e.target.value)}
+                  placeholder="https://youtube.com/@username"
+                  className="w-full h-9 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
+                />
+              </div>
+
+              {/* TikTok */}
+              <div className="space-y-1">
+                <label className="text-[9px] font-semibold text-zinc-400 font-mono flex items-center gap-1.5">
+                  <svg className="w-3 h-3 text-[#00F2FE]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.27 1.76-.23 1.02.14 2.16.92 2.85.8.72 1.95.91 2.97.62.91-.25 1.67-.98 1.9-1.9.15-.6.18-1.24.18-1.87V.02z" />
+                  </svg>
+                  TikTok
+                </label>
+                <input
+                  type="text"
+                  value={tiktokUrl}
+                  onChange={(e) => setTiktokUrl(e.target.value)}
+                  placeholder="https://tiktok.com/@username"
+                  className="w-full h-9 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
+                />
+              </div>
+            </div>
           </div>
 
         </div>

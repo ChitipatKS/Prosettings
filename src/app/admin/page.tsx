@@ -147,7 +147,7 @@ export default function AdminDashboard() {
 
         const { data: recents } = await supabase
           .from('players')
-          .select('id, username, real_name, team, profile_img_url, created_at')
+          .select('id, username, Full_name, team, profile_img_url, created_at')
           .order('created_at', { ascending: false })
           .limit(5);
 
@@ -163,7 +163,17 @@ export default function AdminDashboard() {
           totalTeams: uniqueTeams.size
         });
 
-        if (recents) setRecentPlayers(recents as RecentPlayer[]);
+        if (recents) {
+          const mappedRecents = (recents as any[]).map((p: any) => ({
+            id: p.id,
+            username: p.username,
+            real_name: p.Full_name || p.full_name || p.real_name || null,
+            team: p.team,
+            profile_img_url: p.profile_img_url,
+            created_at: p.created_at
+          }));
+          setRecentPlayers(mappedRecents as RecentPlayer[]);
+        }
         if (recentGearsData) setRecentGears(recentGearsData as RecentGear[]);
 
         const endTime = performance.now();
