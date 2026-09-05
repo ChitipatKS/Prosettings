@@ -1202,7 +1202,7 @@ export default function ProfilePage() {
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
               <div className="flex flex-col md:flex-row md:items-start gap-6 flex-1 min-w-0">
                 {/* Avatar */}
-                <div className="w-32 h-32 md:w-40 md:h-40 min-w-32 min-h-32 md:min-w-40 md:min-h-40 max-w-32 max-h-32 md:max-w-40 md:max-h-40 aspect-square rounded-full bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shrink-0 shadow-[0_0_30px_rgba(245,158,11,0.05)]">
+                <div className="w-32 h-32 md:w-40 md:h-40 min-w-32 min-h-32 md:min-w-40 md:min-h-40 max-w-32 max-h-32 md:max-w-40 md:max-h-40 aspect-square rounded-2xl bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shrink-0 shadow-[0_0_30px_rgba(245,158,11,0.05)]">
                   {profileImgUrl ? (
                     <img src={profileImgUrl} alt={username} className="h-full w-full object-cover" />
                   ) : (
@@ -1505,9 +1505,12 @@ export default function ProfilePage() {
                                 {favPlayer.username}
                               </span>
                               {favPlayer.country_code && (
-                                <span className="text-[8px] text-zinc-500 font-sans font-semibold">
-                                  {favPlayer.country_code}
-                                </span>
+                                <img
+                                  src={`https://flagcdn.com/16x12/${favPlayer.country_code.toLowerCase()}.png`}
+                                  alt={favPlayer.country_code}
+                                  title={favPlayer.country_code}
+                                  className="w-3.5 h-2.5 object-cover rounded-[1px] shrink-0"
+                                />
                               )}
                             </div>
                             <div className="text-[10px] text-zinc-500 font-sans line-clamp-1">

@@ -13,6 +13,7 @@ type Player = {
   username: string;
   real_name: string | null;
   team: string | null;
+  team_logo_url?: string | null;
   nationality: string | null;
   country_code: string | null;
   profile_img_url: string | null;
@@ -779,7 +780,7 @@ function PlayersDirectoryContent() {
                   className="relative bg-[#12121A]/70 backdrop-blur-md border border-border-custom hover:border-zinc-700/80 rounded-2xl p-6 flex flex-col items-center justify-between text-center hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(245,158,11,0.02)] transition-all duration-300 group cursor-pointer min-h-[300px]"
                 >
                   <div className="absolute top-4 left-5 z-20 flex items-center gap-1.5 text-[10px] font-bold text-zinc-500 uppercase tracking-widest pointer-events-none max-w-[68%]">
-                    <TeamLogoImg teamName={player.team} className="w-4.5 h-4.5" />
+                    <TeamLogoImg teamName={player.team} dbLogoUrl={player.team_logo_url} className="w-4.5 h-4.5" />
                     <span className="truncate">{player.team || 'Free Agent'}</span>
                   </div>
 
@@ -846,9 +847,12 @@ function PlayersDirectoryContent() {
                       <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400 font-sans">
                         <span className="font-medium">{player.real_name || '-'}</span>
                         {player.country_code && (
-                          <span className="text-sm leading-none shrink-0" title={player.nationality || ''}>
-                            {getFlagEmoji(player.country_code)}
-                          </span>
+                          <img
+                            src={`https://flagcdn.com/16x12/${player.country_code.toLowerCase()}.png`}
+                            alt={player.country_code}
+                            title={player.nationality || player.country_code}
+                            className="w-4 h-3 object-cover rounded-[2px] shrink-0 shadow-sm"
+                          />
                         )}
                       </div>
                     </div>

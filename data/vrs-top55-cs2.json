@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T18:36:52.658Z",
+  "updated_at": "2026-08-31T13:24:56.111Z",
   "source": "https://liquipedia.net/counterstrike/Valve_Regional_Standings",
   "total_teams": 55,
   "total_players": 275,
@@ -17,35 +17,45 @@
           "team": "Team Spirit",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Danil Kryshkovets",
+          "birth_date": "2007-01-25"
         },
         {
           "username": "magixx",
           "team": "Team Spirit",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Boris Vorobiev",
+          "birth_date": "2003-06-03"
         },
         {
           "username": "sh1ro",
           "team": "Team Spirit",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dmitry Sokolov",
+          "birth_date": "2001-07-15"
         },
         {
           "username": "tN1R",
           "team": "Team Spirit",
           "nationality": "Belarus",
           "country_code": "BY",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Andrei Tatarinovich",
+          "birth_date": "2001-02-14"
         },
         {
           "username": "zont1x",
           "team": "Team Spirit",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Myroslav Plakhotia",
+          "birth_date": "2005-07-20"
         }
       ]
     },
@@ -62,35 +72,45 @@
           "team": "Team Falcons",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Finn Andersen",
+          "birth_date": "1990-04-14"
         },
         {
           "username": "kyousuke",
           "team": "Team Falcons",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Maksim Lukin",
+          "birth_date": "2008-01-30"
         },
         {
           "username": "m0NESY",
           "team": "Team Falcons",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ilya Osipov",
+          "birth_date": "2005-05-01"
         },
         {
           "username": "NiKo",
           "team": "Team Falcons",
           "nationality": "Bosnia and Herzegovina",
           "country_code": "BA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nikola Kovač",
+          "birth_date": "1997-02-16"
         },
         {
           "username": "TeSeS",
           "team": "Team Falcons",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "René Madsen",
+          "birth_date": "2001-02-12"
         }
       ]
     },
@@ -107,35 +127,45 @@
           "team": "9z Team",
           "nationality": "Uruguay",
           "country_code": "UY",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Franco Garcia",
+          "birth_date": "2001-04-09"
         },
         {
           "username": "HUASOPEEK",
           "team": "9z Team",
           "nationality": "Chile",
           "country_code": "CL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nicolás Bravo",
+          "birth_date": "2002-11-20"
         },
         {
           "username": "luchov",
           "team": "9z Team",
           "nationality": "Argentina",
           "country_code": "AR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Luciano Herrera",
+          "birth_date": "2002-09-08"
         },
         {
           "username": "max",
           "team": "9z Team",
           "nationality": "Uruguay",
           "country_code": "UY",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Maximiliano Gonzalez",
+          "birth_date": "1999-07-27"
         },
         {
           "username": "meyern",
           "team": "9z Team",
           "nationality": "Argentina",
           "country_code": "AR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ignacio Meyer",
+          "birth_date": "2002-09-24"
         }
       ]
     },
@@ -152,35 +182,45 @@
           "team": "MOUZ",
           "nationality": "Czechia",
           "country_code": "CZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Patrik Žúdel",
+          "birth_date": "2004-03-08"
         },
         {
           "username": "Spinx",
           "team": "MOUZ",
           "nationality": "Israel",
           "country_code": "IL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Lotan Giladi",
+          "birth_date": "2000-09-13"
         },
         {
           "username": "torzsi",
           "team": "MOUZ",
           "nationality": "Hungary",
           "country_code": "HU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ádám Torzsás",
+          "birth_date": "2002-05-24"
         },
         {
           "username": "xelex",
           "team": "MOUZ",
           "nationality": "Hungary",
           "country_code": "HU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kornél Berecz",
+          "birth_date": "2005-08-11"
         },
         {
           "username": "xertioN",
           "team": "MOUZ",
           "nationality": "Israel",
           "country_code": "IL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dorian Berman",
+          "birth_date": "2004-07-06"
         }
       ]
     },
@@ -197,35 +237,45 @@
           "team": "Team Vitality",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dan Madesclaire",
+          "birth_date": "1993-02-22"
         },
         {
           "username": "flameZ",
           "team": "Team Vitality",
           "nationality": "Israel",
           "country_code": "IL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Shahar Shushan",
+          "birth_date": "2003-06-22"
         },
         {
           "username": "mezii",
           "team": "Team Vitality",
           "nationality": "United Kingdom",
           "country_code": "GB",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "William Merriman",
+          "birth_date": "1998-10-15"
         },
         {
           "username": "ropz",
           "team": "Team Vitality",
           "nationality": "Estonia",
           "country_code": "EE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Robin Kool",
+          "birth_date": "1999-12-22"
         },
         {
           "username": "ZywOo",
           "team": "Team Vitality",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mathieu Herbaut",
+          "birth_date": "2000-11-09"
         }
       ]
     },
@@ -242,35 +292,45 @@
           "team": "Natus Vincere",
           "nationality": "Finland",
           "country_code": "FI",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Aleksi Virolainen",
+          "birth_date": "1997-03-30"
         },
         {
           "username": "b1t",
           "team": "Natus Vincere",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Valeriy Vakhovskiy",
+          "birth_date": "2003-01-05"
         },
         {
           "username": "iM",
           "team": "Natus Vincere",
           "nationality": "Romania",
           "country_code": "RO",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mihai Ivan",
+          "birth_date": "1999-07-29"
         },
         {
           "username": "makazze",
           "team": "Natus Vincere",
           "nationality": "Kosovo",
           "country_code": "XK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dion Budeci",
+          "birth_date": "2007-05-18"
         },
         {
           "username": "w0nderful",
           "team": "Natus Vincere",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ihor Zhdanov",
+          "birth_date": "2004-12-14"
         }
       ]
     },
@@ -287,35 +347,45 @@
           "team": "Legacy",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Andrei Piovezan",
+          "birth_date": "1996-03-24"
         },
         {
           "username": "dumau",
           "team": "Legacy",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Eduardo Wolkmer",
+          "birth_date": "2003-08-28"
         },
         {
           "username": "latto",
           "team": "Legacy",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Bruno Rebelatto",
+          "birth_date": "2002-12-28"
         },
         {
           "username": "n1ssim",
           "team": "Legacy",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vinicius Pereira",
+          "birth_date": "2001-06-05"
         },
         {
           "username": "saadzin",
           "team": "Legacy",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Guilherme Pacheco",
+          "birth_date": "2004-09-25"
         }
       ]
     },
@@ -332,35 +402,45 @@
           "team": "FURIA",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Gabriel Toledo",
+          "birth_date": "1991-05-30"
         },
         {
           "username": "KSCERATO",
           "team": "FURIA",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kaike Cerato",
+          "birth_date": "1999-09-12"
         },
         {
           "username": "molodoy",
           "team": "FURIA",
           "nationality": "Kazakhstan",
           "country_code": "KZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Daniil Galyamov",
+          "birth_date": "2004-11-03"
         },
         {
           "username": "YEKINDAR",
           "team": "FURIA",
           "nationality": "Latvia",
           "country_code": "LV",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mareks Gaļinskis",
+          "birth_date": "1999-10-04"
         },
         {
           "username": "yuurih",
           "team": "FURIA",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Yuri Santos",
+          "birth_date": "1999-12-22"
         }
       ]
     },
@@ -377,35 +457,45 @@
           "team": "BetBoom Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kirill Mikhailov",
+          "birth_date": "1998-12-20"
         },
         {
           "username": "d1Ledez",
           "team": "BetBoom Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Danil Kustov",
+          "birth_date": "2004-11-23"
         },
         {
           "username": "FL4MUS",
           "team": "BetBoom Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Artem Maryev",
+          "birth_date": "2004-12-16"
         },
         {
           "username": "Magnojez",
           "team": "BetBoom Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kirill Rodnov",
+          "birth_date": "2004-08-16"
         },
         {
           "username": "zorte",
           "team": "BetBoom Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Aleksandr Zagodyrenko",
+          "birth_date": "1998-05-18"
         }
       ]
     },
@@ -422,35 +512,45 @@
           "team": "FaZe Clan",
           "nationality": "Slovakia",
           "country_code": "SK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "David Čerňanský",
+          "birth_date": "2002-07-18"
         },
         {
           "username": "JBOEN",
           "team": "FaZe Clan",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jonas Boen",
+          "birth_date": "2005-02-10"
         },
         {
           "username": "jcobbb",
           "team": "FaZe Clan",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jakub Pietruszewski",
+          "birth_date": "2004-03-12"
         },
         {
           "username": "Neityu",
           "team": "FaZe Clan",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ryan Aubry",
+          "birth_date": "2004-12-28"
         },
         {
           "username": "Twistzz",
           "team": "FaZe Clan",
           "nationality": "Canada",
           "country_code": "CA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Russel Van Dulken",
+          "birth_date": "1999-11-14"
         }
       ]
     },
@@ -474,7 +574,9 @@
           "team": "PARIVISION",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dzhami Ali",
+          "birth_date": "1998-08-23"
         },
         {
           "username": "slaxejezzz",
@@ -495,7 +597,9 @@
           "team": "PARIVISION",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Maksim Yatskevich",
+          "birth_date": "2004-03-01"
         }
       ]
     },
@@ -512,35 +616,45 @@
           "team": "G2 Esports",
           "nationality": "Israel",
           "country_code": "IL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nikita Martynenko",
+          "birth_date": "2002-07-29"
         },
         {
           "username": "huNter-",
           "team": "G2 Esports",
           "nationality": "Bosnia and Herzegovina",
           "country_code": "BA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nemanja Kovač",
+          "birth_date": "1996-01-03"
         },
         {
           "username": "matys",
           "team": "G2 Esports",
           "nationality": "Slovakia",
           "country_code": "SK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Matúš Šimko",
+          "birth_date": "2002-07-13"
         },
         {
           "username": "NertZ",
           "team": "G2 Esports",
           "nationality": "Israel",
           "country_code": "IL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Guy Iluz",
+          "birth_date": "1999-08-13"
         },
         {
           "username": "SunPayus",
           "team": "G2 Esports",
           "nationality": "Spain",
           "country_code": "ES",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Álvaro García",
+          "birth_date": "1998-11-14"
         }
       ]
     },
@@ -557,35 +671,45 @@
           "team": "Aurora Gaming",
           "nationality": "Finland",
           "country_code": "FI",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jimi Salo",
+          "birth_date": "2006-09-09"
         },
         {
           "username": "kyxsan",
           "team": "Aurora Gaming",
           "nationality": "North Macedonia",
           "country_code": "MK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Damjan Stoilkovski",
+          "birth_date": "2000-11-19"
         },
         {
           "username": "Wicadia",
           "team": "Aurora Gaming",
           "nationality": "Turkey",
           "country_code": "TR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ali Haydar Yalçın",
+          "birth_date": "2004-12-15"
         },
         {
           "username": "woxic",
           "team": "Aurora Gaming",
           "nationality": "Turkey",
           "country_code": "TR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Özgür Eker",
+          "birth_date": "1998-09-02"
         },
         {
           "username": "XANTARES",
           "team": "Aurora Gaming",
           "nationality": "Turkey",
           "country_code": "TR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "İsmailсan Dörtkardeş",
+          "birth_date": "1995-08-07"
         }
       ]
     },
@@ -692,14 +816,18 @@
           "team": "The MongolZ",
           "nationality": "Mongolia",
           "country_code": "MN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Usukhbayar Banzragch",
+          "birth_date": "2002-06-25"
         },
         {
           "username": "bLitz",
           "team": "The MongolZ",
           "nationality": "Mongolia",
           "country_code": "MN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Garidmagnai Byambasuren",
+          "birth_date": "2001-06-07"
         },
         {
           "username": "cobrazera",
@@ -713,14 +841,18 @@
           "team": "The MongolZ",
           "nationality": "Mongolia",
           "country_code": "MN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ayush Batbold",
+          "birth_date": "2007-06-03"
         },
         {
           "username": "Techno4K",
           "team": "The MongolZ",
           "nationality": "Mongolia",
           "country_code": "MN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Sodbayar Munkhbat",
+          "birth_date": "2005-05-22"
         }
       ]
     },
@@ -737,14 +869,18 @@
           "team": "Team Liquid",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jonathan Jablonowski",
+          "birth_date": "1997-07-16"
         },
         {
           "username": "JT",
           "team": "Team Liquid",
           "nationality": "South Africa",
           "country_code": "ZA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Johnny Theodosiou",
+          "birth_date": "1999-04-14"
         },
         {
           "username": "Jorko",
@@ -758,14 +894,18 @@
           "team": "Team Liquid",
           "nationality": "Guatemala",
           "country_code": "GT",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mario Samayoa",
+          "birth_date": "2002-12-10"
         },
         {
           "username": "NAF",
           "team": "Team Liquid",
           "nationality": "Canada",
           "country_code": "CA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Keith Markovic",
+          "birth_date": "1997-11-24"
         }
       ]
     },
@@ -782,7 +922,9 @@
           "team": "BIG",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Benjamin Bremer",
+          "birth_date": "1997-06-10"
         },
         {
           "username": "faveN",
@@ -803,14 +945,18 @@
           "team": "BIG",
           "nationality": "Germany",
           "country_code": "DE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jon de Castro",
+          "birth_date": "1999-04-10"
         },
         {
           "username": "tabseN",
           "team": "BIG",
           "nationality": "Germany",
           "country_code": "DE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Johannes Wodarz",
+          "birth_date": "1995-04-05"
         }
       ]
     },
@@ -827,28 +973,36 @@
           "team": "MIBR",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Bernardo Ramos",
+          "birth_date": "2003-06-25"
         },
         {
           "username": "insani",
           "team": "MIBR",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Felipe Yuji",
+          "birth_date": "2004-04-04"
         },
         {
           "username": "LNZ",
           "team": "MIBR",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Linus Holtäng",
+          "birth_date": "2002-09-12"
         },
         {
           "username": "nqz",
           "team": "MIBR",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Lucas Soares",
+          "birth_date": "2005-01-22"
         },
         {
           "username": "venomzera",
@@ -879,7 +1033,9 @@
           "team": "Astralis",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jakob Nygaard",
+          "birth_date": "2003-07-25"
         },
         {
           "username": "phzy",
@@ -893,14 +1049,18 @@
           "team": "Astralis",
           "nationality": "Lithuania",
           "country_code": "LT",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Martin Rydeng",
+          "birth_date": "2004-08-20"
         },
         {
           "username": "Staehr",
           "team": "Astralis",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Victor Staehr",
+          "birth_date": "2004-09-02"
         }
       ]
     },
@@ -924,7 +1084,9 @@
           "team": "TYLOO",
           "nationality": "China",
           "country_code": "CN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ji Dongkai",
+          "birth_date": "2004-12-07"
         },
         {
           "username": "Mercury",
@@ -962,7 +1124,9 @@
           "team": "IC Esports",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dmytro Serputko",
+          "birth_date": "2003-02-03"
         },
         {
           "username": "Dawy",
@@ -976,7 +1140,9 @@
           "team": "IC Esports",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Danyyl Valitov",
+          "birth_date": "2004-06-15"
         },
         {
           "username": "onic",
@@ -990,7 +1156,9 @@
           "team": "IC Esports",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Eduard Petrovskyi",
+          "birth_date": "2004-04-03"
         }
       ]
     },
@@ -1007,14 +1175,18 @@
           "team": "B8",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Alexei Yarmyanchuk",
+          "birth_date": "2003-03-08"
         },
         {
           "username": "esenthial",
           "team": "B8",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vitaliy Tsvir",
+          "birth_date": "2005-09-24"
         },
         {
           "username": "kensizor",
@@ -1028,7 +1200,9 @@
           "team": "B8",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Andrii Kukharskyi",
+          "birth_date": "2005-07-14"
         },
         {
           "username": "s1zzi",
@@ -1059,7 +1233,9 @@
           "team": "GamerLegion",
           "nationality": "Czechia",
           "country_code": "CZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Patrik Žúdel",
+          "birth_date": "2004-03-08"
         },
         {
           "username": "REZ",
@@ -1073,14 +1249,18 @@
           "team": "GamerLegion",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Janusz Pogorzelski",
+          "birth_date": "1993-07-05"
         },
         {
           "username": "Tauson",
           "team": "GamerLegion",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Sebastian Tauson Lindelof",
+          "birth_date": "2004-11-20"
         }
       ]
     },
@@ -1097,7 +1277,9 @@
           "team": "HEROIC",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ludvig Brolin",
+          "birth_date": "2002-06-17"
         },
         {
           "username": "Chr1zN",
@@ -1149,7 +1331,9 @@
           "team": "100 Thieves",
           "nationality": "United Kingdom",
           "country_code": "GB",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jack von Spreckelsen",
+          "birth_date": "2004-10-09"
         },
         {
           "username": "poiii",
@@ -1163,7 +1347,9 @@
           "team": "100 Thieves",
           "nationality": "Norway",
           "country_code": "NO",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Håvard Nygaard",
+          "birth_date": "1994-08-27"
         },
         {
           "username": "sirah",
@@ -1215,7 +1401,9 @@
           "team": "HOTU",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "David Danielyan",
+          "birth_date": "2001-03-14"
         }
       ]
     },
@@ -1260,7 +1448,9 @@
           "team": "magic",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Tenzin Tenzy",
+          "birth_date": "2004-05-18"
         }
       ]
     },
@@ -1277,35 +1467,45 @@
           "team": "DENDELE CS",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Daniel Chaves",
+          "birth_date": "2003-07-21"
         },
         {
           "username": "gafolo",
           "team": "DENDELE CS",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Gabriel Cavalcante",
+          "birth_date": "2001-08-14"
         },
         {
           "username": "koala",
           "team": "DENDELE CS",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Leonardo Cherem",
+          "birth_date": "2002-12-19"
         },
         {
           "username": "maxxkor",
           "team": "DENDELE CS",
           "nationality": "Argentina",
           "country_code": "AR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Maximiliano Kormos",
+          "birth_date": "2002-05-18"
         },
         {
           "username": "rdnzao",
           "team": "DENDELE CS",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Rodrigo de Oliveira",
+          "birth_date": "2003-02-17"
         }
       ]
     },
@@ -1322,35 +1522,45 @@
           "team": "Ninjas in Pyjamas",
           "nationality": "Belgium",
           "country_code": "BE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nolan Barrientos",
+          "birth_date": "2003-04-11"
         },
         {
           "username": "sjuush",
           "team": "Ninjas in Pyjamas",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Rasmus Beck",
+          "birth_date": "1999-01-13"
         },
         {
           "username": "Snappi",
           "team": "Ninjas in Pyjamas",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Marco Pfeiffer",
+          "birth_date": "1990-06-09"
         },
         {
           "username": "stavn",
           "team": "Ninjas in Pyjamas",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Martin Lund",
+          "birth_date": "2002-03-29"
         },
         {
           "username": "xKacpersky",
           "team": "Ninjas in Pyjamas",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kacper Gabara",
+          "birth_date": "2006-11-28"
         }
       ]
     },
@@ -1367,35 +1577,45 @@
           "team": "EYEBALLERS",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dennis Edman",
+          "birth_date": "2000-09-04"
         },
         {
           "username": "JW",
           "team": "EYEBALLERS",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jesper Wecksell",
+          "birth_date": "1995-02-23"
         },
         {
           "username": "KRIMZ",
           "team": "EYEBALLERS",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Freddy Johansson",
+          "birth_date": "1994-04-25"
         },
         {
           "username": "maxster",
           "team": "EYEBALLERS",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Max Jansson",
+          "birth_date": "2004-06-28"
         },
         {
           "username": "Ro1f",
           "team": "EYEBALLERS",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Robin Johansson",
+          "birth_date": "2004-09-17"
         }
       ]
     },
@@ -1412,35 +1632,45 @@
           "team": "K27",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Timur Sabirov",
+          "birth_date": "2002-06-03"
         },
         {
           "username": "kashl1d",
           "team": "K27",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kirill Kashlid",
+          "birth_date": "2004-03-12"
         },
         {
           "username": "qw1nk1",
           "team": "K27",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vladislav Chernousov",
+          "birth_date": "2004-07-20"
         },
         {
           "username": "X5G7V",
           "team": "K27",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mikhail Maryshev",
+          "birth_date": "2004-11-15"
         },
         {
           "username": "xeedo",
           "team": "K27",
           "nationality": "Belarus",
           "country_code": "BY",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Aleksandr Kisel",
+          "birth_date": "2003-01-28"
         }
       ]
     },
@@ -1457,35 +1687,45 @@
           "team": "Luminosity Gaming",
           "nationality": "United Kingdom",
           "country_code": "GB",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Andrew Maistros",
+          "birth_date": "2002-09-22"
         },
         {
           "username": "afro",
           "team": "Luminosity Gaming",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Aurélien Drapier",
+          "birth_date": "1999-04-19"
         },
         {
           "username": "Bymas",
           "team": "Luminosity Gaming",
           "nationality": "Lithuania",
           "country_code": "LT",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Aurimas Pipiras",
+          "birth_date": "2003-08-12"
         },
         {
           "username": "Gizmy",
           "team": "Luminosity Gaming",
           "nationality": "United Kingdom",
           "country_code": "GB",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jack von Spreckelsen",
+          "birth_date": "2004-10-09"
         },
         {
           "username": "Rainwaker",
           "team": "Luminosity Gaming",
           "nationality": "Bulgaria",
           "country_code": "BG",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Aleks Petrov",
+          "birth_date": "2001-03-24"
         }
       ]
     },
@@ -1502,35 +1742,45 @@
           "team": "paiN Gaming",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Rodrigo Bittencourt",
+          "birth_date": "1997-02-27"
         },
         {
           "username": "piriajr",
           "team": "paiN Gaming",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kayke Ribeiro",
+          "birth_date": "2003-12-09"
         },
         {
           "username": "saffee",
           "team": "paiN Gaming",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Rafael Costa",
+          "birth_date": "1994-12-19"
         },
         {
           "username": "snow",
           "team": "paiN Gaming",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "João Vinicius",
+          "birth_date": "2007-05-18"
         },
         {
           "username": "v$m",
           "team": "paiN Gaming",
           "nationality": "Brazil",
           "country_code": "BR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vinicius Moreira",
+          "birth_date": "1999-07-21"
         }
       ]
     },
@@ -1547,35 +1797,45 @@
           "team": "3DMAX",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Filip Branković",
+          "birth_date": "2001-04-12"
         },
         {
           "username": "Kursy",
           "team": "3DMAX",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Thomas Gautier",
+          "birth_date": "2000-06-25"
         },
         {
           "username": "Lucky",
           "team": "3DMAX",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Lucas Chastang",
+          "birth_date": "1998-04-10"
         },
         {
           "username": "Maka",
           "team": "3DMAX",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Bryan Canda",
+          "birth_date": "1997-07-03"
         },
         {
           "username": "misutaaa",
           "team": "3DMAX",
           "nationality": "France",
           "country_code": "FR",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kévin Rabier",
+          "birth_date": "2003-01-15"
         }
       ]
     },
@@ -1592,35 +1852,45 @@
           "team": "Virtus.pro",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vladislav Zhuravlev",
+          "birth_date": "2004-10-10"
         },
         {
           "username": "b1st",
           "team": "Virtus.pro",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Danil Kulbakin",
+          "birth_date": "2003-05-14"
         },
         {
           "username": "F0R3VER",
           "team": "Virtus.pro",
           "nationality": "Kazakhstan",
           "country_code": "KZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nikita Chervakov",
+          "birth_date": "2004-08-25"
         },
         {
           "username": "mir",
           "team": "Virtus.pro",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nikolay Bityukov",
+          "birth_date": "1995-12-25"
         },
         {
           "username": "tO0RO",
           "team": "Virtus.pro",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Timur Dudin",
+          "birth_date": "2005-02-18"
         }
       ]
     },
@@ -1637,35 +1907,45 @@
           "team": "Lynn Vision Gaming",
           "nationality": "China",
           "country_code": "CN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Sicheng Su",
+          "birth_date": "2003-08-01"
         },
         {
           "username": "EmiliaQAQ",
           "team": "Lynn Vision Gaming",
           "nationality": "China",
           "country_code": "CN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Tangjunjie Li",
+          "birth_date": "2003-09-18"
         },
         {
           "username": "Starry",
           "team": "Lynn Vision Gaming",
           "nationality": "China",
           "country_code": "CN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Lizhi Ye",
+          "birth_date": "2005-02-12"
         },
         {
           "username": "westmelon",
           "team": "Lynn Vision Gaming",
           "nationality": "China",
           "country_code": "CN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Zhe Niu",
+          "birth_date": "1997-12-28"
         },
         {
           "username": "z4kr",
           "team": "Lynn Vision Gaming",
           "nationality": "China",
           "country_code": "CN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Sike Zhang",
+          "birth_date": "2002-09-25"
         }
       ]
     },
@@ -1682,35 +1962,45 @@
           "team": "Fnatic",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Artur Savchenko",
+          "birth_date": "2005-03-15"
         },
         {
           "username": "fear",
           "team": "Fnatic",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Rodion Smyk",
+          "birth_date": "2000-12-07"
         },
         {
           "username": "jackasmo",
           "team": "Fnatic",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vsevolod Mykhailov",
+          "birth_date": "2006-04-09"
         },
         {
           "username": "jambo",
           "team": "Fnatic",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dmytro Semera",
+          "birth_date": "2005-08-17"
         },
         {
           "username": "mazay",
           "team": "Fnatic",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Bohdan Asmolov",
+          "birth_date": "2004-09-12"
         }
       ]
     },
@@ -1727,35 +2017,45 @@
           "team": "1w Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Artem Kharitonov",
+          "birth_date": "2002-01-14"
         },
         {
           "username": "Ax1Le",
           "team": "1w Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Sergey Rykhtorov",
+          "birth_date": "2002-04-29"
         },
         {
           "username": "BELCHONOKK",
           "team": "1w Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ivan Suraev",
+          "birth_date": "2004-09-10"
         },
         {
           "username": "fame",
           "team": "1w Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Petr Bolyshev",
+          "birth_date": "2003-03-22"
         },
         {
           "username": "nafany",
           "team": "1w Team",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vladislav Gorshkov",
+          "birth_date": "2001-06-15"
         }
       ]
     },
@@ -1772,35 +2072,45 @@
           "team": "Team Nemesis",
           "nationality": "Kazakhstan",
           "country_code": "KZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vladislav Ten",
+          "birth_date": "2004-01-15"
         },
         {
           "username": "r3salt",
           "team": "Team Nemesis",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Evgeny Frolov",
+          "birth_date": "2005-02-05"
         },
         {
           "username": "SELLTER",
           "team": "Team Nemesis",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Andrey Drobysh",
+          "birth_date": "2004-06-18"
         },
         {
           "username": "Sdaim",
           "team": "Team Nemesis",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Danil Tursunov",
+          "birth_date": "2005-07-29"
         },
         {
           "username": "tex1y",
           "team": "Team Nemesis",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Daniil Vinogradov",
+          "birth_date": "2004-10-18"
         }
       ]
     },
@@ -1817,35 +2127,45 @@
           "team": "Sashi Esport",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Frederik Gyldstrand",
+          "birth_date": "1997-05-24"
         },
         {
           "username": "Anlelele",
           "team": "Sashi Esport",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Anton Huynh",
+          "birth_date": "2001-11-20"
         },
         {
           "username": "Cabbi",
           "team": "Sashi Esport",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Martin Dahms",
+          "birth_date": "2001-08-10"
         },
         {
           "username": "MistR",
           "team": "Sashi Esport",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mikkel Thomsen",
+          "birth_date": "2004-09-24"
         },
         {
           "username": "Zyphon",
           "team": "Sashi Esport",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Rasmus Nordfoss",
+          "birth_date": "2004-02-03"
         }
       ]
     },
@@ -1862,35 +2182,45 @@
           "team": "Acend",
           "nationality": "Bulgaria",
           "country_code": "BG",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Deyvid Benchev",
+          "birth_date": "2000-04-18"
         },
         {
           "username": "KalubeR",
           "team": "Acend",
           "nationality": "Bulgaria",
           "country_code": "BG",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Martin Kaludov",
+          "birth_date": "2002-07-25"
         },
         {
           "username": "REDSTAR",
           "team": "Acend",
           "nationality": "Bulgaria",
           "country_code": "BG",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Viktor Virag",
+          "birth_date": "1999-05-18"
         },
         {
           "username": "SPELLAN",
           "team": "Acend",
           "nationality": "Bulgaria",
           "country_code": "BG",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Teodor Nikolov",
+          "birth_date": "1998-03-23"
         },
         {
           "username": "Skrimo",
           "team": "Acend",
           "nationality": "Bulgaria",
           "country_code": "BG",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Martin Karamfilov",
+          "birth_date": "2001-11-28"
         }
       ]
     },
@@ -1907,35 +2237,45 @@
           "team": "Betclic Apogee Esports",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Denis Demho",
+          "birth_date": "2002-03-15"
         },
         {
           "username": "Ex1st",
           "team": "Betclic Apogee Esports",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jan Kwieciński",
+          "birth_date": "2004-05-12"
         },
         {
           "username": "fr3nd",
           "team": "Betclic Apogee Esports",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Tomasz Svoboda",
+          "birth_date": "2002-04-16"
         },
         {
           "username": "Prism",
           "team": "Betclic Apogee Esports",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Wojciech Zięba",
+          "birth_date": "2003-01-27"
         },
         {
           "username": "Qlocuu",
           "team": "Betclic Apogee Esports",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Miłosz Grabowski",
+          "birth_date": "2004-09-14"
         }
       ]
     },
@@ -1952,35 +2292,45 @@
           "team": "Echo",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Oliver Boye",
+          "birth_date": "2003-07-15"
         },
         {
           "username": "IceBerg",
           "team": "Echo",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jonas Berg",
+          "birth_date": "2001-09-18"
         },
         {
           "username": "Leakz",
           "team": "Echo",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mikkel Kristensen",
+          "birth_date": "2002-02-22"
         },
         {
           "username": "NickyB",
           "team": "Echo",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nicklas Bøhm",
+          "birth_date": "2001-04-20"
         },
         {
           "username": "salazar",
           "team": "Echo",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Danny Salazar",
+          "birth_date": "2001-08-25"
         }
       ]
     },
@@ -1997,35 +2347,45 @@
           "team": "FOKUS",
           "nationality": "Finland",
           "country_code": "FI",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ville Syvänen",
+          "birth_date": "2004-06-03"
         },
         {
           "username": "jocab",
           "team": "FOKUS",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jacob Nerheden",
+          "birth_date": "2003-10-11"
         },
         {
           "username": "Matheos",
           "team": "FOKUS",
           "nationality": "Croatia",
           "country_code": null,
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mateo Miletić",
+          "birth_date": "2003-08-15"
         },
         {
           "username": "podi",
           "team": "FOKUS",
           "nationality": "Finland",
           "country_code": "FI",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Paavo Heiskanen",
+          "birth_date": "2004-08-03"
         },
         {
           "username": "ztr",
           "team": "FOKUS",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Erik Gustafsson",
+          "birth_date": "2003-07-16"
         }
       ]
     },
@@ -2042,35 +2402,45 @@
           "team": "JiJieHao",
           "nationality": "Palestine",
           "country_code": null,
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Osama Al-Khatib",
+          "birth_date": "2002-04-14"
         },
         {
           "username": "bibu",
           "team": "JiJieHao",
           "nationality": "Iraq",
           "country_code": null,
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Bilal Firat",
+          "birth_date": "2001-09-10"
         },
         {
           "username": "CacaNito",
           "team": "JiJieHao",
           "nationality": "North Macedonia",
           "country_code": "MK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Aleksandar Krunić",
+          "birth_date": "2000-11-18"
         },
         {
           "username": "m1N1",
           "team": "JiJieHao",
           "nationality": "Lebanon",
           "country_code": null,
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Michel Nini",
+          "birth_date": "2000-06-18"
         },
         {
           "username": "sinnopsyy",
           "team": "JiJieHao",
           "nationality": "Kosovo",
           "country_code": "XK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dion Budeci",
+          "birth_date": "2000-08-01"
         }
       ]
     },
@@ -2087,35 +2457,45 @@
           "team": "Wildcard",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Danny Strzelczyk",
+          "birth_date": "2000-11-09"
         },
         {
           "username": "HexT",
           "team": "Wildcard",
           "nationality": "Canada",
           "country_code": "CA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jadan Postma",
+          "birth_date": "2001-10-25"
         },
         {
           "username": "mhL",
           "team": "Wildcard",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Miłosz Knasiak",
+          "birth_date": "2002-04-25"
         },
         {
           "username": "nEMANHA",
           "team": "Wildcard",
           "nationality": "Serbia",
           "country_code": "RS",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nemanja Đukić",
+          "birth_date": "2001-07-15"
         },
         {
           "username": "reck",
           "team": "Wildcard",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ethan Serrano",
+          "birth_date": "2002-04-15"
         }
       ]
     },
@@ -2132,35 +2512,45 @@
           "team": "Nuclear TigeRES",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Danil Ayuki",
+          "birth_date": "2005-02-14"
         },
         {
           "username": "flouzer",
           "team": "Nuclear TigeRES",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Dmitry Morozov",
+          "birth_date": "2004-06-18"
         },
         {
           "username": "m1QUSE",
           "team": "Nuclear TigeRES",
           "nationality": "Belarus",
           "country_code": "BY",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nikita Mikusev",
+          "birth_date": "2003-10-09"
         },
         {
           "username": "senka",
           "team": "Nuclear TigeRES",
           "nationality": "Belarus",
           "country_code": "BY",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Arseniy Senka",
+          "birth_date": "2004-12-05"
         },
         {
           "username": "z1k4",
           "team": "Nuclear TigeRES",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Roman Zikov",
+          "birth_date": "2005-04-22"
         }
       ]
     },
@@ -2177,35 +2567,45 @@
           "team": "BC.Game Esports",
           "nationality": "Russia",
           "country_code": "RU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Denis Sharipov",
+          "birth_date": "1998-09-02"
         },
         {
           "username": "Magisk",
           "team": "BC.Game Esports",
           "nationality": "Denmark",
           "country_code": "DK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Emil Reif",
+          "birth_date": "1998-03-05"
         },
         {
           "username": "mzinho",
           "team": "BC.Game Esports",
           "nationality": "Mongolia",
           "country_code": "MN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Ayush Batbold",
+          "birth_date": "2007-06-03"
         },
         {
           "username": "s1mple",
           "team": "BC.Game Esports",
           "nationality": "Ukraine",
           "country_code": "UA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Oleksandr Kostyliev",
+          "birth_date": "1997-10-02"
         },
         {
           "username": "Senzu",
           "team": "BC.Game Esports",
           "nationality": "Mongolia",
           "country_code": "MN",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Azbayar Munkhbold",
+          "birth_date": "2006-09-02"
         }
       ]
     },
@@ -2222,35 +2622,45 @@
           "team": "INFINITE",
           "nationality": "Romania",
           "country_code": "RO",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Vít Štětina",
+          "birth_date": "2001-08-06"
         },
         {
           "username": "Dytor",
           "team": "INFINITE",
           "nationality": "Czechia",
           "country_code": "CZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Martin Handl",
+          "birth_date": "2000-11-12"
         },
         {
           "username": "kreaz",
           "team": "INFINITE",
           "nationality": "Sweden",
           "country_code": "SE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Rasmus Johansson",
+          "birth_date": "1998-03-20"
         },
         {
           "username": "sl3nd",
           "team": "INFINITE",
           "nationality": "Hungary",
           "country_code": "HU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Henrich Hevesi",
+          "birth_date": "2004-10-21"
         },
         {
           "username": "volt",
           "team": "INFINITE",
           "nationality": "Romania",
           "country_code": "RO",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Sebastian Maloș",
+          "birth_date": "2001-10-03"
         }
       ]
     },
@@ -2267,35 +2677,45 @@
           "team": "M80",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Josh Barutt",
+          "birth_date": "2004-03-15"
         },
         {
           "username": "Lake",
           "team": "M80",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Mason Sanderson",
+          "birth_date": "2004-05-08"
         },
         {
           "username": "s1n",
           "team": "M80",
           "nationality": "Germany",
           "country_code": "DE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Elias Stein",
+          "birth_date": "2002-03-24"
         },
         {
           "username": "slaxz-",
           "team": "M80",
           "nationality": "Germany",
           "country_code": "DE",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Fritz Dietrich",
+          "birth_date": "1998-10-04"
         },
         {
           "username": "Swisher",
           "team": "M80",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Michael Schmid",
+          "birth_date": "1998-07-27"
         }
       ]
     },
@@ -2312,35 +2732,45 @@
           "team": "FlyQuest",
           "nationality": "New Zealand",
           "country_code": "NZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Sean Kaiwai",
+          "birth_date": "1996-03-01"
         },
         {
           "username": "INS",
           "team": "FlyQuest",
           "nationality": "Australia",
           "country_code": "AU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Joshua Potter",
+          "birth_date": "1998-09-28"
         },
         {
           "username": "jks",
           "team": "FlyQuest",
           "nationality": "Australia",
           "country_code": "AU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Justin Savage",
+          "birth_date": "1995-12-12"
         },
         {
           "username": "nettik",
           "team": "FlyQuest",
           "nationality": "New Zealand",
           "country_code": "NZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Kitano Kawai",
+          "birth_date": "2004-07-29"
         },
         {
           "username": "Vexite",
           "team": "FlyQuest",
           "nationality": "Australia",
           "country_code": "AU",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Declan Portelli",
+          "birth_date": "2004-12-08"
         }
       ]
     },
@@ -2357,35 +2787,45 @@
           "team": "Iberian Soul",
           "nationality": "Spain",
           "country_code": "ES",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Alejandro Masanet",
+          "birth_date": "1995-12-14"
         },
         {
           "username": "CRUC1AL",
           "team": "Iberian Soul",
           "nationality": "Netherlands",
           "country_code": "NL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Joey Steusel",
+          "birth_date": "1997-03-15"
         },
         {
           "username": "dav1g",
           "team": "Iberian Soul",
           "nationality": "Spain",
           "country_code": "ES",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "David Granado Bermudo",
+          "birth_date": "2000-11-09"
         },
         {
           "username": "mopoz",
           "team": "Iberian Soul",
           "nationality": "Spain",
           "country_code": "ES",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Alejandro Fernández-Quejo Cano",
+          "birth_date": "1996-07-28"
         },
         {
           "username": "sausol",
           "team": "Iberian Soul",
           "nationality": "Spain",
           "country_code": "ES",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Pere Solsona Saumell",
+          "birth_date": "2000-02-09"
         }
       ]
     },
@@ -2402,35 +2842,45 @@
           "team": "NRG",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Michael Wince",
+          "birth_date": "2000-04-18"
         },
         {
           "username": "hallzerk",
           "team": "NRG",
           "nationality": "Norway",
           "country_code": "NO",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Håkon Fjærli",
+          "birth_date": "2000-07-14"
         },
         {
           "username": "Jeorge",
           "team": "NRG",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Jeorge Endicott",
+          "birth_date": "2003-07-29"
         },
         {
           "username": "nitr0",
           "team": "NRG",
           "nationality": "United States",
           "country_code": "US",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Nicholas Cannella",
+          "birth_date": "1995-08-16"
         },
         {
           "username": "Sonic",
           "team": "NRG",
           "nationality": "South Africa",
           "country_code": "ZA",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Aran Groesbeek",
+          "birth_date": "1999-01-20"
         }
       ]
     },
@@ -2447,35 +2897,45 @@
           "team": "SINNERS Esports",
           "nationality": "Czechia",
           "country_code": "CZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Sebastian Daňo",
+          "birth_date": "1998-05-10"
         },
         {
           "username": "kisserek",
           "team": "SINNERS Esports",
           "nationality": "Poland",
           "country_code": "PL",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Oskar Banbor",
+          "birth_date": "2005-08-22"
         },
         {
           "username": "MoDo",
           "team": "SINNERS Esports",
           "nationality": "Romania",
           "country_code": "RO",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Iulian Mirea",
+          "birth_date": "2003-04-14"
         },
         {
           "username": "SHOCK",
           "team": "SINNERS Esports",
           "nationality": "Czechia",
           "country_code": "CZ",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Max Kvapil",
+          "birth_date": "2001-04-02"
         },
         {
           "username": "stressarN",
           "team": "SINNERS Esports",
           "nationality": "North Macedonia",
           "country_code": "MK",
-          "game": "cs2"
+          "game": "cs2",
+          "real_name": "Lucas Hedman",
+          "birth_date": "2004-11-18"
         }
       ]
     }

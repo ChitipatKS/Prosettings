@@ -7,6 +7,7 @@ import CommentSection from '@/components/CommentSection';
 import ProfileSidebar from '@/components/ProfileSidebar';
 import CopyButton from '@/components/CopyButton';
 import TeamLogoImg from '@/components/TeamLogoImg';
+import CrosshairPreview, { getCrosshairExportCode, parseCrosshairDetails } from '@/components/CrosshairPreview';
 
 type Product = {
   id: number;
@@ -171,10 +172,31 @@ export default function PlayerProfileClient({
 }: PlayerProfileClientProps) {
   const [selectedGameId, setSelectedGameId] = useState<number>(settingsData[0]?.games?.id || 0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [activeCrosshairIndex, setActiveCrosshairIndex] = useState<number>(0);
 
   const activeSettings = settingsData.find(s => s.games?.id === selectedGameId) || settingsData[0] || null;
   const settingsJson = activeSettings?.settings_data || {};
   const isValorant = activeSettings?.games?.slug === 'valorant';
+
+  // Multiple Crosshairs extraction
+  const crosshairsList = Array.isArray(settingsJson.crosshairs) && settingsJson.crosshairs.length > 0
+    ? settingsJson.crosshairs
+    : [
+        {
+          name: 'Primary Crosshair',
+          crosshair_code: settingsJson.crosshair_code,
+          crosshair_color: settingsJson.crosshair_color,
+          crosshair_dot: settingsJson.crosshair_dot,
+          crosshair_outline: settingsJson.crosshair_outline,
+          crosshair_inner: settingsJson.crosshair_inner,
+          crosshair_outer: settingsJson.crosshair_outer,
+          crosshair_thickness: settingsJson.crosshair_thickness,
+        }
+      ];
+
+  const currentCrosshair = crosshairsList[activeCrosshairIndex] || crosshairsList[0];
+  const parsedCurrentCrosshair = parseCrosshairDetails(currentCrosshair);
+  const currentCrosshairCode = getCrosshairExportCode(currentCrosshair);
 
   const displayAspect = activeSettings?.aspect_ratio || getAspectRatio(activeSettings?.resolution);
   const displayRefresh = activeSettings?.refresh_rate
@@ -382,50 +404,60 @@ export default function PlayerProfileClient({
                   title="Crosshair" 
                 />
 
-                {/* Crosshair preview area */}
-                <div className="relative bg-[#12121a] bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px] border border-border-custom rounded-xl overflow-hidden mb-4" style={{ aspectRatio: '16/9' }}>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {/* Crosshair simulation placeholder */}
-                    <div className="relative">
-                      <div className="w-px h-6 bg-green-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full opacity-80"></div>
-                      <div className="w-px h-6 bg-green-400 absolute top-1/2 left-1/2 -translate-x-1/2 opacity-80"></div>
-                      <div className="w-6 h-px bg-green-400 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-full opacity-80"></div>
-                      <div className="w-6 h-px bg-green-400 absolute top-1/2 left-1/2 -translate-y-1/2 opacity-80"></div>
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-80"></div>
-                    </div>
-                  </div>
-
-                  {/* Navigation arrows */}
-                  <button className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all cursor-pointer">
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                  </button>
-                  <button className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all cursor-pointer">
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </button>
-
-                  {/* Crosshair counter */}
-                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] font-mono text-zinc-500 bg-black/60 px-2 py-0.5 rounded-full border border-white/5">
-                    1 / 1
-                  </div>
-                </div>
+                {/* Dynamic Crosshair preview area */}
+                <CrosshairPreview
+                  settings={currentCrosshair}
+                  crosshairs={crosshairsList}
+                  currentIndex={activeCrosshairIndex}
+                  onIndexChange={setActiveCrosshairIndex}
+                  isValorant={isValorant}
+                />
 
                 {/* Crosshair Settings */}
                 <div className="space-y-1 mb-3">
-                  <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans mb-3">Crosshair Settings</p>
-                  <SettingRow label="Inner Lines" value={settingsJson.crosshair_inner || null} />
-                  <SettingRow label="Outer Lines" value={settingsJson.crosshair_outer || null} />
-                  <SettingRow label="Center Dot" value={settingsJson.crosshair_dot || null} />
-                  <SettingRow label="Thickness" value={settingsJson.crosshair_thickness || null} />
-                  <SettingRow label="Outline" value={settingsJson.crosshair_outline || null} />
-                  <SettingRow label="Color" value={settingsJson.crosshair_color || null} />
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                      {currentCrosshair.name || "Crosshair Settings"}
+                    </p>
+                    {crosshairsList.length > 1 && (
+                      <span className="text-[9px] font-mono text-zinc-500 bg-white/[0.04] px-2 py-0.5 rounded-full border border-white/5">
+                        {activeCrosshairIndex + 1} of {crosshairsList.length}
+                      </span>
+                    )}
+                  </div>
+                  <SettingRow
+                    label="Inner Lines"
+                    value={
+                      parsedCurrentCrosshair.innerShow
+                        ? `${parsedCurrentCrosshair.innerOpacity} / ${parsedCurrentCrosshair.innerLength} / ${parsedCurrentCrosshair.innerThickness} / ${parsedCurrentCrosshair.innerOffset}`
+                        : "Off"
+                    }
+                  />
+                  <SettingRow
+                    label="Outer Lines"
+                    value={
+                      parsedCurrentCrosshair.outerShow
+                        ? `${parsedCurrentCrosshair.outerOpacity} / ${parsedCurrentCrosshair.outerLength} / ${parsedCurrentCrosshair.outerThickness} / ${parsedCurrentCrosshair.outerOffset}`
+                        : "Off"
+                    }
+                  />
+                  <SettingRow label="Center Dot" value={parsedCurrentCrosshair.hasCenterDot ? (parsedCurrentCrosshair.dotSize > 1 ? `On (${parsedCurrentCrosshair.dotSize})` : "On") : "Off"} />
+                  <SettingRow label="Thickness" value={parsedCurrentCrosshair.innerThickness} />
+                  <SettingRow
+                    label="Outline"
+                    value={
+                      parsedCurrentCrosshair.hasOutline
+                        ? (parsedCurrentCrosshair.outlineOpacity !== 1 || parsedCurrentCrosshair.outlineThickness !== 1
+                            ? `On (${parsedCurrentCrosshair.outlineOpacity} / ${parsedCurrentCrosshair.outlineThickness})`
+                            : "On")
+                        : "Off"
+                    }
+                  />
+                  <SettingRow label="Color" value={parsedCurrentCrosshair.colorName} />
                 </div>
 
                 <CopyButton 
-                  textToCopy={settingsJson.crosshair_code || "0;P;c;5;o;1;d;1;z;3;f;0;0t;4;0l;2;0o;2;0a;1;0f;0;1b;0"} 
+                  textToCopy={currentCrosshairCode} 
                   label="Copy Crosshair Code" 
                   successLabel="Crosshair Code Copied!"
                   className="w-full text-[10px] font-bold py-2.5 px-4 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"

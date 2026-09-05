@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import fs from 'fs';
+import path from 'path';
+
+const LOCAL_MAP_FILE = path.join(process.cwd(), 'data/teams_custom_logos.json');
+function getLocalLogosMap(): Record<string, string> {
+  try {
+    if (fs.existsSync(LOCAL_MAP_FILE)) {
+      return JSON.parse(fs.readFileSync(LOCAL_MAP_FILE, 'utf8'));
+    }
+  } catch {}
+  return {};
+}
 
 // Helper to generate search variations for leet-speak names (e.g. monesy <-> m0nesy, simple <-> s1mple)
 function getSearchVariations(term: string): string[] {
@@ -53,12 +65,14 @@ export async function GET(request: NextRequest) {
     const team = searchParams.get('team') || '';
     const country = searchParams.get('country') || '';
 
+    const localLogosMap = getLocalLogosMap();
+
     // Retrieve all players from players table for selection modal
     if (searchParams.get('all') === 'true') {
       const searchVal = searchParams.get('search') || '';
       let query = supabase
         .from('players')
-        .select('id, username, Full_name, team_id, team, profile_img_url, teams(name)')
+        .select('id, username, Full_name, team_id, team, profile_img_url, teams(name, logo_url)')
         .order('username');
 
       if (searchVal.trim()) {
@@ -77,6 +91,7 @@ export async function GET(request: NextRequest) {
         real_name: p.Full_name || p.full_name || p.real_name || null,
         team_id: p.team_id,
         team: p.teams?.name || p.team,
+        team_logo_url: p.teams?.logo_url || localLogosMap[p.team?.trim()] || localLogosMap[p.teams?.name?.trim()] || null,
         profile_img_url: p.profile_img_url
       }));
 
@@ -107,7 +122,8 @@ export async function GET(request: NextRequest) {
       country_code,
       profile_img_url,
       teams (
-        name
+        name,
+        logo_url
       ),
       player_game_settings (
         id,
@@ -188,6 +204,7 @@ export async function GET(request: NextRequest) {
         real_name: item.Full_name || item.full_name || item.real_name || null,
         team: item.teams?.name || item.team,
         team_id: item.team_id,
+        team_logo_url: item.teams?.logo_url || localLogosMap[item.team?.trim()] || localLogosMap[item.teams?.name?.trim()] || null,
         nationality: item.nationality,
         country_code: item.country_code,
         profile_img_url: item.profile_img_url,

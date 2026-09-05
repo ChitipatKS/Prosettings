@@ -630,9 +630,16 @@ export default function Home() {
                           {player.game}
                         </span>
                         {player.country_code && (
-                          <span className="text-[10px] text-zinc-500 font-bold font-sans tracking-wide" title={player.nationality || ''}>
-                            {player.country_code}
-                          </span>
+                          <div className="flex items-center gap-1.5" title={player.nationality || player.country_code}>
+                            <img
+                              src={`https://flagcdn.com/16x12/${player.country_code.toLowerCase()}.png`}
+                              alt={player.country_code}
+                              className="w-4 h-3 object-cover rounded-[2px] shrink-0 shadow-sm"
+                            />
+                            <span className="text-[10px] text-zinc-500 font-bold font-sans tracking-wide">
+                              {player.country_code}
+                            </span>
+                          </div>
                         )}
                       </div>
 
@@ -765,9 +772,16 @@ export default function Home() {
                           {player.game}
                         </span>
                         {player.country_code && (
-                          <span className="text-[10px] text-zinc-500 font-bold font-sans tracking-wide" title={player.nationality || ''}>
-                            {player.country_code}
-                          </span>
+                          <div className="flex items-center gap-1.5" title={player.nationality || player.country_code}>
+                            <img
+                              src={`https://flagcdn.com/16x12/${player.country_code.toLowerCase()}.png`}
+                              alt={player.country_code}
+                              className="w-4 h-3 object-cover rounded-[2px] shrink-0 shadow-sm"
+                            />
+                            <span className="text-[10px] text-zinc-500 font-bold font-sans tracking-wide">
+                              {player.country_code}
+                            </span>
+                          </div>
                         )}
                       </div>
 

@@ -10,13 +10,12 @@
   },
   "100 Thieves": {
     "name": "100 Thieves",
-    "logo_url": "/images/teams/100_thieves_darkmode_1785396050114.png",
+    "logo_url": "/images/teams/100t_1788176889548.png",
     "description": "100 Thieves is a premier American lifestyle brand and competitive gaming organization based in Los Angeles, California. It features championship esports teams, high-end streetwear apparel, and digital content creation",
     "games": [
-      "VALORANT",
-      "CS2"
+      "cs2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Edward Gaming": {
     "name": "Edward Gaming",
@@ -274,13 +273,12 @@
   },
   "9z Team": {
     "name": "9z Team",
-    "logo_url": "",
+    "logo_url": "/images/teams/9z_1788176990380.png",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "cs2"
     ],
-    "region": ""
+    "region": "AM"
   },
   "TyLoo": {
     "name": "TyLoo",
@@ -796,7 +794,7 @@
   },
   "2GAME ESPORTS": {
     "name": "2GAME ESPORTS",
-    "logo_url": "",
+    "logo_url": "/images/teams/2g_1788176942323.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -805,7 +803,7 @@
   },
   "All Gamers": {
     "name": "All Gamers",
-    "logo_url": "",
+    "logo_url": "/images/teams/ag_1788177056577.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -896,7 +894,7 @@
   },
   "2GAME ESPORTS Academy": {
     "name": "2GAME ESPORTS Academy",
-    "logo_url": "",
+    "logo_url": "/images/teams/2g_1788176948679.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -1284,15 +1282,6 @@
     ],
     "region": ""
   },
-  "Aurora": {
-    "name": "Aurora",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
   "GamerLegion": {
     "name": "GamerLegion",
     "logo_url": "",
@@ -1331,21 +1320,21 @@
   },
   "Astralis": {
     "name": "Astralis",
-    "logo_url": "",
+    "logo_url": "/images/teams/astralis_1788177163223.png",
     "description": "",
     "games": [
-      "CS2"
+      "cs2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "3DMAX": {
     "name": "3DMAX",
-    "logo_url": "",
+    "logo_url": "/images/teams/3dmax_1788176426197.png",
     "description": "",
     "games": [
-      "CS2"
+      "cs2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "B8 Esports": {
     "name": "B8 Esports",
@@ -1934,12 +1923,12 @@
   },
   "Alliance": {
     "name": "Alliance",
-    "logo_url": "",
+    "logo_url": "/images/teams/alliance_1788177131801.png",
     "description": "",
     "games": [
-      "CS2"
+      "cs2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "TSM": {
     "name": "TSM",
@@ -1961,12 +1950,12 @@
   },
   "Acend": {
     "name": "Acend",
-    "logo_url": "",
+    "logo_url": "/images/teams/acend_1788177027276.png",
     "description": "",
     "games": [
-      "CS2"
+      "cs2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "MOUZ NXT": {
     "name": "MOUZ NXT",
@@ -2774,5 +2763,32 @@
       "Rainbow Six"
     ],
     "region": ""
+  },
+  "1w Team": {
+    "name": "1w Team",
+    "logo_url": "/images/teams/1w_1788176392726.png",
+    "description": "",
+    "games": [
+      "cs2"
+    ],
+    "region": "EU"
+  },
+  "Aurora Gaming": {
+    "name": "Aurora Gaming",
+    "logo_url": "/images/teams/aurora_1788177199856.png",
+    "description": "",
+    "games": [
+      "cs2"
+    ],
+    "region": "EU"
+  },
+  "BC.Game Esports": {
+    "name": "BC.Game Esports",
+    "logo_url": "/images/teams/bc_game_1788177224056.png",
+    "description": "",
+    "games": [
+      "cs2"
+    ],
+    "region": "EU"
   }
 }
