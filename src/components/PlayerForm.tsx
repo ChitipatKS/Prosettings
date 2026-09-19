@@ -4,6 +4,15 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { parseValorantCrosshairToFields, getCrosshairExportCode, parseCrosshairDetails } from '@/components/CrosshairPreview';
+import CS2CrosshairPreview, {
+  CS2CrosshairSettings,
+  decodeCSGOShareCode,
+  encodeCSGOShareCode,
+  parseCS2CrosshairDetails,
+  getCS2ConsoleCommandsString,
+  CS2_COLOR_PRESETS,
+  CS2_STYLES
+} from '@/components/CS2CrosshairPreview';
 
 type Country = {
   name: string;
@@ -274,11 +283,15 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
     crosshair_inner: string;
     crosshair_outer: string;
     crosshair_thickness: string;
+    inner_movement_error?: boolean;
+    inner_firing_error?: boolean;
+    outer_movement_error?: boolean;
+    outer_firing_error?: boolean;
   }>>([
     {
       id: '1',
       name: 'Primary Crosshair',
-      crosshair_code: '',
+      crosshair_code: '0;P;c;5;h;0;d;0;0b;1;0t;1;0l;4;0o;2;0a;1;1b;0',
       crosshair_color: 'Cyan',
       crosshair_outline: 'Off',
       crosshair_dot: 'Off',
@@ -306,21 +319,26 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
   const [csAnisotropic, setCsAnisotropic] = useState('Bilinear');
 
   // CS2 Crosshair Settings (Multiple Crosshairs supported)
-  const [csCrosshairs, setCsCrosshairs] = useState<Array<{
-    id: string;
-    name: string;
-    crosshair_code: string;
-    crosshair_color: string;
-    crosshair_outline: string;
-    crosshair_dot: string;
-    crosshair_inner: string;
-    crosshair_outer: string;
-    crosshair_thickness: string;
-  }>>([
+  const [csCrosshairs, setCsCrosshairs] = useState<Array<CS2CrosshairSettings>>([
     {
       id: '1',
       name: 'Primary Crosshair',
-      crosshair_code: '',
+      crosshair_code: 'CSGO-xOXnV-jZP3R-9eAyU-8Kewr-UupcG',
+      style: 4,
+      size: 2,
+      gap: -3,
+      thickness: 1,
+      dot: false,
+      outline: false,
+      outline_thickness: 1,
+      color: 1,
+      color_r: 50,
+      color_g: 250,
+      color_b: 50,
+      alpha: 255,
+      use_alpha: true,
+      t_style: false,
+      recoil: false,
       crosshair_color: 'Green',
       crosshair_outline: '0',
       crosshair_dot: '0',
@@ -329,6 +347,9 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
       crosshair_thickness: '1'
     }
   ]);
+
+  const [copiedCsCmdIndex, setCopiedCsCmdIndex] = useState<number | null>(null);
+  const [copiedCsCodeIndex, setCopiedCsCodeIndex] = useState<number | null>(null);
 
   // 3. Gears Selection State
   const [selectedMouseId, setSelectedMouseId] = useState('');
@@ -497,31 +518,49 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
 
               // Load Crosshair settings (Multiple Crosshairs supported)
               if (Array.isArray(sData.crosshairs) && sData.crosshairs.length > 0) {
-                setValCrosshairs(sData.crosshairs.map((c: any, idx: number) => ({
-                  id: c.id || String(idx + 1),
-                  name: c.name || `Crosshair ${idx + 1}`,
-                  crosshair_code: c.crosshair_code || '',
-                  crosshair_color: c.crosshair_color || 'Cyan',
-                  crosshair_outline: c.crosshair_outline || 'Off',
-                  crosshair_dot: c.crosshair_dot || 'Off',
-                  crosshair_inner: c.crosshair_inner || '1 / 4 / 2 / 2',
-                  crosshair_outer: c.crosshair_outer || 'Off',
-                  crosshair_thickness: c.crosshair_thickness || '1'
-                })));
-              } else {
-                setValCrosshairs([
-                  {
-                    id: '1',
-                    name: 'Primary Crosshair',
-                    crosshair_code: sData.crosshair_code || '',
-                    crosshair_color: sData.crosshair_color || 'Cyan',
-                    crosshair_outline: sData.crosshair_outline || 'Off',
-                    crosshair_dot: sData.crosshair_dot || 'Off',
-                    crosshair_inner: sData.crosshair_inner || '1 / 4 / 2 / 2',
-                    crosshair_outer: sData.crosshair_outer || 'Off',
-                    crosshair_thickness: sData.crosshair_thickness || '1'
+                setValCrosshairs(sData.crosshairs.map((c: any, idx: number) => {
+                  const chParsed = c.crosshair_code ? parseCrosshairDetails({ crosshair_code: c.crosshair_code }) : null;
+                  const item = {
+                    id: c.id || String(idx + 1),
+                    name: c.name || `Crosshair ${idx + 1}`,
+                    crosshair_code: c.crosshair_code || '',
+                    crosshair_color: c.crosshair_color || 'Cyan',
+                    crosshair_outline: c.crosshair_outline || 'Off',
+                    crosshair_dot: c.crosshair_dot || 'Off',
+                    crosshair_inner: c.crosshair_inner || '1 / 4 / 2 / 2',
+                    crosshair_outer: c.crosshair_outer || 'Off',
+                    crosshair_thickness: c.crosshair_thickness || '1',
+                    inner_movement_error: c.inner_movement_error ?? chParsed?.innerMovementError ?? false,
+                    inner_firing_error: c.inner_firing_error ?? chParsed?.innerFiringError ?? true,
+                    outer_movement_error: c.outer_movement_error ?? chParsed?.outerMovementError ?? true,
+                    outer_firing_error: c.outer_firing_error ?? chParsed?.outerFiringError ?? true,
+                  };
+                  if (!item.crosshair_code) {
+                    item.crosshair_code = getCrosshairExportCode({ ...item, crosshair_code: undefined });
                   }
-                ]);
+                  return item;
+                }));
+              } else {
+                const primaryParsed = sData.crosshair_code ? parseCrosshairDetails({ crosshair_code: sData.crosshair_code }) : null;
+                const primaryItem = {
+                  id: '1',
+                  name: 'Primary Crosshair',
+                  crosshair_code: sData.crosshair_code || '',
+                  crosshair_color: sData.crosshair_color || 'Cyan',
+                  crosshair_outline: sData.crosshair_outline || 'Off',
+                  crosshair_dot: sData.crosshair_dot || 'Off',
+                  crosshair_inner: sData.crosshair_inner || '1 / 4 / 2 / 2',
+                  crosshair_outer: sData.crosshair_outer || 'Off',
+                  crosshair_thickness: sData.crosshair_thickness || '1',
+                  inner_movement_error: sData.inner_movement_error ?? primaryParsed?.innerMovementError ?? false,
+                  inner_firing_error: sData.inner_firing_error ?? primaryParsed?.innerFiringError ?? true,
+                  outer_movement_error: sData.outer_movement_error ?? primaryParsed?.outerMovementError ?? true,
+                  outer_firing_error: sData.outer_firing_error ?? primaryParsed?.outerFiringError ?? true,
+                };
+                if (!primaryItem.crosshair_code) {
+                  primaryItem.crosshair_code = getCrosshairExportCode({ ...primaryItem, crosshair_code: undefined });
+                }
+                setValCrosshairs([primaryItem]);
               }
             }
 
@@ -550,29 +589,33 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
 
               // Load CS2 Crosshair settings (Multiple Crosshairs supported)
               if (Array.isArray(sData.crosshairs) && sData.crosshairs.length > 0) {
-                setCsCrosshairs(sData.crosshairs.map((c: any, idx: number) => ({
-                  id: c.id || String(idx + 1),
-                  name: c.name || `Crosshair ${idx + 1}`,
-                  crosshair_code: c.crosshair_code || '',
-                  crosshair_color: c.crosshair_color || 'Green',
-                  crosshair_outline: c.crosshair_outline || '0',
-                  crosshair_dot: c.crosshair_dot || '0',
-                  crosshair_inner: c.crosshair_inner || 'Classic Static',
-                  crosshair_outer: c.crosshair_outer || '',
-                  crosshair_thickness: c.crosshair_thickness || '1'
-                })));
+                setCsCrosshairs(sData.crosshairs.map((c: any, idx: number) => {
+                  const normalized = parseCS2CrosshairDetails(c);
+                  return {
+                    ...normalized,
+                    id: c.id || String(idx + 1),
+                    name: c.name || `Crosshair ${idx + 1}`,
+                    crosshair_code: c.crosshair_code || normalized.crosshair_code
+                  };
+                }));
               } else {
+                const single = {
+                  id: '1',
+                  name: 'Primary Crosshair',
+                  crosshair_code: sData.crosshair_code || '',
+                  crosshair_color: sData.crosshair_color || 'Green',
+                  crosshair_outline: sData.crosshair_outline || '0',
+                  crosshair_dot: sData.crosshair_dot || '0',
+                  crosshair_inner: sData.crosshair_inner || 'Classic Static',
+                  crosshair_outer: sData.crosshair_outer || '',
+                  crosshair_thickness: sData.crosshair_thickness || '1'
+                };
+                const normalized = parseCS2CrosshairDetails(single);
                 setCsCrosshairs([
                   {
-                    id: '1',
-                    name: 'Primary Crosshair',
-                    crosshair_code: sData.crosshair_code || '',
-                    crosshair_color: sData.crosshair_color || 'Green',
-                    crosshair_outline: sData.crosshair_outline || '0',
-                    crosshair_dot: sData.crosshair_dot || '0',
-                    crosshair_inner: sData.crosshair_inner || 'Classic Static',
-                    crosshair_outer: sData.crosshair_outer || '',
-                    crosshair_thickness: sData.crosshair_thickness || '1'
+                    ...normalized,
+                    ...single,
+                    crosshair_code: sData.crosshair_code || normalized.crosshair_code
                   }
                 ]);
               }
@@ -704,7 +747,19 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
       // Insert selected settings
       const settingsToInsert = [];
       if (playsValorant) {
-        const primaryValCrosshair = valCrosshairs[0] || {};
+        // Automatically generate and ensure fresh crosshair code from configured fields for all crosshairs
+        const finalValCrosshairs = valCrosshairs.map(ch => {
+          const generatedCode = getCrosshairExportCode({
+            ...ch,
+            crosshair_code: undefined // Force code generation from current settings fields
+          });
+          return {
+            ...ch,
+            crosshair_code: generatedCode || ch.crosshair_code?.trim() || ''
+          };
+        });
+
+        const primaryValCrosshair = finalValCrosshairs[0] || {};
         settingsToInsert.push({
           player_id: savedPlayerId,
           game_id: 2, // Valorant
@@ -740,7 +795,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
             map_minimap_size: valMapMinimapSize,
             map_minimap_zoom: valMapMinimapZoom,
             map_vision_cones: valMapVisionCones,
-            crosshairs: valCrosshairs,
+            crosshairs: finalValCrosshairs,
             crosshair_code: primaryValCrosshair.crosshair_code?.trim() || undefined,
             crosshair_color: primaryValCrosshair.crosshair_color || undefined,
             crosshair_outline: primaryValCrosshair.crosshair_outline || undefined,
@@ -753,7 +808,16 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
       }
 
       if (playsCS2) {
-        const primaryCsCrosshair = csCrosshairs[0] || {};
+        const finalCsCrosshairs = csCrosshairs.map(c => {
+          const freshCode = (!c.crosshair_code || !c.crosshair_code.trim().startsWith('CSGO-'))
+            ? encodeCSGOShareCode(c)
+            : c.crosshair_code.trim();
+          return {
+            ...c,
+            crosshair_code: freshCode
+          };
+        });
+        const primaryCsCrosshair = finalCsCrosshairs[0] || {};
         settingsToInsert.push({
           player_id: savedPlayerId,
           game_id: 3, // CS2
@@ -775,14 +839,14 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
             vsync: csVsync,
             anti_aliasing: csAntiAliasing,
             anisotropic_filtering: csAnisotropic,
-            crosshairs: csCrosshairs,
+            crosshairs: finalCsCrosshairs,
             crosshair_code: primaryCsCrosshair.crosshair_code?.trim() || undefined,
-            crosshair_color: primaryCsCrosshair.crosshair_color || undefined,
-            crosshair_outline: primaryCsCrosshair.crosshair_outline || undefined,
-            crosshair_dot: primaryCsCrosshair.crosshair_dot || undefined,
-            crosshair_inner: primaryCsCrosshair.crosshair_inner?.trim() || undefined,
+            crosshair_color: primaryCsCrosshair.color !== undefined ? CS2_COLOR_PRESETS[primaryCsCrosshair.color]?.name : primaryCsCrosshair.crosshair_color,
+            crosshair_outline: primaryCsCrosshair.outline ? '1' : '0',
+            crosshair_dot: primaryCsCrosshair.dot ? '1' : '0',
+            crosshair_inner: primaryCsCrosshair.style !== undefined ? CS2_STYLES[primaryCsCrosshair.style] : primaryCsCrosshair.crosshair_inner,
             crosshair_outer: primaryCsCrosshair.crosshair_outer?.trim() || undefined,
-            crosshair_thickness: primaryCsCrosshair.crosshair_thickness?.trim() || undefined
+            crosshair_thickness: primaryCsCrosshair.thickness !== undefined ? String(primaryCsCrosshair.thickness) : primaryCsCrosshair.crosshair_thickness
           }
         });
       }
@@ -1500,20 +1564,21 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                 </h4>
                 <button
                   type="button"
-                  onClick={() => setValCrosshairs(prev => [
-                    ...prev,
-                    {
+                  onClick={() => {
+                    const newCh = {
                       id: String(Date.now()),
-                      name: `Crosshair ${prev.length + 1}`,
-                      crosshair_code: '',
-                      crosshair_color: 'Cyan',
+                      name: `Crosshair ${valCrosshairs.length + 1}`,
+                      crosshair_color: 'Green',
                       crosshair_outline: 'Off',
                       crosshair_dot: 'Off',
                       crosshair_inner: '1 / 4 / 2 / 2',
                       crosshair_outer: 'Off',
-                      crosshair_thickness: '1'
-                    }
-                  ])}
+                      crosshair_thickness: '2',
+                      crosshair_code: ''
+                    };
+                    newCh.crosshair_code = getCrosshairExportCode({ ...newCh, crosshair_code: undefined });
+                    setValCrosshairs(prev => [...prev, newCh]);
+                  }}
                   className="px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-[10px] font-mono font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
                 >
                   <span>+</span> Add Another Crosshair
@@ -1528,7 +1593,11 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                     setValCrosshairs(prev => prev.map((item, i) => {
                       if (i !== index) return item;
                       const updated = { ...item, ...changes };
-                      const newCode = getCrosshairExportCode(updated);
+                      // Always generate fresh code directly from the updated structured settings
+                      const newCode = getCrosshairExportCode({
+                        ...updated,
+                        crosshair_code: undefined
+                      });
                       return { ...updated, crosshair_code: newCode };
                     }));
                   };
@@ -1566,7 +1635,22 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
 
                       {/* Code String Input */}
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-zinc-400 font-mono uppercase">Crosshair Profile Code (Export / Import String)</label>
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] font-bold text-zinc-400 font-mono uppercase">
+                            Crosshair Profile Code (Export / Import String)
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const code = getCrosshairExportCode({ ...c, crosshair_code: undefined });
+                              setValCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_code: code } : item));
+                            }}
+                            className="text-[9px] font-mono text-red-400 hover:text-red-300 transition-colors flex items-center gap-1 cursor-pointer bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20"
+                            title="Re-generate code from current settings"
+                          >
+                            <span>⚡ Generate Code from Settings</span>
+                          </button>
+                        </div>
                         <input
                           type="text"
                           value={c.crosshair_code}
@@ -1582,7 +1666,11 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                                 crosshair_dot: auto.crosshair_dot,
                                 crosshair_inner: auto.crosshair_inner,
                                 crosshair_outer: auto.crosshair_outer,
-                                crosshair_thickness: auto.crosshair_thickness
+                                crosshair_thickness: auto.crosshair_thickness,
+                                inner_movement_error: auto.inner_movement_error,
+                                inner_firing_error: auto.inner_firing_error,
+                                outer_movement_error: auto.outer_movement_error,
+                                outer_firing_error: auto.outer_firing_error,
                               } : item));
                             } else {
                               setValCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_code: val } : item));
@@ -1696,12 +1784,17 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                             <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Center Dot Opacity</label>
                             <input
                               type="number"
-                              step="0.1"
+                              step="0.01"
                               min="0"
                               max="1"
-                              value={parsed.hasCenterDot ? 1 : 0}
-                              disabled
-                              className="w-full h-8 bg-black/20 border border-zinc-800/60 rounded-lg px-2 text-xs text-zinc-500 font-mono opacity-80"
+                              value={parsed.hasCenterDot ? parsed.dotOpacity : 0}
+                              disabled={!parsed.hasCenterDot}
+                              onChange={(e) => {
+                                const op = parseFloat(e.target.value) || 0;
+                                const updated = parsed.hasCenterDot ? `On / ${op} / ${parsed.dotSize || 2}` : "Off";
+                                updateValCrosshair({ crosshair_dot: updated });
+                              }}
+                              className="w-full h-8 bg-black/40 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-red-500/40 font-mono disabled:opacity-40 disabled:cursor-not-allowed"
                             />
                           </div>
 
@@ -1815,8 +1908,8 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                             <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Movement Error</label>
                             <select
                               value={parsed.innerMovementError ? "On" : "Off"}
-                              disabled
-                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800/60 rounded-lg px-2 text-xs text-zinc-500 font-mono opacity-80"
+                              onChange={(e) => updateValCrosshair({ inner_movement_error: e.target.value === "On" })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-red-500/40 font-mono cursor-pointer"
                             >
                               <option value="Off">Off</option>
                               <option value="On">On</option>
@@ -1827,8 +1920,8 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                             <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Firing Error</label>
                             <select
                               value={parsed.innerFiringError ? "On" : "Off"}
-                              disabled
-                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800/60 rounded-lg px-2 text-xs text-zinc-500 font-mono opacity-80"
+                              onChange={(e) => updateValCrosshair({ inner_firing_error: e.target.value === "On" })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-red-500/40 font-mono cursor-pointer"
                             >
                               <option value="Off">Off</option>
                               <option value="On">On</option>
@@ -1929,8 +2022,8 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                             <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Movement Error</label>
                             <select
                               value={parsed.outerMovementError ? "On" : "Off"}
-                              disabled
-                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800/60 rounded-lg px-2 text-xs text-zinc-500 font-mono opacity-80"
+                              onChange={(e) => updateValCrosshair({ outer_movement_error: e.target.value === "On" })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-red-500/40 font-mono cursor-pointer"
                             >
                               <option value="Off">Off</option>
                               <option value="On">On</option>
@@ -1941,8 +2034,8 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                             <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Firing Error</label>
                             <select
                               value={parsed.outerFiringError ? "On" : "Off"}
-                              disabled
-                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800/60 rounded-lg px-2 text-xs text-zinc-500 font-mono opacity-80"
+                              onChange={(e) => updateValCrosshair({ outer_firing_error: e.target.value === "On" })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-red-500/40 font-mono cursor-pointer"
                             >
                               <option value="Off">Off</option>
                               <option value="On">On</option>
@@ -2121,20 +2214,34 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                 </h4>
                 <button
                   type="button"
-                  onClick={() => setCsCrosshairs(prev => [
-                    ...prev,
-                    {
+                  onClick={() => {
+                    const newCh: CS2CrosshairSettings = {
                       id: String(Date.now()),
-                      name: `Crosshair ${prev.length + 1}`,
-                      crosshair_code: '',
+                      name: `Crosshair ${csCrosshairs.length + 1}`,
+                      style: 4,
+                      size: 2,
+                      gap: -3,
+                      thickness: 1,
+                      dot: false,
+                      outline: false,
+                      outline_thickness: 1,
+                      color: 1,
+                      color_r: 50,
+                      color_g: 250,
+                      color_b: 50,
+                      alpha: 255,
+                      use_alpha: true,
+                      t_style: false,
+                      recoil: false,
                       crosshair_color: 'Green',
                       crosshair_outline: '0',
                       crosshair_dot: '0',
                       crosshair_inner: 'Classic Static',
-                      crosshair_outer: '',
                       crosshair_thickness: '1'
-                    }
-                  ])}
+                    };
+                    newCh.crosshair_code = encodeCSGOShareCode(newCh);
+                    setCsCrosshairs(prev => [...prev, newCh]);
+                  }}
                   className="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-[10px] font-mono font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
                 >
                   <span>+</span> Add Another Crosshair
@@ -2142,140 +2249,348 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
               </div>
 
               <div className="space-y-4">
-                {csCrosshairs.map((c, index) => (
-                  <div key={c.id || index} className="p-4 rounded-xl bg-black/30 border border-zinc-800/80 space-y-3 relative group">
-                    <div className="flex items-center justify-between border-b border-zinc-800/60 pb-2.5">
-                      <div className="flex items-center gap-2 flex-1 max-w-sm">
-                        <span className="text-[10px] font-mono text-zinc-500 font-bold bg-white/5 px-2 py-0.5 rounded">
-                          #{index + 1}
-                        </span>
-                        <input
-                          type="text"
-                          value={c.name}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, name: val } : item));
-                          }}
-                          placeholder="e.g. Primary Crosshair, Dot Crosshair"
-                          className="h-7 bg-black/40 border border-zinc-800 rounded-md px-2 text-xs font-mono text-white focus:outline-none focus:border-amber-500/40 w-full"
-                        />
-                      </div>
-                      {csCrosshairs.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => setCsCrosshairs(prev => prev.filter((_, i) => i !== index))}
-                          className="text-zinc-500 hover:text-amber-400 text-xs font-mono px-2 py-1 rounded hover:bg-amber-500/10 transition-colors cursor-pointer"
-                          title="Remove this crosshair"
-                        >
-                          ✕ Delete
-                        </button>
-                      )}
-                    </div>
+                {csCrosshairs.map((c, index) => {
+                  const parsed = parseCS2CrosshairDetails(c);
 
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Crosshair Share Code</label>
-                      <input
-                        type="text"
-                        value={c.crosshair_code}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_code: val } : item));
-                        }}
-                        placeholder="e.g. CSGO-xxxxx-xxxxx-xxxxx-xxxxx-xxxxx"
-                        className="w-full h-8 bg-black/40 border border-zinc-800 rounded-lg px-3 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono placeholder:text-zinc-600"
-                      />
-                    </div>
+                  const updateCsCrosshair = (changes: Partial<CS2CrosshairSettings>) => {
+                    setCsCrosshairs(prev => prev.map((item, i) => {
+                      if (i !== index) return item;
+                      const updated: CS2CrosshairSettings = { ...item, ...changes };
+                      // Always regenerate valid share code from updated properties
+                      const newCode = encodeCSGOShareCode(updated);
+                      return {
+                        ...updated,
+                        crosshair_code: newCode,
+                        crosshair_color: updated.color !== undefined ? CS2_COLOR_PRESETS[updated.color]?.name : updated.crosshair_color,
+                        crosshair_outline: updated.outline ? '1' : '0',
+                        crosshair_dot: updated.dot ? '1' : '0',
+                        crosshair_inner: updated.style !== undefined ? CS2_STYLES[updated.style] : updated.crosshair_inner,
+                        crosshair_thickness: updated.thickness !== undefined ? String(updated.thickness) : updated.crosshair_thickness
+                      };
+                    }));
+                  };
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Color</label>
-                        <select
-                          value={c.crosshair_color}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_color: val } : item));
-                          }}
-                          className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
-                        >
-                          <option value="Green">Green</option>
-                          <option value="Yellow">Yellow</option>
-                          <option value="Cyan">Cyan</option>
-                          <option value="Red">Red</option>
-                          <option value="Blue">Blue</option>
-                          <option value="White">White</option>
-                          <option value="Custom">Custom</option>
-                        </select>
+                  const handleCopyCommands = () => {
+                    const cmds = getCS2ConsoleCommandsString(c);
+                    navigator.clipboard.writeText(cmds);
+                    setCopiedCsCmdIndex(index);
+                    setTimeout(() => setCopiedCsCmdIndex(null), 2000);
+                  };
+
+                  const handleCopyCode = () => {
+                    if (c.crosshair_code) {
+                      navigator.clipboard.writeText(c.crosshair_code);
+                      setCopiedCsCodeIndex(index);
+                      setTimeout(() => setCopiedCsCodeIndex(null), 2000);
+                    }
+                  };
+
+                  return (
+                    <div key={c.id || index} className="p-4 rounded-xl bg-black/40 border border-zinc-800 space-y-4 relative group">
+                      {/* Crosshair Card Header */}
+                      <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+                        <div className="flex items-center gap-2 flex-1 max-w-sm">
+                          <span className="text-[10px] font-mono text-zinc-500 font-bold bg-white/5 px-2 py-0.5 rounded">
+                            #{index + 1}
+                          </span>
+                          <input
+                            type="text"
+                            value={c.name || ''}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, name: val } : item));
+                            }}
+                            placeholder="e.g. Primary Crosshair, Dot Crosshair"
+                            className="h-8 bg-black/50 border border-zinc-800 rounded-md px-2.5 text-xs font-mono font-bold text-white focus:outline-none focus:border-amber-500/40 w-full"
+                          />
+                        </div>
+                        {csCrosshairs.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => setCsCrosshairs(prev => prev.filter((_, i) => i !== index))}
+                            className="text-zinc-500 hover:text-amber-400 text-xs font-mono px-2.5 py-1 rounded hover:bg-amber-500/10 transition-colors cursor-pointer"
+                            title="Remove this crosshair"
+                          >
+                            ✕ Delete
+                          </button>
+                        )}
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Outline</label>
-                        <select
-                          value={c.crosshair_outline}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_outline: val } : item));
-                          }}
-                          className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
-                        >
-                          <option value="0">0 (Off)</option>
-                          <option value="1">1 (On)</option>
-                        </select>
+
+                      {/* Live Canvas Crosshair Simulation */}
+                      <div className="w-full max-w-md mx-auto">
+                        <CS2CrosshairPreview settings={c} className="mb-0" />
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Center Dot</label>
-                        <select
-                          value={c.crosshair_dot}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_dot: val } : item));
-                          }}
-                          className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
-                        >
-                          <option value="0">0 (Off)</option>
-                          <option value="1">1 (On)</option>
-                        </select>
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Style / Inner Lines</label>
+
+                      {/* Share Code and Actions */}
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] font-bold text-zinc-400 font-mono uppercase">
+                            CS2 Crosshair Share Code
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const code = encodeCSGOShareCode(c);
+                                setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_code: code } : item));
+                              }}
+                              className="text-[9px] font-mono text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20"
+                              title="Re-generate code from current settings"
+                            >
+                              <span>⚡ Generate Code</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleCopyCommands}
+                              className="text-[9px] font-mono text-zinc-300 hover:text-white transition-colors flex items-center gap-1 cursor-pointer bg-white/5 hover:bg-white/10 px-2 py-0.5 rounded border border-white/10"
+                              title="Copy cl_crosshair console commands to clipboard"
+                            >
+                              <span>{copiedCsCmdIndex === index ? '✓ Commands Copied!' : '📋 Copy Commands'}</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleCopyCode}
+                              className="text-[9px] font-mono text-zinc-300 hover:text-white transition-colors flex items-center gap-1 cursor-pointer bg-white/5 hover:bg-white/10 px-2 py-0.5 rounded border border-white/10"
+                              title="Copy share code"
+                            >
+                              <span>{copiedCsCodeIndex === index ? '✓ Code Copied!' : '📋 Copy Code'}</span>
+                            </button>
+                          </div>
+                        </div>
                         <input
                           type="text"
-                          value={c.crosshair_inner}
+                          value={c.crosshair_code || ''}
                           onChange={(e) => {
-                            const val = e.target.value;
-                            setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_inner: val } : item));
+                            const val = e.target.value.trim();
+                            if (val.startsWith('CSGO-')) {
+                              const decoded = decodeCSGOShareCode(val);
+                              if (decoded) {
+                                setCsCrosshairs(prev => prev.map((item, i) => i === index ? {
+                                  ...item,
+                                  ...decoded,
+                                  crosshair_code: val,
+                                  crosshair_color: decoded.color !== undefined ? CS2_COLOR_PRESETS[decoded.color]?.name : item.crosshair_color,
+                                  crosshair_outline: decoded.outline ? '1' : '0',
+                                  crosshair_dot: decoded.dot ? '1' : '0',
+                                  crosshair_inner: decoded.style !== undefined ? CS2_STYLES[decoded.style] : item.crosshair_inner,
+                                  crosshair_thickness: decoded.thickness !== undefined ? String(decoded.thickness) : item.crosshair_thickness
+                                } : item));
+                                return;
+                              }
+                            }
+                            setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_code: e.target.value } : item));
                           }}
-                          placeholder="e.g. Classic Static"
-                          className="w-full h-8 bg-black/40 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono"
+                          placeholder="CSGO-xxxxx-xxxxx-xxxxx-xxxxx-xxxxx"
+                          className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-3 text-xs text-amber-300 focus:outline-none focus:border-amber-500/40 transition-all font-mono placeholder:text-zinc-600 select-all"
                         />
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Outer Lines / Gap</label>
-                        <input
-                          type="text"
-                          value={c.crosshair_outer}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_outer: val } : item));
-                          }}
-                          placeholder="e.g. Gap -3"
-                          className="w-full h-8 bg-black/40 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-bold text-zinc-500 font-mono uppercase">Thickness</label>
-                        <input
-                          type="text"
-                          value={c.crosshair_thickness}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setCsCrosshairs(prev => prev.map((item, i) => i === index ? { ...item, crosshair_thickness: val } : item));
-                          }}
-                          placeholder="e.g. 1"
-                          className="w-full h-8 bg-black/40 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono"
-                        />
+
+                      {/* Main Settings Form Controls */}
+                      <div className="space-y-3 pt-2">
+                        {/* Row 1: Style & Color */}
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Crosshair Style</label>
+                            <select
+                              value={parsed.style}
+                              onChange={(e) => updateCsCrosshair({ style: parseInt(e.target.value, 10) })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
+                            >
+                              <option value={0}>0 (Default)</option>
+                              <option value={1}>1 (Default Static)</option>
+                              <option value={2}>2 (Classic)</option>
+                              <option value={3}>3 (Classic Dynamic)</option>
+                              <option value={4}>4 (Classic Static)</option>
+                              <option value={5}>5 (Legacy Dynamic)</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Color</label>
+                            <select
+                              value={parsed.color}
+                              onChange={(e) => updateCsCrosshair({ color: parseInt(e.target.value, 10) })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
+                            >
+                              <option value={1}>Green</option>
+                              <option value={2}>Yellow</option>
+                              <option value={3}>Blue</option>
+                              <option value={4}>Cyan</option>
+                              <option value={0}>Red</option>
+                              <option value={5}>Custom RGB</option>
+                            </select>
+                          </div>
+
+                          {/* Custom RGB Inputs */}
+                          {parsed.color === 5 && (
+                            <>
+                              <div className="space-y-1 col-span-2 grid grid-cols-3 gap-1.5">
+                                <div>
+                                  <label className="text-[8px] font-bold text-red-400 font-mono uppercase">R</label>
+                                  <input
+                                    type="number"
+                                    min={0}
+                                    max={255}
+                                    value={parsed.color_r}
+                                    onChange={(e) => updateCsCrosshair({ color_r: Math.max(0, Math.min(255, parseInt(e.target.value, 10) || 0)) })}
+                                    className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 font-mono"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[8px] font-bold text-green-400 font-mono uppercase">G</label>
+                                  <input
+                                    type="number"
+                                    min={0}
+                                    max={255}
+                                    value={parsed.color_g}
+                                    onChange={(e) => updateCsCrosshair({ color_g: Math.max(0, Math.min(255, parseInt(e.target.value, 10) || 0)) })}
+                                    className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 font-mono"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[8px] font-bold text-blue-400 font-mono uppercase">B</label>
+                                  <input
+                                    type="number"
+                                    min={0}
+                                    max={255}
+                                    value={parsed.color_b}
+                                    onChange={(e) => updateCsCrosshair({ color_b: Math.max(0, Math.min(255, parseInt(e.target.value, 10) || 0)) })}
+                                    className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 font-mono"
+                                  />
+                                </div>
+                              </div>
+                            </>
+                          )}
+
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Alpha (Opacity)</label>
+                            <input
+                              type="number"
+                              min={0}
+                              max={255}
+                              value={parsed.alpha}
+                              onChange={(e) => updateCsCrosshair({ alpha: Math.max(0, Math.min(255, parseInt(e.target.value, 10) || 0)) })}
+                              className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 font-mono"
+                            />
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Sniper Width</label>
+                            <input
+                              type="number"
+                              min={1}
+                              max={5}
+                              value={parsed.sniper_width ?? 1}
+                              onChange={(e) => updateCsCrosshair({ sniper_width: Math.max(1, parseInt(e.target.value, 10) || 1) })}
+                              className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 font-mono"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Row 2: Dimensions (Size, Gap, Thickness) */}
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Size (Length)</label>
+                            <input
+                              type="number"
+                              step="0.1"
+                              min={0}
+                              value={parsed.size}
+                              onChange={(e) => updateCsCrosshair({ size: parseFloat(e.target.value) || 0 })}
+                              className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 font-mono"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Gap (Spacing)</label>
+                            <input
+                              type="number"
+                              step="0.5"
+                              value={parsed.gap}
+                              onChange={(e) => updateCsCrosshair({ gap: parseFloat(e.target.value) || 0 })}
+                              className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 font-mono"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Thickness</label>
+                            <input
+                              type="number"
+                              step="0.1"
+                              min={0.1}
+                              value={parsed.thickness}
+                              onChange={(e) => updateCsCrosshair({ thickness: parseFloat(e.target.value) || 0.1 })}
+                              className="w-full h-8 bg-black/50 border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 font-mono"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Row 3: Toggles (Dot, Outline, T-Style, Follow Recoil) */}
+                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Center Dot</label>
+                            <select
+                              value={parsed.dot ? '1' : '0'}
+                              onChange={(e) => updateCsCrosshair({ dot: e.target.value === '1' })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
+                            >
+                              <option value="0">Off</option>
+                              <option value="1">On</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Outline</label>
+                            <select
+                              value={parsed.outline ? '1' : '0'}
+                              onChange={(e) => updateCsCrosshair({ outline: e.target.value === '1' })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
+                            >
+                              <option value="0">Off</option>
+                              <option value="1">On</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Outline Thickness</label>
+                            <select
+                              value={parsed.outline_thickness}
+                              disabled={!parsed.outline}
+                              onChange={(e) => updateCsCrosshair({ outline_thickness: parseFloat(e.target.value) || 1 })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                              <option value={1}>1</option>
+                              <option value={2}>2</option>
+                              <option value={3}>3</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">T-Style (No Top)</label>
+                            <select
+                              value={parsed.t_style ? '1' : '0'}
+                              onChange={(e) => updateCsCrosshair({ t_style: e.target.value === '1' })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
+                            >
+                              <option value="0">Off</option>
+                              <option value="1">On</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-zinc-400 font-mono uppercase">Follow Recoil</label>
+                            <select
+                              value={parsed.recoil ? '1' : '0'}
+                              onChange={(e) => updateCsCrosshair({ recoil: e.target.value === '1' })}
+                              className="w-full h-8 bg-[#0F0F15] border border-zinc-800 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-amber-500/40 transition-all font-mono cursor-pointer"
+                            >
+                              <option value="0">Off</option>
+                              <option value="1">On (CS2)</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

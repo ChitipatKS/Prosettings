@@ -3,19 +3,19 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect') || '/profile';
 
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
     // If user is already logged in, redirect them
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
@@ -27,6 +27,12 @@ function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
+
+    if (!isSupabaseConfigured) {
+      setErrorMsg('ยังไม่ได้เชื่อมต่อ Supabase: กรุณาสร้างไฟล์ .env.local พร้อมระบุ NEXT_PUBLIC_SUPABASE_URL และ NEXT_PUBLIC_SUPABASE_ANON_KEY');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -42,7 +48,11 @@ function LoginForm() {
         router.refresh();
       }
     } catch (err: any) {
-      setErrorMsg(err.message || 'An unexpected error occurred.');
+      if (err?.message === 'Failed to fetch' || err?.name === 'TypeError') {
+        setErrorMsg('ไม่สามารถเชื่อมต่อไปยัง Supabase ได้ (Failed to fetch) ตรวจสอบ URL ใน .env.local หรือการเชื่อมต่ออินเทอร์เน็ต');
+      } else {
+        setErrorMsg(err?.message || 'An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }

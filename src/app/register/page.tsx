@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 function RegisterForm() {
   const [email, setEmail] = useState('');
@@ -18,6 +18,7 @@ function RegisterForm() {
   const redirectTo = searchParams.get('redirect') || '/profile';
 
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
     // If user is already logged in, redirect them
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
@@ -30,6 +31,11 @@ function RegisterForm() {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
+
+    if (!isSupabaseConfigured) {
+      setErrorMsg('ยังไม่ได้เชื่อมต่อ Supabase: กรุณาสร้างไฟล์ .env.local พร้อมระบุ NEXT_PUBLIC_SUPABASE_URL และ NEXT_PUBLIC_SUPABASE_ANON_KEY');
+      return;
+    }
 
     // Simple username validation
     if (username.trim().length < 3) {
@@ -63,7 +69,11 @@ function RegisterForm() {
         }
       }
     } catch (err: any) {
-      setErrorMsg(err.message || 'An unexpected error occurred.');
+      if (err?.message === 'Failed to fetch' || err?.name === 'TypeError') {
+        setErrorMsg('ไม่สามารถเชื่อมต่อไปยัง Supabase ได้ (Failed to fetch) ตรวจสอบ URL ใน .env.local หรือการเชื่อมต่ออินเทอร์เน็ต');
+      } else {
+        setErrorMsg(err?.message || 'An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }
@@ -73,7 +83,7 @@ function RegisterForm() {
     <div className="w-full max-w-md bg-[#12121A]/80 border border-zinc-800 p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.3)] backdrop-blur-md">
       <div className="text-center space-y-2 mb-8">
         <h2 className="text-2xl font-extrabold text-white font-display">Create Account</h2>
-        <p className="text-zinc-400 text-xs font-mono">Sign up to bookmark players & configure specs</p>
+        <p className="text-zinc-400 text-xs font-mono">Join the competitive gaming directory</p>
       </div>
 
       {errorMsg && (

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export type CrosshairSettings = {
   name?: string | null;
@@ -11,6 +11,10 @@ export type CrosshairSettings = {
   crosshair_inner?: string | null;
   crosshair_outer?: string | null;
   crosshair_thickness?: string | null;
+  inner_movement_error?: boolean | null;
+  inner_firing_error?: boolean | null;
+  outer_movement_error?: boolean | null;
+  outer_firing_error?: boolean | null;
 };
 
 type Props = {
@@ -21,44 +25,76 @@ type Props = {
   isValorant?: boolean;
 };
 
-// Map color names to CSS colors
+// Map color names to CSS colors (corrected to match Valorant in-game values)
 const COLOR_MAP: Record<string, string> = {
   'cyan': '#00FFFF',
-  'green': '#00FF44',
+  'green': '#00FF00',
   'white': '#FFFFFF',
-  'yellow': '#FFE600',
-  'red': '#FF2222',
-  'pink': '#FF3399',
+  'yellow': '#FFFF00',
+  'yellow green': '#7FFF00',
+  'green yellow': '#DFFF00',
+  'red': '#FF0000',
+  'pink': '#FF00FF',
   'magenta': '#FF00FF',
   'blue': '#00A2FF',
   'black': '#000000',
   'custom': '#FFFFFF'
 };
 
-// Valorant Color code mapping
+// Valorant Color code mapping (corrected to match in-game values)
 const VAL_COLOR_INDEX: Record<string, { hex: string; name: string }> = {
   '0': { hex: '#FFFFFF', name: 'White' },
-  '1': { hex: '#00FF44', name: 'Green' },
-  '2': { hex: '#88FF00', name: 'Yellow Green' },
-  '3': { hex: '#CCFF00', name: 'Green Yellow' },
-  '4': { hex: '#FFE600', name: 'Yellow' },
+  '1': { hex: '#00FF00', name: 'Green' },
+  '2': { hex: '#7FFF00', name: 'Yellow Green' },
+  '3': { hex: '#DFFF00', name: 'Green Yellow' },
+  '4': { hex: '#FFFF00', name: 'Yellow' },
   '5': { hex: '#00FFFF', name: 'Cyan' },
-  '6': { hex: '#FF3399', name: 'Pink' },
-  '7': { hex: '#FF2222', name: 'Red' },
+  '6': { hex: '#FF00FF', name: 'Pink' },
+  '7': { hex: '#FF0000', name: 'Red' },
+  '8': { hex: '#FFFFFF', name: 'Custom' },  // Custom: read from 'u' token
 };
 
 /**
- * Token-based parser for Valorant crosshair string
+ * All recognized crosshair tokens
  */
-export function parseValorantCodeMap(code: string): Record<string, string> {
+const VALID_TOKENS = new Set([
+  'c', 'u', 'h', 'd', 'z', 'o', 't', 'a', 'f', 's', 'p',
+  '0b', '0t', '0l', '0v', '0g', '0o', '0a', '0m', '0f', '0s', '0e',
+  '1b', '1t', '1l', '1v', '1g', '1o', '1a', '1m', '1f', '1s', '1e',
+]);
+
+/**
+ * Section-aware parser for Valorant crosshair string.
+ * Returns tokens for the Primary (P) section by default.
+ */
+export function parseValorantCodeMap(code: string, section: 'P' | 'A' | 'S' = 'P'): Record<string, string> {
   const map: Record<string, string> = {};
   const tokens = code.split(';').map(t => t.trim()).filter(Boolean);
-  
-  for (let i = 0; i < tokens.length - 1; i++) {
+
+  let inTargetSection = false;
+  let pastFirstSection = false;
+
+  for (let i = 0; i < tokens.length; i++) {
     const k = tokens[i];
-    const v = tokens[i + 1];
-    if (/^(c|u|h|d|z|o|t|a|f|s|0b|0t|0l|0v|0g|0o|0a|0m|0f|0s|0e|1b|1t|1l|1v|1g|1o|1a|1m|1f|1s|1e)$/.test(k)) {
-      map[k] = v;
+
+    // Section markers
+    if (k === 'P' || k === 'A' || k === 'S') {
+      if (pastFirstSection && inTargetSection) break; // We've left our target section
+      inTargetSection = k === section;
+      pastFirstSection = true;
+      continue;
+    }
+
+    // Global tokens (before any section) are always captured
+    // Section tokens are only captured when in the target section
+    if (VALID_TOKENS.has(k) && i + 1 < tokens.length) {
+      const v = tokens[i + 1];
+      if (!pastFirstSection || inTargetSection) {
+        map[k] = v;
+        i++; // skip value token
+      } else {
+        i++; // still skip value even if not our section
+      }
     }
   }
   return map;
@@ -73,43 +109,54 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
   let colorName = 'White';
   let hasCenterDot = false;
   let dotSize = 2;
-  let hasOutline = false;
+  let dotOpacity = 1;
+  let hasOutline = true;
   let outlineThickness = 1;
-  let outlineOpacity = 1;
+  let outlineOpacity = 0.5;
   let innerShow = true;
-  let innerLength = 4;
+  let innerLength = 6;
+  let innerVerticalLength = 6;
+  let innerIndependent = false;
   let innerThickness = 2;
-  let innerOffset = 2;
+  let innerOffset = 3;
   let innerOpacity = 1;
-  let outerShow = false;
-  let outerLength = 0;
-  let outerThickness = 0;
-  let outerOffset = 0;
+  let outerShow = true;
+  let outerLength = 2;
+  let outerVerticalLength = 2;
+  let outerIndependent = false;
+  let outerThickness = 2;
+  let outerOffset = 10;
   let outerOpacity = 1;
   let innerMovementError = false;
-  let innerFiringError = false;
-  let outerMovementError = false;
-  let outerFiringError = false;
+  let innerFiringError = true;
+  let outerMovementError = true;
+  let outerFiringError = true;
 
   const rawCode = (settings?.crosshair_code || '').trim();
 
   if (rawCode && rawCode.includes(';')) {
     const valMap = parseValorantCodeMap(rawCode);
 
-    // Color
+    // Color — handle c;8 (Custom) by reading 'u' token
     if (valMap['c'] !== undefined) {
-      const valObj = VAL_COLOR_INDEX[valMap['c']];
-      if (valObj) {
-        color = valObj.hex;
-        colorName = valObj.name;
+      const cVal = valMap['c'];
+      if (cVal === '8' && valMap['u']) {
+        // Custom color: RRGGBBAA format
+        const raw = valMap['u'].replace(/^#/, '');
+        color = `#${raw.substring(0, 6)}`;
+        colorName = 'Custom';
+      } else {
+        const valObj = VAL_COLOR_INDEX[cVal];
+        if (valObj) {
+          color = valObj.hex;
+          colorName = valObj.name;
+        }
       }
     } else if (valMap['u']) {
-      const hex = valMap['u'].startsWith('#') ? valMap['u'] : `#${valMap['u']}`;
-      color = hex.length === 9 ? hex.substring(0, 7) : hex;
+      // Custom color without c;8 prefix
+      const raw = valMap['u'].replace(/^#/, '');
+      color = `#${raw.substring(0, 6)}`;
       colorName = 'Custom';
-    } else {
-      color = '#FFFFFF';
-      colorName = 'White';
     }
 
     // Center Dot
@@ -119,33 +166,40 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
     if (valMap['z'] !== undefined) {
       dotSize = parseFloat(valMap['z']) || 2;
     }
+    // Center Dot Opacity (token 'a')
+    if (valMap['a'] !== undefined) {
+      dotOpacity = parseFloat(valMap['a']);
+      if (isNaN(dotOpacity)) dotOpacity = 1;
+    }
 
     // Outline
     if (valMap['h'] !== undefined) {
-      hasOutline = valMap['h'] === '0';
-    }
-    if (valMap['o'] !== undefined) {
-      const oVal = parseFloat(valMap['o']);
-      if (!isNaN(oVal)) {
-        hasOutline = oVal > 0;
-        outlineOpacity = oVal;
-      }
+      // h=1 means outlines ON, h=0 means outlines OFF
+      hasOutline = valMap['h'] === '1';
     }
     if (valMap['t'] !== undefined) {
       outlineThickness = parseFloat(valMap['t']) || 1;
     }
-    if (valMap['a'] !== undefined) {
-      outlineOpacity = parseFloat(valMap['a']) || outlineOpacity;
+    if (valMap['o'] !== undefined) {
+      const oVal = parseFloat(valMap['o']);
+      if (!isNaN(oVal)) {
+        outlineOpacity = oVal;
+      }
     }
 
     // Inner lines
     if (valMap['0b'] !== undefined) {
       innerShow = valMap['0b'] === '1';
-    } else {
-      innerShow = true;
     }
     if (valMap['0l'] !== undefined) {
       innerLength = parseFloat(valMap['0l']) || 0;
+      innerVerticalLength = innerLength; // default vertical = horizontal
+    }
+    if (valMap['0g'] !== undefined) {
+      innerIndependent = valMap['0g'] === '1';
+    }
+    if (valMap['0v'] !== undefined && innerIndependent) {
+      innerVerticalLength = parseFloat(valMap['0v']) || 0;
     }
     if (valMap['0t'] !== undefined) {
       innerThickness = parseFloat(valMap['0t']) || 1;
@@ -154,7 +208,8 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
       innerOffset = parseFloat(valMap['0o']) || 0;
     }
     if (valMap['0a'] !== undefined) {
-      innerOpacity = parseFloat(valMap['0a']) || 1;
+      innerOpacity = parseFloat(valMap['0a']);
+      if (isNaN(innerOpacity)) innerOpacity = 1;
     }
     if (valMap['0m'] !== undefined) innerMovementError = valMap['0m'] === '1';
     if (valMap['0f'] !== undefined) innerFiringError = valMap['0f'] === '1';
@@ -162,26 +217,26 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
     // Outer lines
     if (valMap['1b'] !== undefined) {
       outerShow = valMap['1b'] === '1';
-    } else if (valMap['1l'] !== undefined || valMap['1t'] !== undefined || valMap['1o'] !== undefined) {
-      outerShow = true;
     }
     if (valMap['1l'] !== undefined) {
       outerLength = parseFloat(valMap['1l']) || 0;
-    } else if (outerShow) {
-      outerLength = 2;
+      outerVerticalLength = outerLength;
+    }
+    if (valMap['1g'] !== undefined) {
+      outerIndependent = valMap['1g'] === '1';
+    }
+    if (valMap['1v'] !== undefined && outerIndependent) {
+      outerVerticalLength = parseFloat(valMap['1v']) || 0;
     }
     if (valMap['1t'] !== undefined) {
       outerThickness = parseFloat(valMap['1t']) || 1;
-    } else if (outerShow) {
-      outerThickness = 1;
     }
     if (valMap['1o'] !== undefined) {
       outerOffset = parseFloat(valMap['1o']) || 0;
-    } else if (outerShow) {
-      outerOffset = 3;
     }
     if (valMap['1a'] !== undefined) {
-      outerOpacity = parseFloat(valMap['1a']) || 1;
+      outerOpacity = parseFloat(valMap['1a']);
+      if (isNaN(outerOpacity)) outerOpacity = 1;
     }
     if (valMap['1m'] !== undefined) outerMovementError = valMap['1m'] === '1';
     if (valMap['1f'] !== undefined) outerFiringError = valMap['1f'] === '1';
@@ -205,6 +260,13 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
       hasCenterDot = false;
     } else if (dotStr.includes('on') || dotStr === '1' || dotStr === 'true') {
       hasCenterDot = true;
+      const parts = dotStr.split(/[\/, ]+/).map(n => parseFloat(n)).filter(n => !isNaN(n));
+      if (parts.length >= 2) {
+        dotOpacity = parts[0];
+        dotSize = parts[1];
+      } else if (parts.length === 1) {
+        dotSize = parts[0];
+      }
     }
   }
 
@@ -214,6 +276,13 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
       hasOutline = false;
     } else if (outlineStr.includes('on') || outlineStr === '1' || outlineStr === 'true') {
       hasOutline = true;
+      const parts = outlineStr.split(/[\/, ]+/).map(n => parseFloat(n)).filter(n => !isNaN(n));
+      if (parts.length >= 2) {
+        outlineOpacity = parts[0];
+        outlineThickness = parts[1];
+      } else if (parts.length === 1) {
+        outlineOpacity = parts[0];
+      }
     }
   }
 
@@ -265,16 +334,32 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
     if (!isNaN(t) && t > 0) innerThickness = t;
   }
 
+  if (settings?.inner_movement_error !== undefined && settings.inner_movement_error !== null) {
+    innerMovementError = Boolean(settings.inner_movement_error);
+  }
+  if (settings?.inner_firing_error !== undefined && settings.inner_firing_error !== null) {
+    innerFiringError = Boolean(settings.inner_firing_error);
+  }
+  if (settings?.outer_movement_error !== undefined && settings.outer_movement_error !== null) {
+    outerMovementError = Boolean(settings.outer_movement_error);
+  }
+  if (settings?.outer_firing_error !== undefined && settings.outer_firing_error !== null) {
+    outerFiringError = Boolean(settings.outer_firing_error);
+  }
+
   return {
     color,
     colorName,
     hasCenterDot,
     dotSize,
+    dotOpacity,
     hasOutline,
     outlineThickness,
     outlineOpacity,
     innerShow,
     innerLength,
+    innerVerticalLength,
+    innerIndependent,
     innerThickness,
     innerOffset,
     innerOpacity,
@@ -282,6 +367,8 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
     innerFiringError,
     outerShow,
     outerLength,
+    outerVerticalLength,
+    outerIndependent,
     outerThickness,
     outerOffset,
     outerOpacity,
@@ -306,8 +393,8 @@ export function parseValorantCrosshairToFields(code: string) {
 
   let dotStr = 'Off';
   if (parsed.hasCenterDot) {
-    if (parsed.dotSize !== 2) {
-      dotStr = `On / 1 / ${parsed.dotSize}`;
+    if (parsed.dotSize !== 2 || parsed.dotOpacity !== 1) {
+      dotStr = `On / ${parsed.dotOpacity} / ${parsed.dotSize}`;
     } else {
       dotStr = 'On';
     }
@@ -319,7 +406,11 @@ export function parseValorantCrosshairToFields(code: string) {
     crosshair_dot: dotStr,
     crosshair_inner: parsed.innerShow ? `${parsed.innerOpacity} / ${parsed.innerLength} / ${parsed.innerThickness} / ${parsed.innerOffset}` : 'Off',
     crosshair_outer: parsed.outerShow ? `${parsed.outerOpacity} / ${parsed.outerLength} / ${parsed.outerThickness} / ${parsed.outerOffset}` : 'Off',
-    crosshair_thickness: String(parsed.innerThickness)
+    crosshair_thickness: String(parsed.innerThickness),
+    inner_movement_error: parsed.innerMovementError,
+    inner_firing_error: parsed.innerFiringError,
+    outer_movement_error: parsed.outerMovementError,
+    outer_firing_error: parsed.outerFiringError,
   };
 }
 
@@ -338,38 +429,49 @@ export function getCrosshairExportCode(settings?: CrosshairSettings | null): str
   let cIndex = '0';
   const cLower = parsed.colorName.toLowerCase();
   if (cLower.includes('white')) cIndex = '0';
+  else if (cLower.includes('yellow green')) cIndex = '2';
+  else if (cLower.includes('green yellow')) cIndex = '3';
   else if (cLower.includes('green')) cIndex = '1';
   else if (cLower.includes('yellow')) cIndex = '4';
   else if (cLower.includes('cyan')) cIndex = '5';
   else if (cLower.includes('pink') || cLower.includes('magenta')) cIndex = '6';
   else if (cLower.includes('red')) cIndex = '7';
+  else if (cLower.includes('custom')) cIndex = '8';
 
-  const codeParts = [
-    '0', 'P',
-    'c', cIndex,
-    'h', '0',
-    'f', '0',
-    'o', parsed.hasOutline ? '1' : '0',
-    'd', parsed.hasCenterDot ? '1' : '0'
-  ];
+  const codeParts: string[] = ['0', 'P', 'c', cIndex];
 
+  if (cIndex === '8' && parsed.color) {
+    const hexClean = parsed.color.replace(/^#/, '').toUpperCase();
+    codeParts.push('u', `${hexClean}FF`);
+  }
+
+  codeParts.push('h', parsed.hasOutline ? '1' : '0');
   if (parsed.hasOutline) {
     codeParts.push('t', String(parsed.outlineThickness));
     codeParts.push('o', String(parsed.outlineOpacity));
   }
 
+  codeParts.push('d', parsed.hasCenterDot ? '1' : '0');
   if (parsed.hasCenterDot) {
     codeParts.push('z', String(parsed.dotSize));
+    if (parsed.dotOpacity !== 1) {
+      codeParts.push('a', String(parsed.dotOpacity));
+    }
   }
 
   if (parsed.innerShow) {
     codeParts.push(
+      '0b', '1',
       '0t', String(parsed.innerThickness),
       '0l', String(parsed.innerLength),
       '0o', String(parsed.innerOffset),
-      '0a', String(parsed.innerOpacity || 1),
-      '0f', '0'
+      '0a', String(parsed.innerOpacity)
     );
+    if (parsed.innerIndependent && parsed.innerVerticalLength !== parsed.innerLength) {
+      codeParts.push('0g', '1', '0v', String(parsed.innerVerticalLength));
+    }
+    codeParts.push('0m', parsed.innerMovementError ? '1' : '0');
+    codeParts.push('0f', parsed.innerFiringError ? '1' : '0');
   } else {
     codeParts.push('0b', '0');
   }
@@ -380,8 +482,13 @@ export function getCrosshairExportCode(settings?: CrosshairSettings | null): str
       '1t', String(parsed.outerThickness),
       '1l', String(parsed.outerLength),
       '1o', String(parsed.outerOffset),
-      '1a', String(parsed.outerOpacity || 1)
+      '1a', String(parsed.outerOpacity)
     );
+    if (parsed.outerIndependent && parsed.outerVerticalLength !== parsed.outerLength) {
+      codeParts.push('1g', '1', '1v', String(parsed.outerVerticalLength));
+    }
+    codeParts.push('1m', parsed.outerMovementError ? '1' : '0');
+    codeParts.push('1f', parsed.outerFiringError ? '1' : '0');
   } else {
     codeParts.push('1b', '0');
   }
@@ -396,8 +503,8 @@ export default function CrosshairPreview({
   onIndexChange,
   isValorant = true
 }: Props) {
-  const [zoom, setZoom] = useState<number>(1);
-  const [bgType, setBgType] = useState<'ascent' | 'grid'>('ascent');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const activeSettings = crosshairs && crosshairs.length > 0 ? crosshairs[currentIndex] : settings;
   const parsed = parseCrosshairDetails(activeSettings);
@@ -415,149 +522,244 @@ export default function CrosshairPreview({
     onIndexChange((currentIndex + 1) % crosshairs.length);
   };
 
-  // Helper to render a rectangle with solid 1px black outline backing
-  const renderLineWithOutline = (x: number, y: number, w: number, h: number, key: string) => {
-    const ot = parsed.outlineThickness || 1;
-    return (
-      <React.Fragment key={key}>
-        {parsed.hasOutline && (
-          <rect
-            x={x - ot}
-            y={y - ot}
-            width={w + 2 * ot}
-            height={h + 2 * ot}
-            fill="#000000"
-            opacity={parsed.outlineOpacity}
-          />
-        )}
-        <rect
-          x={x}
-          y={y}
-          width={w}
-          height={h}
-          fill={parsed.color}
-        />
-      </React.Fragment>
-    );
-  };
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const render = () => {
+      const rect = container.getBoundingClientRect();
+      const width = Math.floor(rect.width);
+      const height = Math.floor(rect.height);
+
+      if (width <= 0 || height <= 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.imageSmoothingEnabled = false;
+
+      // Clear Canvas
+      ctx.clearRect(0, 0, width, height);
+
+      // Center coordinates (at screen center seam)
+      const cx = Math.floor(width / 2);
+      const cy = Math.floor(height / 2);
+
+      // True 1:1 In-Game Pixel Scale (1 unit in Valorant = 1 physical screen pixel)
+      // Exactly matches the actual physical size seen on your monitor in Valorant
+      const scale = 1;
+
+      type Rect = { x: number; y: number; w: number; h: number };
+
+      const outlineRects: Rect[] = [];
+      const innerRects: Rect[] = [];
+      const outerRects: Rect[] = [];
+      let dotRect: Rect | null = null;
+
+      const ot = parsed.hasOutline ? (parsed.outlineThickness || 1) : 0;
+
+      // 1. Center Dot
+      if (parsed.hasCenterDot && parsed.dotSize > 0) {
+        const halfZ = Math.floor(parsed.dotSize / 2);
+        dotRect = {
+          x: cx - halfZ * scale,
+          y: cy - halfZ * scale,
+          w: parsed.dotSize * scale,
+          h: parsed.dotSize * scale
+        };
+        if (ot > 0) {
+          outlineRects.push({
+            x: dotRect.x - ot * scale,
+            y: dotRect.y - ot * scale,
+            w: dotRect.w + 2 * ot * scale,
+            h: dotRect.h + 2 * ot * scale
+          });
+        }
+      }
+
+      // 2. Inner Lines
+      if (parsed.innerShow && (parsed.innerLength > 0 || (parsed.innerIndependent && parsed.innerVerticalLength > 0))) {
+        const halfT = Math.floor(parsed.innerThickness / 2);
+        const tScaled = parsed.innerThickness * scale;
+        const hLenScaled = parsed.innerLength * scale;
+        const vLenScaled = (parsed.innerIndependent ? parsed.innerVerticalLength : parsed.innerLength) * scale;
+        const offsetScaled = parsed.innerOffset * scale;
+
+        // Right
+        if (parsed.innerLength > 0) {
+          innerRects.push({
+            x: cx + offsetScaled,
+            y: cy - halfT * scale,
+            w: hLenScaled,
+            h: tScaled
+          });
+          // Left
+          innerRects.push({
+            x: cx - offsetScaled - hLenScaled,
+            y: cy - halfT * scale,
+            w: hLenScaled,
+            h: tScaled
+          });
+        }
+
+        // Bottom
+        if (vLenScaled > 0) {
+          innerRects.push({
+            x: cx - halfT * scale,
+            y: cy + offsetScaled,
+            w: tScaled,
+            h: vLenScaled
+          });
+          // Top
+          innerRects.push({
+            x: cx - halfT * scale,
+            y: cy - offsetScaled - vLenScaled,
+            w: tScaled,
+            h: vLenScaled
+          });
+        }
+      }
+
+      // 3. Outer Lines
+      if (parsed.outerShow && (parsed.outerLength > 0 || (parsed.outerIndependent && parsed.outerVerticalLength > 0))) {
+        const halfT = Math.floor(parsed.outerThickness / 2);
+        const tScaled = parsed.outerThickness * scale;
+        const hLenScaled = parsed.outerLength * scale;
+        const vLenScaled = (parsed.outerIndependent ? parsed.outerVerticalLength : parsed.outerLength) * scale;
+        const offsetScaled = parsed.outerOffset * scale;
+
+        // Right
+        if (parsed.outerLength > 0) {
+          outerRects.push({
+            x: cx + offsetScaled,
+            y: cy - halfT * scale,
+            w: hLenScaled,
+            h: tScaled
+          });
+          // Left
+          outerRects.push({
+            x: cx - offsetScaled - hLenScaled,
+            y: cy - halfT * scale,
+            w: hLenScaled,
+            h: tScaled
+          });
+        }
+
+        // Bottom
+        if (vLenScaled > 0) {
+          outerRects.push({
+            x: cx - halfT * scale,
+            y: cy + offsetScaled,
+            w: tScaled,
+            h: vLenScaled
+          });
+          // Top
+          outerRects.push({
+            x: cx - halfT * scale,
+            y: cy - offsetScaled - vLenScaled,
+            w: tScaled,
+            h: vLenScaled
+          });
+        }
+      }
+
+      // Collect line outlines
+      if (ot > 0) {
+        for (const r of outerRects) {
+          outlineRects.push({
+            x: r.x - ot * scale,
+            y: r.y - ot * scale,
+            w: r.w + 2 * ot * scale,
+            h: r.h + 2 * ot * scale
+          });
+        }
+        for (const r of innerRects) {
+          outlineRects.push({
+            x: r.x - ot * scale,
+            y: r.y - ot * scale,
+            w: r.w + 2 * ot * scale,
+            h: r.h + 2 * ot * scale
+          });
+        }
+      }
+
+      // DRAW ORDER:
+      // Layer 1: Outlines (Pure Black, independent outlineOpacity, crisp integer coords)
+      if (parsed.hasOutline && outlineRects.length > 0) {
+        ctx.fillStyle = '#000000';
+        ctx.globalAlpha = Math.max(0, Math.min(1, parsed.outlineOpacity ?? 1));
+        for (const r of outlineRects) {
+          ctx.fillRect(Math.round(r.x), Math.round(r.y), Math.round(r.w), Math.round(r.h));
+        }
+      }
+
+      // Layer 2: Outer Lines (Line color, outerOpacity)
+      if (outerRects.length > 0) {
+        ctx.fillStyle = parsed.color;
+        ctx.globalAlpha = Math.max(0, Math.min(1, parsed.outerOpacity ?? 1));
+        for (const r of outerRects) {
+          ctx.fillRect(Math.round(r.x), Math.round(r.y), Math.round(r.w), Math.round(r.h));
+        }
+      }
+
+      // Layer 3: Inner Lines (Line color, innerOpacity)
+      if (innerRects.length > 0) {
+        ctx.fillStyle = parsed.color;
+        ctx.globalAlpha = Math.max(0, Math.min(1, parsed.innerOpacity ?? 1));
+        for (const r of innerRects) {
+          ctx.fillRect(Math.round(r.x), Math.round(r.y), Math.round(r.w), Math.round(r.h));
+        }
+      }
+
+      // Layer 4: Center Dot (Line color, dotOpacity)
+      if (dotRect) {
+        ctx.fillStyle = parsed.color;
+        ctx.globalAlpha = Math.max(0, Math.min(1, parsed.dotOpacity ?? 1));
+        ctx.fillRect(Math.round(dotRect.x), Math.round(dotRect.y), Math.round(dotRect.w), Math.round(dotRect.h));
+      }
+
+      ctx.restore();
+    };
+
+    render();
+
+    const ro = new ResizeObserver(() => render());
+    ro.observe(container);
+    return () => ro.disconnect();
+  }, [parsed]);
 
   return (
-    <div className="relative border border-border-custom rounded-xl overflow-hidden mb-4 select-none group" style={{ aspectRatio: '16/9' }}>
-      {/* Background Mode: Ascent Stone Wall Image OR Dark Grid */}
-      {bgType === 'ascent' ? (
-        <div className="absolute inset-0 bg-[#3a3a4e] overflow-hidden">
-          <img
-            src="/images/crosshair-bg-ascent.png"
-            alt="Valorant Ascent Background"
-            className="w-full h-full object-cover object-center select-none pointer-events-none"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/15 pointer-events-none" />
-        </div>
-      ) : (
-        <div className="absolute inset-0 bg-[#0d0d14]">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:16px_16px]" />
-        </div>
-      )}
-
-      {/* Target Aim Simulation (True 1:1 Pixel SVG Renderer) */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <svg
-          viewBox="-160 -90 320 180"
-          className="w-full h-full"
-          style={{ transform: `scale(${zoom})`, transformOrigin: 'center center' }}
-          shapeRendering="crispEdges"
-        >
-          {/* Center Dot */}
-          {parsed.hasCenterDot && renderLineWithOutline(
-            -parsed.dotSize / 2,
-            -parsed.dotSize / 2,
-            parsed.dotSize,
-            parsed.dotSize,
-            'dot'
-          )}
-
-          {/* Inner Lines */}
-          {parsed.innerShow && parsed.innerLength > 0 && (
-            <g opacity={parsed.innerOpacity}>
-              {/* Top Line */}
-              {renderLineWithOutline(
-                -parsed.innerThickness / 2,
-                -(parsed.innerOffset + parsed.innerLength),
-                parsed.innerThickness,
-                parsed.innerLength,
-                'in-top'
-              )}
-              {/* Bottom Line */}
-              {renderLineWithOutline(
-                -parsed.innerThickness / 2,
-                parsed.innerOffset,
-                parsed.innerThickness,
-                parsed.innerLength,
-                'in-bot'
-              )}
-              {/* Left Line */}
-              {renderLineWithOutline(
-                -(parsed.innerOffset + parsed.innerLength),
-                -parsed.innerThickness / 2,
-                parsed.innerLength,
-                parsed.innerThickness,
-                'in-left'
-              )}
-              {/* Right Line */}
-              {renderLineWithOutline(
-                parsed.innerOffset,
-                -parsed.innerThickness / 2,
-                parsed.innerLength,
-                parsed.innerThickness,
-                'in-right'
-              )}
-            </g>
-          )}
-
-          {/* Outer Lines */}
-          {parsed.outerShow && parsed.outerLength > 0 && (
-            <g opacity={parsed.outerOpacity}>
-              {/* Top Outer */}
-              {renderLineWithOutline(
-                -parsed.outerThickness / 2,
-                -(parsed.outerOffset + parsed.outerLength),
-                parsed.outerThickness,
-                parsed.outerLength,
-                'out-top'
-              )}
-              {/* Bottom Outer */}
-              {renderLineWithOutline(
-                -parsed.outerThickness / 2,
-                parsed.outerOffset,
-                parsed.outerThickness,
-                parsed.outerLength,
-                'out-bot'
-              )}
-              {/* Left Outer */}
-              {renderLineWithOutline(
-                -(parsed.outerOffset + parsed.outerLength),
-                -parsed.outerThickness / 2,
-                parsed.outerLength,
-                parsed.outerThickness,
-                'out-left'
-              )}
-              {/* Right Outer */}
-              {renderLineWithOutline(
-                parsed.outerOffset,
-                -parsed.outerThickness / 2,
-                parsed.outerLength,
-                parsed.outerThickness,
-                'out-right'
-              )}
-            </g>
-          )}
-        </svg>
+    <div
+      ref={containerRef}
+      className="relative border border-border-custom rounded-xl overflow-hidden mb-4 select-none group bg-[#0A0D14] flex items-center justify-center shadow-inner"
+      style={{ aspectRatio: '16/9' }}
+    >
+      {/* Subtle center cross alignment guides for technical aesthetic */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-white/[0.04]" />
+        <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/[0.04]" />
       </div>
+
+      {/* Pixel-Perfect HTML5 Canvas Crosshair */}
+      <canvas
+        ref={canvasRef}
+        className="block pointer-events-none"
+      />
 
       {/* Navigation Arrows for Multiple Crosshairs */}
       {hasMultiple && (
         <>
           <button
+            type="button"
             onClick={handlePrev}
             className="absolute left-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 border border-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all cursor-pointer z-20 shadow-md"
             title="Previous crosshair"
@@ -567,6 +769,7 @@ export default function CrosshairPreview({
             </svg>
           </button>
           <button
+            type="button"
             onClick={handleNext}
             className="absolute right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 border border-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all cursor-pointer z-20 shadow-md"
             title="Next crosshair"
@@ -583,27 +786,6 @@ export default function CrosshairPreview({
           </div>
         </>
       )}
-
-      {/* Top Overlay Controls: Zoom */}
-      <div className="absolute top-2.5 right-2.5 flex items-center gap-1 z-20 bg-black/60 backdrop-blur-sm rounded-lg p-0.5 border border-white/10">
-        <button
-          onClick={() => setZoom(prev => Math.max(1, prev - 1))}
-          className="w-5 h-5 rounded bg-white/5 hover:bg-white/15 text-[10px] font-mono text-zinc-300 hover:text-white transition-all cursor-pointer flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none"
-          title="Zoom Out"
-          disabled={zoom <= 1}
-        >
-          -
-        </button>
-        <span className="text-[9px] font-mono text-zinc-300 px-1.5">{zoom.toFixed(1)}x</span>
-        <button
-          onClick={() => setZoom(prev => Math.min(4, prev + 1))}
-          className="w-5 h-5 rounded bg-white/5 hover:bg-white/15 text-[10px] font-mono text-zinc-300 hover:text-white transition-all cursor-pointer flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none"
-          title="Zoom In"
-          disabled={zoom >= 4}
-        >
-          +
-        </button>
-      </div>
     </div>
   );
 }

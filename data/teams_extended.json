@@ -867,7 +867,7 @@
   },
   "Falcons Vega": {
     "name": "Falcons Vega",
-    "logo_url": "",
+    "logo_url": "/images/teams/team_falcons_2022_allmode_1789836706291.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -1257,15 +1257,6 @@
   },
   "MOUZ": {
     "name": "MOUZ",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Falcons Esports": {
-    "name": "Falcons Esports",
     "logo_url": "",
     "description": "",
     "games": [
@@ -2380,15 +2371,6 @@
     ],
     "region": ""
   },
-  "Falcons Force": {
-    "name": "Falcons Force",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
   "NIP Impact": {
     "name": "NIP Impact",
     "logo_url": "",
@@ -2788,6 +2770,16 @@
     "description": "",
     "games": [
       "cs2"
+    ],
+    "region": "EU"
+  },
+  "Team Falcons": {
+    "name": "Team Falcons",
+    "logo_url": "/images/teams/team_falcons_2022_allmode_1789836673051.png",
+    "description": "",
+    "games": [
+      "cs2",
+      "CS2"
     ],
     "region": "EU"
   }

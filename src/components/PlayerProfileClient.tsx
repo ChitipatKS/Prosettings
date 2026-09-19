@@ -8,6 +8,12 @@ import ProfileSidebar from '@/components/ProfileSidebar';
 import CopyButton from '@/components/CopyButton';
 import TeamLogoImg from '@/components/TeamLogoImg';
 import CrosshairPreview, { getCrosshairExportCode, parseCrosshairDetails } from '@/components/CrosshairPreview';
+import CS2CrosshairPreview, {
+  parseCS2CrosshairDetails,
+  getCS2ConsoleCommandsString,
+  CS2_COLOR_PRESETS,
+  CS2_STYLES
+} from '@/components/CS2CrosshairPreview';
 
 type Product = {
   id: number;
@@ -177,6 +183,7 @@ export default function PlayerProfileClient({
   const activeSettings = settingsData.find(s => s.games?.id === selectedGameId) || settingsData[0] || null;
   const settingsJson = activeSettings?.settings_data || {};
   const isValorant = activeSettings?.games?.slug === 'valorant';
+  const isCS2 = activeSettings?.games?.slug === 'cs2' || activeSettings?.games?.slug === 'csgo';
 
   // Multiple Crosshairs extraction
   const crosshairsList = Array.isArray(settingsJson.crosshairs) && settingsJson.crosshairs.length > 0
@@ -196,7 +203,10 @@ export default function PlayerProfileClient({
 
   const currentCrosshair = crosshairsList[activeCrosshairIndex] || crosshairsList[0];
   const parsedCurrentCrosshair = parseCrosshairDetails(currentCrosshair);
-  const currentCrosshairCode = getCrosshairExportCode(currentCrosshair);
+  const parsedCsCurrentCrosshair = parseCS2CrosshairDetails(currentCrosshair);
+  const currentCrosshairCode = isCS2
+    ? (currentCrosshair.crosshair_code || parsedCsCurrentCrosshair.crosshair_code)
+    : getCrosshairExportCode(currentCrosshair);
 
   const displayAspect = activeSettings?.aspect_ratio || getAspectRatio(activeSettings?.resolution);
   const displayRefresh = activeSettings?.refresh_rate
@@ -405,63 +415,122 @@ export default function PlayerProfileClient({
                 />
 
                 {/* Dynamic Crosshair preview area */}
-                <CrosshairPreview
-                  settings={currentCrosshair}
-                  crosshairs={crosshairsList}
-                  currentIndex={activeCrosshairIndex}
-                  onIndexChange={setActiveCrosshairIndex}
-                  isValorant={isValorant}
-                />
+                {isCS2 ? (
+                  <CS2CrosshairPreview
+                    settings={currentCrosshair}
+                    crosshairs={crosshairsList}
+                    currentIndex={activeCrosshairIndex}
+                    onIndexChange={setActiveCrosshairIndex}
+                  />
+                ) : (
+                  <CrosshairPreview
+                    settings={currentCrosshair}
+                    crosshairs={crosshairsList}
+                    currentIndex={activeCrosshairIndex}
+                    onIndexChange={setActiveCrosshairIndex}
+                    isValorant={isValorant}
+                  />
+                )}
 
                 {/* Crosshair Settings */}
-                <div className="space-y-1 mb-3">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
-                      {currentCrosshair.name || "Crosshair Settings"}
-                    </p>
-                    {crosshairsList.length > 1 && (
-                      <span className="text-[9px] font-mono text-zinc-500 bg-white/[0.04] px-2 py-0.5 rounded-full border border-white/5">
-                        {activeCrosshairIndex + 1} of {crosshairsList.length}
-                      </span>
-                    )}
+                {isCS2 ? (
+                  <div className="space-y-1 mb-3">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 border-l-2 border-amber-400 pl-2 font-sans">
+                        {currentCrosshair.name || "CS2 Crosshair Settings"}
+                      </p>
+                      {crosshairsList.length > 1 && (
+                        <span className="text-[9px] font-mono text-zinc-500 bg-white/[0.04] px-2 py-0.5 rounded-full border border-white/5">
+                          {activeCrosshairIndex + 1} of {crosshairsList.length}
+                        </span>
+                      )}
+                    </div>
+                    <SettingRow label="Style" value={CS2_STYLES[parsedCsCurrentCrosshair.style] || `Style ${parsedCsCurrentCrosshair.style}`} />
+                    <SettingRow label="Size" value={parsedCsCurrentCrosshair.size} />
+                    <SettingRow label="Gap" value={parsedCsCurrentCrosshair.gap} />
+                    <SettingRow label="Thickness" value={parsedCsCurrentCrosshair.thickness} />
+                    <SettingRow label="Center Dot" value={parsedCsCurrentCrosshair.dot ? "On" : "Off"} />
+                    <SettingRow
+                      label="Outline"
+                      value={
+                        parsedCsCurrentCrosshair.outline
+                          ? (parsedCsCurrentCrosshair.outline_thickness > 1
+                              ? `On (${parsedCsCurrentCrosshair.outline_thickness})`
+                              : "On")
+                          : "Off"
+                      }
+                    />
+                    <SettingRow label="T-Style" value={parsedCsCurrentCrosshair.t_style ? "On" : "Off"} />
+                    <SettingRow label="Follow Recoil" value={parsedCsCurrentCrosshair.recoil ? "On" : "Off"} />
+                    <SettingRow label="Color" value={parsedCsCurrentCrosshair.color === 5 ? "Custom RGB" : (CS2_COLOR_PRESETS[parsedCsCurrentCrosshair.color]?.name || "Green")} />
                   </div>
-                  <SettingRow
-                    label="Inner Lines"
-                    value={
-                      parsedCurrentCrosshair.innerShow
-                        ? `${parsedCurrentCrosshair.innerOpacity} / ${parsedCurrentCrosshair.innerLength} / ${parsedCurrentCrosshair.innerThickness} / ${parsedCurrentCrosshair.innerOffset}`
-                        : "Off"
-                    }
-                  />
-                  <SettingRow
-                    label="Outer Lines"
-                    value={
-                      parsedCurrentCrosshair.outerShow
-                        ? `${parsedCurrentCrosshair.outerOpacity} / ${parsedCurrentCrosshair.outerLength} / ${parsedCurrentCrosshair.outerThickness} / ${parsedCurrentCrosshair.outerOffset}`
-                        : "Off"
-                    }
-                  />
-                  <SettingRow label="Center Dot" value={parsedCurrentCrosshair.hasCenterDot ? (parsedCurrentCrosshair.dotSize > 1 ? `On (${parsedCurrentCrosshair.dotSize})` : "On") : "Off"} />
-                  <SettingRow label="Thickness" value={parsedCurrentCrosshair.innerThickness} />
-                  <SettingRow
-                    label="Outline"
-                    value={
-                      parsedCurrentCrosshair.hasOutline
-                        ? (parsedCurrentCrosshair.outlineOpacity !== 1 || parsedCurrentCrosshair.outlineThickness !== 1
-                            ? `On (${parsedCurrentCrosshair.outlineOpacity} / ${parsedCurrentCrosshair.outlineThickness})`
-                            : "On")
-                        : "Off"
-                    }
-                  />
-                  <SettingRow label="Color" value={parsedCurrentCrosshair.colorName} />
-                </div>
+                ) : (
+                  <div className="space-y-1 mb-3">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                        {currentCrosshair.name || "Crosshair Settings"}
+                      </p>
+                      {crosshairsList.length > 1 && (
+                        <span className="text-[9px] font-mono text-zinc-500 bg-white/[0.04] px-2 py-0.5 rounded-full border border-white/5">
+                          {activeCrosshairIndex + 1} of {crosshairsList.length}
+                        </span>
+                      )}
+                    </div>
+                    <SettingRow
+                      label="Inner Lines"
+                      value={
+                        parsedCurrentCrosshair.innerShow
+                          ? `${parsedCurrentCrosshair.innerOpacity} / ${parsedCurrentCrosshair.innerLength} / ${parsedCurrentCrosshair.innerThickness} / ${parsedCurrentCrosshair.innerOffset}`
+                          : "Off"
+                      }
+                    />
+                    <SettingRow
+                      label="Outer Lines"
+                      value={
+                        parsedCurrentCrosshair.outerShow
+                          ? `${parsedCurrentCrosshair.outerOpacity} / ${parsedCurrentCrosshair.outerLength} / ${parsedCurrentCrosshair.outerThickness} / ${parsedCurrentCrosshair.outerOffset}`
+                          : "Off"
+                      }
+                    />
+                    <SettingRow label="Center Dot" value={parsedCurrentCrosshair.hasCenterDot ? (parsedCurrentCrosshair.dotSize > 1 ? `On (${parsedCurrentCrosshair.dotSize})` : "On") : "Off"} />
+                    <SettingRow label="Thickness" value={parsedCurrentCrosshair.innerThickness} />
+                    <SettingRow
+                      label="Outline"
+                      value={
+                        parsedCurrentCrosshair.hasOutline
+                          ? (parsedCurrentCrosshair.outlineOpacity !== 1 || parsedCurrentCrosshair.outlineThickness !== 1
+                              ? `On (${parsedCurrentCrosshair.outlineOpacity} / ${parsedCurrentCrosshair.outlineThickness})`
+                              : "On")
+                          : "Off"
+                      }
+                    />
+                    <SettingRow label="Color" value={parsedCurrentCrosshair.colorName} />
+                  </div>
+                )}
 
-                <CopyButton 
-                  textToCopy={currentCrosshairCode} 
-                  label="Copy Crosshair Code" 
-                  successLabel="Crosshair Code Copied!"
-                  className="w-full text-[10px] font-bold py-2.5 px-4 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
-                />
+                {isCS2 ? (
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <CopyButton 
+                      textToCopy={currentCrosshairCode} 
+                      label="Copy Share Code" 
+                      successLabel="Share Code Copied!"
+                      className="flex-1 text-[10px] font-bold py-2.5 px-4 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
+                    />
+                    <CopyButton 
+                      textToCopy={getCS2ConsoleCommandsString(currentCrosshair)} 
+                      label="Copy Commands" 
+                      successLabel="Commands Copied!"
+                      className="flex-1 text-[10px] font-bold py-2.5 px-4 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-white border border-amber-500/20 hover:border-amber-500/30 transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
+                    />
+                  </div>
+                ) : (
+                  <CopyButton 
+                    textToCopy={currentCrosshairCode} 
+                    label="Copy Crosshair Code" 
+                    successLabel="Crosshair Code Copied!"
+                    className="w-full text-[10px] font-bold py-2.5 px-4 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
+                  />
+                )}
               </div>
 
               {/* MAP SETTINGS */}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
 
 export default function Navbar() {
@@ -13,6 +13,8 @@ export default function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
+
     const checkAdminStatus = async (userId: string) => {
       try {
         const { data: profile } = await supabase
