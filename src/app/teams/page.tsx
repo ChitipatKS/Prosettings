@@ -71,9 +71,15 @@ function TeamsContent() {
         if (res.ok) {
           const data = await res.json();
           // Filter to make sure it's an exact match or closely matching team field
-          const players = (data.players || []).filter((p: Player) => 
-            p.team?.toLowerCase() === selectedTeam.toLowerCase()
-          );
+          const players = (data.players || [])
+            .filter((p: any) => p.team?.toLowerCase() === selectedTeam.toLowerCase())
+            .map((p: any) => ({
+              ...p,
+              game: p.game || p.games?.[0]?.name || '',
+              game_slug: p.game_slug || p.games?.[0]?.slug || '',
+              game_role: p.game_role || p.games?.[0]?.role || null,
+              mouse_settings: p.mouse_settings || p.games?.[0]?.mouse_settings || { dpi: null, sens: null }
+            }));
           setAllTeamPlayers(players);
         }
       } catch (err) {
@@ -89,14 +95,25 @@ function TeamsContent() {
   // Extract available games dynamically for the selected team
   const availableGames = Array.from(
     new Map(
-      allTeamPlayers.map((p) => [p.game_slug, { slug: p.game_slug, name: p.game }])
+      allTeamPlayers
+        .flatMap((p: any) =>
+          p.games && p.games.length > 0
+            ? p.games.map((g: any) => [g.slug, { slug: g.slug, name: g.name }])
+            : [[p.game_slug, { slug: p.game_slug, name: p.game }]]
+        )
+        .filter(([slug]: any) => Boolean(slug))
     ).values()
-  );
+  ) as Array<{ slug: string; name: string }>;
 
   // Auto fallback activeGameFilter to 'all' if selected game doesn't exist in team
   useEffect(() => {
     if (activeGameFilter !== 'all' && allTeamPlayers.length > 0) {
-      const hasGame = allTeamPlayers.some(p => p.game_slug === activeGameFilter);
+      const hasGame = allTeamPlayers.some((p: any) => {
+        if (p.games && p.games.length > 0) {
+          return p.games.some((g: any) => g.slug === activeGameFilter);
+        }
+        return p.game_slug === activeGameFilter;
+      });
       if (!hasGame) {
         setActiveGameFilter('all');
       }
@@ -104,17 +121,23 @@ function TeamsContent() {
   }, [allTeamPlayers, activeGameFilter]);
 
   // Filter team players based on activeGameFilter
-  const displayedPlayers = activeGameFilter === 'all'
+  const displayedPlayers = (activeGameFilter === 'all' || !activeGameFilter)
     ? allTeamPlayers
-    : allTeamPlayers.filter((p) => p.game_slug === activeGameFilter);
+    : allTeamPlayers.filter((p: any) => {
+        if (p.games && p.games.length > 0) {
+          return p.games.some((g: any) => g.slug?.toLowerCase() === activeGameFilter.toLowerCase());
+        }
+        return p.game_slug?.toLowerCase() === activeGameFilter.toLowerCase();
+      });
 
   const handleGameToggle = (gameSlug: string) => {
-    setActiveGameFilter(gameSlug);
+    const slug = gameSlug || 'all';
+    setActiveGameFilter(slug);
     if (!selectedTeam) return;
     const params = new URLSearchParams();
     params.set('team', selectedTeam);
-    if (gameSlug !== 'all') {
-      params.set('game', gameSlug);
+    if (slug !== 'all') {
+      params.set('game', slug);
     }
     router.push(`/teams?${params.toString()}`);
   };
@@ -215,7 +238,7 @@ function TeamsContent() {
                 <div className="border-b border-white/5 pb-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <span className="text-[10px] font-bold text-accent font-mono uppercase tracking-widest">
-                      {activeGameFilter !== 'all' ? `${activeGameFilter.toUpperCase()} Active Roster` : 'Active Roster'}
+                      {activeGameFilter && activeGameFilter !== 'all' ? `${activeGameFilter.toUpperCase()} Active Roster` : 'Active Roster'}
                     </span>
                     <div className="flex items-center gap-3 mt-1.5">
                       <TeamLogoImg teamName={selectedTeam} className="w-10 h-10 p-1 bg-black/50 border border-border-custom rounded-xl shadow-md" />

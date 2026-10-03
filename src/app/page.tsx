@@ -322,9 +322,9 @@ export default function Home() {
               <div className="shrink-0">
                 <button
                   type="submit"
-                  className="h-14 px-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 hover:scale-[1.02] active:scale-[0.98] text-[#0A0A0F] text-xs font-bold transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_35px_rgba(245,158,11,0.55)] border border-amber-400/20 flex items-center justify-center gap-2 cursor-pointer font-sans uppercase tracking-wider"
+                  className="h-14 px-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 hover:scale-[1.02] active:scale-[0.98] text-[#0A0A0F] text-sm sm:text-base font-bold transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_35px_rgba(245,158,11,0.55)] border border-amber-400/20 flex items-center justify-center gap-2 cursor-pointer font-sans uppercase tracking-wider"
                 >
-                  <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                   Search
@@ -336,7 +336,7 @@ export default function Home() {
           {/* Header Banner */}
           <div id="games" className="text-center max-w-3xl mx-auto space-y-4 pt-8 border-t border-white/5">
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight font-display">
-              Select Your <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">Favorite Game!</span>
+              Select Your Favorite Game!
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400 font-semibold tracking-wide font-sans uppercase">
               From our selection of Popular games

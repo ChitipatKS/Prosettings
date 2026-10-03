@@ -1,25 +1,17 @@
 {
-  "500": {
-    "name": "500",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
   "100 Thieves": {
     "name": "100 Thieves",
     "logo_url": "/images/teams/100t_1788176889548.png",
     "description": "100 Thieves is a premier American lifestyle brand and competitive gaming organization based in Los Angeles, California. It features championship esports teams, high-end streetwear apparel, and digital content creation",
     "games": [
-      "cs2"
+      "CS2",
+      "VALORANT"
     ],
     "region": "EU"
   },
   "Edward Gaming": {
     "name": "Edward Gaming",
-    "logo_url": "",
+    "logo_url": "/images/teams/edg_1789889449831.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -28,7 +20,7 @@
   },
   "Team Heretics": {
     "name": "Team Heretics",
-    "logo_url": "",
+    "logo_url": "/images/teams/th_1789894036600.avif",
     "description": "",
     "games": [
       "VALORANT"
@@ -37,7 +29,7 @@
   },
   "Gen.G": {
     "name": "Gen.G",
-    "logo_url": "",
+    "logo_url": "/images/teams/geng_1789889893951.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -46,7 +38,7 @@
   },
   "Leviatan": {
     "name": "Leviatan",
-    "logo_url": "",
+    "logo_url": "/images/teams/lev_1789890285042.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -55,27 +47,27 @@
   },
   "G2 Esports": {
     "name": "G2 Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/g2_1789897565268.svg",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Fnatic": {
     "name": "Fnatic",
-    "logo_url": "",
+    "logo_url": "/images/teams/fnc_1790354108744.svg",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "EU"
   },
   "DRX": {
     "name": "DRX",
-    "logo_url": "",
+    "logo_url": "/images/teams/krx_profile_english_1789889145783.webp",
     "description": "",
     "games": [
       "VALORANT"
@@ -84,7 +76,7 @@
   },
   "Sentinels": {
     "name": "Sentinels",
-    "logo_url": "",
+    "logo_url": "/images/teams/sen_1789893690069.webp",
     "description": "",
     "games": [
       "VALORANT"
@@ -93,16 +85,7 @@
   },
   "Paper Rex": {
     "name": "Paper Rex",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "G2 Gozen": {
-    "name": "G2 Gozen",
-    "logo_url": "",
+    "logo_url": "/images/teams/prx_1789893248225.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -111,7 +94,7 @@
   },
   "LOUD": {
     "name": "LOUD",
-    "logo_url": "",
+    "logo_url": "/images/teams/loud_1789890323314.webp",
     "description": "",
     "games": [
       "VALORANT"
@@ -120,17 +103,17 @@
   },
   "FUT Esports": {
     "name": "FUT Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/fut_1789897481607.png",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "EU"
   },
   "T1": {
     "name": "T1",
-    "logo_url": "",
+    "logo_url": "/images/teams/t1_1789893897742.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -139,7 +122,7 @@
   },
   "KRÜ Esports": {
     "name": "KRÜ Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/kru_1789890189387.png",
     "description": "",
     "games": [
       "VALORANT",
@@ -149,17 +132,17 @@
   },
   "NRG": {
     "name": "NRG",
-    "logo_url": "",
+    "logo_url": "/images/teams/nrg_1789892268688.webp",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "AM"
   },
   "ZETA DIVISION": {
     "name": "ZETA DIVISION",
-    "logo_url": "",
+    "logo_url": "/images/teams/zeta_1789894832027.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -168,27 +151,27 @@
   },
   "Team Liquid": {
     "name": "Team Liquid",
-    "logo_url": "",
+    "logo_url": "/images/teams/tl_1789894157375.webp",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "AM"
   },
   "MIBR": {
     "name": "MIBR",
-    "logo_url": "",
+    "logo_url": "/images/teams/mibr_1790354914769.png",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "AM"
   },
   "Bilibili Gaming": {
     "name": "Bilibili Gaming",
-    "logo_url": "none",
+    "logo_url": "/images/teams/blg_1789893473225.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -197,7 +180,7 @@
   },
   "Karmine Corp": {
     "name": "Karmine Corp",
-    "logo_url": "",
+    "logo_url": "/images/teams/kc_1789890148590.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -206,7 +189,7 @@
   },
   "FunPlus Phoenix": {
     "name": "FunPlus Phoenix",
-    "logo_url": "",
+    "logo_url": "/images/teams/fpx_1789889867411.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -215,7 +198,7 @@
   },
   "Titan Esports Club": {
     "name": "Titan Esports Club",
-    "logo_url": "",
+    "logo_url": "/images/teams/tec_1789894336069.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -224,37 +207,37 @@
   },
   "Team Vitality": {
     "name": "Team Vitality",
-    "logo_url": "",
+    "logo_url": "/images/teams/vit_1789902051579.png",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Natus Vincere": {
     "name": "Natus Vincere",
-    "logo_url": "",
+    "logo_url": "/images/teams/navi_1789898244631.webp",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "EU"
   },
   "FURIA": {
     "name": "FURIA",
-    "logo_url": "",
+    "logo_url": "/images/teams/furia_1789897459735.jpg",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "AM"
   },
   "Cloud9": {
     "name": "Cloud9",
-    "logo_url": "none",
+    "logo_url": "/images/teams/c9_1789888927245.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -276,7 +259,7 @@
     "logo_url": "/images/teams/9z_1788176990380.png",
     "description": "",
     "games": [
-      "cs2"
+      "CS2"
     ],
     "region": "AM"
   },
@@ -292,25 +275,7 @@
   },
   "S2G": {
     "name": "S2G",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Ovation Esports": {
-    "name": "Ovation Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Velocity Gaming": {
-    "name": "Velocity Gaming",
-    "logo_url": "",
+    "logo_url": "/images/teams/s2g_1790355137566.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -319,53 +284,7 @@
   },
   "Rex Regum Qeon": {
     "name": "Rex Regum Qeon",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "TBK Esports": {
-    "name": "TBK Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "BESTIA": {
-    "name": "BESTIA",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT",
-      "CS2"
-    ],
-    "region": ""
-  },
-  "BOOM Esports": {
-    "name": "BOOM Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "SK Gaming": {
-    "name": "SK Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Barca Esports": {
-    "name": "Barca Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/rrq_1789893549116.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -374,7 +293,7 @@
   },
   "Wolves Esports": {
     "name": "Wolves Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/wolves_1789894867040.webp",
     "description": "",
     "games": [
       "VALORANT"
@@ -383,7 +302,7 @@
   },
   "Sharper Esports": {
     "name": "Sharper Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/sp_1789893821438.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -392,26 +311,17 @@
   },
   "M80": {
     "name": "M80",
-    "logo_url": "",
+    "logo_url": "/images/teams/m80_1790354861088.png",
     "description": "",
     "games": [
-      "VALORANT",
-      "CS2"
-    ],
-    "region": ""
-  },
-  "ALTERNATE aTTaX": {
-    "name": "ALTERNATE aTTaX",
-    "logo_url": "",
-    "description": "",
-    "games": [
+      "CS2",
       "VALORANT"
     ],
-    "region": ""
+    "region": "AM"
   },
   "Mandatory": {
     "name": "Mandatory",
-    "logo_url": "",
+    "logo_url": "/images/teams/mandatory_1789890423146.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -420,7 +330,7 @@
   },
   "RED Canids": {
     "name": "RED Canids",
-    "logo_url": "",
+    "logo_url": "/images/teams/redcanids_1790355055073.png",
     "description": "",
     "games": [
       "VALORANT",
@@ -428,18 +338,9 @@
     ],
     "region": ""
   },
-  "UCAM Esports Club": {
-    "name": "UCAM Esports Club",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
   "FULL SENSE": {
     "name": "FULL SENSE",
-    "logo_url": "",
+    "logo_url": "/images/teams/fs_1789889812755.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -448,7 +349,7 @@
   },
   "Team Secret": {
     "name": "Team Secret",
-    "logo_url": "",
+    "logo_url": "/images/teams/ts_1789894306075.webp",
     "description": "",
     "games": [
       "VALORANT"
@@ -457,7 +358,7 @@
   },
   "FENNEL": {
     "name": "FENNEL",
-    "logo_url": "",
+    "logo_url": "/images/teams/fe_1789889753586.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -466,20 +367,10 @@
   },
   "Global Esports": {
     "name": "Global Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/ge_1789890027600.png",
     "description": "",
     "games": [
       "VALORANT"
-    ],
-    "region": ""
-  },
-  "Fokus Clan": {
-    "name": "Fokus Clan",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT",
-      "CS2"
     ],
     "region": ""
   },
@@ -494,7 +385,7 @@
   },
   "Team RA’AD": {
     "name": "Team RA’AD",
-    "logo_url": "",
+    "logo_url": "/images/teams/raad_1790355359970.png",
     "description": "",
     "games": [
       "VALORANT",
@@ -502,18 +393,9 @@
     ],
     "region": ""
   },
-  "Los Grandes": {
-    "name": "Los Grandes",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
   "Enterprise Esports": {
     "name": "Enterprise Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/ep_1789889680872.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -522,7 +404,7 @@
   },
   "JD Gaming": {
     "name": "JD Gaming",
-    "logo_url": "",
+    "logo_url": "/images/teams/jdg_1789890054614.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -531,25 +413,7 @@
   },
   "Weibo Gaming": {
     "name": "Weibo Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "MIBR Academy": {
-    "name": "MIBR Academy",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Crazy Raccoon": {
-    "name": "Crazy Raccoon",
-    "logo_url": "",
+    "logo_url": "/images/teams/weibo_1789894662853.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -558,7 +422,7 @@
   },
   "Gentle Mates": {
     "name": "Gentle Mates",
-    "logo_url": "",
+    "logo_url": "/images/teams/m8_1790354415459.png",
     "description": "",
     "games": [
       "VALORANT",
@@ -568,7 +432,7 @@
   },
   "REJECT": {
     "name": "REJECT",
-    "logo_url": "",
+    "logo_url": "/images/teams/rj_1789893352693.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -577,7 +441,7 @@
   },
   "DetonatioN FocusMe": {
     "name": "DetonatioN FocusMe",
-    "logo_url": "",
+    "logo_url": "/images/teams/dfm_1789888999960.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -595,16 +459,7 @@
   },
   "Evil Geniuses": {
     "name": "Evil Geniuses",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "BBL Esports": {
-    "name": "BBL Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/eg_1789889589835.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -613,16 +468,7 @@
   },
   "Team Envy": {
     "name": "Team Envy",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "NOEZ FOXX": {
-    "name": "NOEZ FOXX",
-    "logo_url": "",
+    "logo_url": "/images/teams/envy_1790355758356.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -631,16 +477,17 @@
   },
   "Nongshim RedForce": {
     "name": "Nongshim RedForce",
-    "logo_url": "",
+    "logo_url": "/images/teams/ns_1789890455237.png",
     "description": "",
     "games": [
-      "VALORANT"
+      "VALORANT",
+      "League of Legends"
     ],
     "region": ""
   },
   "Dragon Ranger Gaming": {
     "name": "Dragon Ranger Gaming",
-    "logo_url": "",
+    "logo_url": "/images/teams/drg_1789889028521.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -649,16 +496,7 @@
   },
   "Joblife": {
     "name": "Joblife",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Riddle Order": {
-    "name": "Riddle Order",
-    "logo_url": "",
+    "logo_url": "/images/teams/joblife_darkmode_1789890119982.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -667,34 +505,7 @@
   },
   "Eintracht Frankfurt": {
     "name": "Eintracht Frankfurt",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Ramboot Club": {
-    "name": "Ramboot Club",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Maryville Esports": {
-    "name": "Maryville Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "YFP Gaming": {
-    "name": "YFP Gaming",
-    "logo_url": "",
+    "logo_url": "/images/teams/eintrach_1789889482046.svg",
     "description": "",
     "games": [
       "VALORANT"
@@ -703,7 +514,7 @@
   },
   "Shopify Rebellion Black": {
     "name": "Shopify Rebellion Black",
-    "logo_url": "",
+    "logo_url": "/images/teams/shopify_1790355240640.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -712,7 +523,7 @@
   },
   "GIANTX": {
     "name": "GIANTX",
-    "logo_url": "",
+    "logo_url": "/images/teams/gx_1789889992468.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -721,15 +532,6 @@
   },
   "Murash Gaming": {
     "name": "Murash Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "NEXGA": {
-    "name": "NEXGA",
     "logo_url": "",
     "description": "",
     "games": [
@@ -757,7 +559,7 @@
   },
   "Elevate": {
     "name": "Elevate",
-    "logo_url": "",
+    "logo_url": "/images/teams/elv_1789894992567.png",
     "description": "",
     "games": [
       "VALORANT",
@@ -776,7 +578,7 @@
   },
   "Trace Esports": {
     "name": "Trace Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/trace_1789894475481.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -812,7 +614,7 @@
   },
   "XLG Esports": {
     "name": "XLG Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/xlg_1789894747623.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -830,34 +632,6 @@
   },
   "Winthrop University": {
     "name": "Winthrop University",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "ShindeN": {
-    "name": "ShindeN",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT",
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Motiv Esports": {
-    "name": "Motiv Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "QoR": {
-    "name": "QoR",
     "logo_url": "",
     "description": "",
     "games": [
@@ -883,15 +657,6 @@
     ],
     "region": ""
   },
-  "FENNEL Female": {
-    "name": "FENNEL Female",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
   "2GAME ESPORTS Academy": {
     "name": "2GAME ESPORTS Academy",
     "logo_url": "/images/teams/2g_1788176948679.png",
@@ -901,28 +666,9 @@
     ],
     "region": ""
   },
-  "MIBR fe": {
-    "name": "MIBR fe",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT",
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Team Solid": {
-    "name": "Team Solid",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
   "NOVA Esports": {
     "name": "NOVA Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/nova_1789898513107.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -931,105 +677,6 @@
   },
   "Any Questions Gaming": {
     "name": "Any Questions Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "PCIFIC Esports": {
-    "name": "PCIFIC Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "NRG Academy": {
-    "name": "NRG Academy",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Todak": {
-    "name": "Todak",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "ONSIDE GAMING": {
-    "name": "ONSIDE GAMING",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Galions": {
-    "name": "Galions",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "VALORANDO": {
-    "name": "VALORANDO",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "ULF Esports": {
-    "name": "ULF Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Pixel Lumina": {
-    "name": "Pixel Lumina",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "FEARX": {
-    "name": "FEARX",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "WIP Esports": {
-    "name": "WIP Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Formulation Gaming": {
-    "name": "Formulation Gaming",
     "logo_url": "",
     "description": "",
     "games": [
@@ -1048,7 +695,7 @@
   },
   "VARREL": {
     "name": "VARREL",
-    "logo_url": "",
+    "logo_url": "/images/teams/vl_1789894569334.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -1057,16 +704,7 @@
   },
   "LYON": {
     "name": "LYON",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Team Liquid Academy": {
-    "name": "Team Liquid Academy",
-    "logo_url": "",
+    "logo_url": "/images/teams/lyon_1790354801026.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -1091,24 +729,6 @@
     ],
     "region": ""
   },
-  "Misa Esports": {
-    "name": "Misa Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "RAFHA eSPORTS": {
-    "name": "RAFHA eSPORTS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
   "Shopify Rebellion Gold": {
     "name": "Shopify Rebellion Gold",
     "logo_url": "",
@@ -1118,36 +738,9 @@
     ],
     "region": ""
   },
-  "NOVA Esports GC": {
-    "name": "NOVA Esports GC",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
   "SaD Esports": {
     "name": "SaD Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Z11": {
-    "name": "Z11",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Farenvehn": {
-    "name": "Farenvehn",
-    "logo_url": "",
+    "logo_url": "/images/teams/sad_1789893661741.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -1163,36 +756,9 @@
     ],
     "region": ""
   },
-  "Rival Esports": {
-    "name": "Rival Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Ghools Esports": {
-    "name": "Ghools Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Team Liquid Brazil": {
-    "name": "Team Liquid Brazil",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
   "Gen.G GC": {
     "name": "Gen.G GC",
-    "logo_url": "",
+    "logo_url": "/images/teams/geng_1789889905814.png",
     "description": "",
     "games": [
       "VALORANT"
@@ -1201,15 +767,6 @@
   },
   "INTZ": {
     "name": "INTZ",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "VALORANT"
-    ],
-    "region": ""
-  },
-  "Karmine Corp GC": {
-    "name": "Karmine Corp GC",
     "logo_url": "",
     "description": "",
     "games": [
@@ -1248,21 +805,21 @@
   },
   "Team Spirit": {
     "name": "Team Spirit",
-    "logo_url": "",
+    "logo_url": "/images/teams/spirit_1789901817243.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "MOUZ": {
     "name": "MOUZ",
-    "logo_url": "",
+    "logo_url": "/images/teams/mouz_1789898206570.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "The Mongolz": {
     "name": "The Mongolz",
@@ -1275,46 +832,47 @@
   },
   "GamerLegion": {
     "name": "GamerLegion",
-    "logo_url": "",
+    "logo_url": "/images/teams/gl_1790354365898.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "FaZe Clan": {
     "name": "FaZe Clan",
-    "logo_url": "",
+    "logo_url": "/images/teams/faze_1789894955960.svg",
     "description": "",
     "games": [
-      "CS2"
+      "CS2",
+      "VALORANT"
     ],
-    "region": ""
+    "region": "EU"
   },
   "HEROIC": {
     "name": "HEROIC",
-    "logo_url": "",
+    "logo_url": "/images/teams/heroic_1789897630071.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Virtus.pro": {
     "name": "Virtus.pro",
-    "logo_url": "",
+    "logo_url": "/images/teams/vp_1789902151450.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Astralis": {
     "name": "Astralis",
     "logo_url": "/images/teams/astralis_1788177163223.png",
     "description": "",
     "games": [
-      "cs2"
+      "CS2"
     ],
     "region": "EU"
   },
@@ -1323,121 +881,67 @@
     "logo_url": "/images/teams/3dmax_1788176426197.png",
     "description": "",
     "games": [
-      "cs2"
+      "CS2"
     ],
     "region": "EU"
   },
-  "B8 Esports": {
-    "name": "B8 Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
   "Ninjas in Pyjamas": {
     "name": "Ninjas in Pyjamas",
-    "logo_url": "",
+    "logo_url": "/images/teams/nip_1789898412796.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Legacy": {
     "name": "Legacy",
-    "logo_url": "",
+    "logo_url": "/images/teams/legacy_1789897888036.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "AM"
   },
   "paiN Gaming": {
     "name": "paiN Gaming",
-    "logo_url": "",
+    "logo_url": "/images/teams/pain_1789898634754.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
-  },
-  "Lynn Vision": {
-    "name": "Lynn Vision",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
+    "region": "AM"
   },
   "BIG": {
     "name": "BIG",
-    "logo_url": "",
+    "logo_url": "/images/teams/big_1790353612937.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
-  },
-  "Wildcard Gaming": {
-    "name": "Wildcard Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
+    "region": "EU"
   },
   "FlyQuest": {
     "name": "FlyQuest",
-    "logo_url": "",
+    "logo_url": "/images/teams/fq_1790354039941.svg",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "AS"
   },
   "BetBoom Team": {
     "name": "BetBoom Team",
-    "logo_url": "",
+    "logo_url": "/images/teams/bb_1789895026167.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
-  },
-  "Nemiga Gaming": {
-    "name": "Nemiga Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "OG Esports": {
-    "name": "OG Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
+    "region": "EU"
   },
   "ENCE": {
     "name": "ENCE",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "ODDIK": {
-    "name": "ODDIK",
-    "logo_url": "",
+    "logo_url": "/images/teams/ence_1789897350862.png",
     "description": "",
     "games": [
       "CS2"
@@ -1446,51 +950,15 @@
   },
   "HOTU": {
     "name": "HOTU",
-    "logo_url": "",
+    "logo_url": "/images/teams/hotu_1790354478545.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Imperial Esports": {
     "name": "Imperial Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Chinggis Warriors": {
-    "name": "Chinggis Warriors",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "SAW": {
-    "name": "SAW",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Natus Vincere Jr.": {
-    "name": "Natus Vincere Jr.",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Fluxo": {
-    "name": "Fluxo",
     "logo_url": "",
     "description": "",
     "games": [
@@ -1509,105 +977,24 @@
   },
   "JiJieHao": {
     "name": "JiJieHao",
-    "logo_url": "",
+    "logo_url": "/images/teams/jijie_1790354652730.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
-  },
-  "Passion UA": {
-    "name": "Passion UA",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
+    "region": "EU"
   },
   "PARIVISION": {
     "name": "PARIVISION",
-    "logo_url": "",
+    "logo_url": "/images/teams/pari_1789898664523.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Team Spirit Academy": {
     "name": "Team Spirit Academy",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Rare Atom": {
-    "name": "Rare Atom",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Nexus Gaming": {
-    "name": "Nexus Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "9INE": {
-    "name": "9INE",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "ESC Gaming": {
-    "name": "ESC Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "9 Pandas": {
-    "name": "9 Pandas",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Preasy": {
-    "name": "Preasy",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "TropiCaos": {
-    "name": "TropiCaos",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Sashi": {
-    "name": "Sashi",
     "logo_url": "",
     "description": "",
     "games": [
@@ -1633,159 +1020,6 @@
     ],
     "region": ""
   },
-  "Dynamo Eclot": {
-    "name": "Dynamo Eclot",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Monte": {
-    "name": "Monte",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "w7m esports": {
-    "name": "w7m esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Nakama": {
-    "name": "Nakama",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Gaimin Gladiators": {
-    "name": "Gaimin Gladiators",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "IKLA": {
-    "name": "IKLA",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Partizan Esports": {
-    "name": "Partizan Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "BLUEJAYS": {
-    "name": "BLUEJAYS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "O PLANO": {
-    "name": "O PLANO",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Sangal": {
-    "name": "Sangal",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Rebels Gaming": {
-    "name": "Rebels Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "BIG Academy": {
-    "name": "BIG Academy",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Steel Helmet": {
-    "name": "Steel Helmet",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Team NKT": {
-    "name": "Team NKT",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Anonymo": {
-    "name": "Anonymo",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Keyd Stars": {
-    "name": "Keyd Stars",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Case Esports": {
-    "name": "Case Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
   "Mythic": {
     "name": "Mythic",
     "logo_url": "",
@@ -1797,142 +1031,34 @@
   },
   "EYEBALLERS": {
     "name": "EYEBALLERS",
-    "logo_url": "",
+    "logo_url": "/images/teams/eyeball_1790353986491.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
-  },
-  "Young Ninjas": {
-    "name": "Young Ninjas",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Tricked Esport": {
-    "name": "Tricked Esport",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "HAVU": {
-    "name": "HAVU",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Team oNe eSports": {
-    "name": "Team oNe eSports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Nordavind": {
-    "name": "Nordavind",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Finest": {
-    "name": "Finest",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Bad News Eagles": {
-    "name": "Bad News Eagles",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "los kogutos": {
-    "name": "los kogutos",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Wave Esports": {
-    "name": "Wave Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Endpoint": {
-    "name": "Endpoint",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
+    "region": "EU"
   },
   "SINNERS Esports": {
     "name": "SINNERS Esports",
-    "logo_url": "",
+    "logo_url": "/images/teams/sinners_1789899860454.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
-  },
-  "Sharks Esports": {
-    "name": "Sharks Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
+    "region": "EU"
   },
   "Alliance": {
     "name": "Alliance",
     "logo_url": "/images/teams/alliance_1788177131801.png",
     "description": "",
     "games": [
-      "cs2"
+      "CS2"
     ],
     "region": "EU"
   },
   "TSM": {
     "name": "TSM",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "forZe": {
-    "name": "forZe",
-    "logo_url": "",
+    "logo_url": "/images/teams/tsm_1790355833648.png",
     "description": "",
     "games": [
       "CS2"
@@ -1944,453 +1070,12 @@
     "logo_url": "/images/teams/acend_1788177027276.png",
     "description": "",
     "games": [
-      "cs2"
+      "CS2"
     ],
     "region": "EU"
   },
-  "MOUZ NXT": {
-    "name": "MOUZ NXT",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Metizport": {
-    "name": "Metizport",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Project G": {
-    "name": "Project G",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
   "Fire Flux Esports": {
     "name": "Fire Flux Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Unluko5": {
-    "name": "Unluko5",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "AMKAL": {
-    "name": "AMKAL",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Party Astronauts": {
-    "name": "Party Astronauts",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Copenhagen Wolves": {
-    "name": "Copenhagen Wolves",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "The Huns Esports": {
-    "name": "The Huns Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Permitta Esports": {
-    "name": "Permitta Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "V1dar Gaming": {
-    "name": "V1dar Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "GUN5": {
-    "name": "GUN5",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "ATOX Esports": {
-    "name": "ATOX Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Revenant Esports": {
-    "name": "Revenant Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Take Flyte": {
-    "name": "Take Flyte",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Perseverance Gaming": {
-    "name": "Perseverance Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "BC.Game": {
-    "name": "BC.Game",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Vikings KR": {
-    "name": "Vikings KR",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Pera Esports": {
-    "name": "Pera Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "G2 Ares": {
-    "name": "G2 Ares",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Johnny Speeds": {
-    "name": "Johnny Speeds",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "brazylijski luz": {
-    "name": "brazylijski luz",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "FAVBET": {
-    "name": "FAVBET",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Alter Ego": {
-    "name": "Alter Ego",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "DRILLAS": {
-    "name": "DRILLAS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "BOSS": {
-    "name": "BOSS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "UNiTY ESPORTS": {
-    "name": "UNiTY ESPORTS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Zero Tenacity": {
-    "name": "Zero Tenacity",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Viperio": {
-    "name": "Viperio",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "GR Gaming": {
-    "name": "GR Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "WW": {
-    "name": "WW",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "WOPA": {
-    "name": "WOPA",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Bounty Hunters": {
-    "name": "Bounty Hunters",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Inner Circle": {
-    "name": "Inner Circle",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Imperial fe": {
-    "name": "Imperial fe",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "SemperFi": {
-    "name": "SemperFi",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Getting Info": {
-    "name": "Getting Info",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Novaq": {
-    "name": "Novaq",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "WildLotus": {
-    "name": "WildLotus",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "QMISTRY": {
-    "name": "QMISTRY",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Wings Up": {
-    "name": "Wings Up",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "ALGO Esports": {
-    "name": "ALGO Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "SkyFury": {
-    "name": "SkyFury",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "The Last Resort": {
-    "name": "The Last Resort",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "fish123": {
-    "name": "fish123",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "AM Gaming": {
-    "name": "AM Gaming",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Venom": {
-    "name": "Venom",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "NIP Impact": {
-    "name": "NIP Impact",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Phantom Esports": {
-    "name": "Phantom Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "AaB esport": {
-    "name": "AaB esport",
     "logo_url": "",
     "description": "",
     "games": [
@@ -2407,149 +1092,23 @@
     ],
     "region": ""
   },
-  "Galorys": {
-    "name": "Galorys",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Skinrave Esports": {
-    "name": "Skinrave Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Marsborne": {
-    "name": "Marsborne",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "SportsBetExpert": {
-    "name": "SportsBetExpert",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "ALLINNERS": {
-    "name": "ALLINNERS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Basement Boys": {
-    "name": "Basement Boys",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Vasco Esports": {
-    "name": "Vasco Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "THUNDER dOWNUNDER": {
-    "name": "THUNDER dOWNUNDER",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "WHITEBIRD": {
-    "name": "WHITEBIRD",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
   "Team Nemesis": {
     "name": "Team Nemesis",
-    "logo_url": "",
+    "logo_url": "/images/teams/nemesis_1790355324663.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
-  },
-  "ARCRED": {
-    "name": "ARCRED",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Prestige": {
-    "name": "Prestige",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "MINLATE": {
-    "name": "MINLATE",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "illwill": {
-    "name": "illwill",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "VEXA": {
-    "name": "VEXA",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
+    "region": "EU"
   },
   "K27": {
     "name": "K27",
-    "logo_url": "",
+    "logo_url": "/images/teams/k27_1790354687675.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
+    "region": "EU"
   },
   "Game Hunters": {
     "name": "Game Hunters",
@@ -2560,176 +1119,14 @@
     ],
     "region": ""
   },
-  "Drama Esports": {
-    "name": "Drama Esports",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "ASTRAL ESPORTS": {
-    "name": "ASTRAL ESPORTS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "INFINITE ESPORTS": {
-    "name": "INFINITE ESPORTS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "ALKA": {
-    "name": "ALKA",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "LP": {
-    "name": "LP",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "FURIA Fe": {
-    "name": "FURIA Fe",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Hashiras": {
-    "name": "Hashiras",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "M1X KS": {
-    "name": "M1X KS",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "KOLESIE": {
-    "name": "KOLESIE",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Voca": {
-    "name": "Voca",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Fake do Biru": {
-    "name": "Fake do Biru",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Atreides": {
-    "name": "Atreides",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
   "magic": {
     "name": "magic",
-    "logo_url": "",
+    "logo_url": "/images/teams/magic_1789897915239.png",
     "description": "",
     "games": [
       "CS2"
     ],
-    "region": ""
-  },
-  "TDK": {
-    "name": "TDK",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "NEXVOID": {
-    "name": "NEXVOID",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Clutchain": {
-    "name": "Clutchain",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Yawara": {
-    "name": "Yawara",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Sparta": {
-    "name": "Sparta",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
-  },
-  "Walczaki": {
-    "name": "Walczaki",
-    "logo_url": "",
-    "description": "",
-    "games": [
-      "CS2"
-    ],
-    "region": ""
+    "region": "EU"
   },
   "FGATIC": {
     "name": "FGATIC",
@@ -2737,12 +1134,7 @@
     "description": "",
     "games": [
       "VALORANT",
-      "CS2",
-      "Apex Legends",
-      "PUBG",
-      "Overwatch 2",
-      "League of Legends",
-      "Rainbow Six"
+      "CS2"
     ],
     "region": ""
   },
@@ -2751,7 +1143,7 @@
     "logo_url": "/images/teams/1w_1788176392726.png",
     "description": "",
     "games": [
-      "cs2"
+      "CS2"
     ],
     "region": "EU"
   },
@@ -2760,7 +1152,7 @@
     "logo_url": "/images/teams/aurora_1788177199856.png",
     "description": "",
     "games": [
-      "cs2"
+      "CS2"
     ],
     "region": "EU"
   },
@@ -2769,7 +1161,7 @@
     "logo_url": "/images/teams/bc_game_1788177224056.png",
     "description": "",
     "games": [
-      "cs2"
+      "CS2"
     ],
     "region": "EU"
   },
@@ -2778,7 +1170,144 @@
     "logo_url": "/images/teams/team_falcons_2022_allmode_1789836673051.png",
     "description": "",
     "games": [
-      "cs2",
+      "CS2"
+    ],
+    "region": "EU"
+  },
+  "Lynn Vision Gaming": {
+    "name": "Lynn Vision Gaming",
+    "logo_url": "/images/teams/lynn_1789897840802.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "AS"
+  },
+  "Luminosity Gaming": {
+    "name": "Luminosity Gaming",
+    "logo_url": "/images/teams/lg_1789898117485.webp",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "EU"
+  },
+  "Nuclear TigeRES": {
+    "name": "Nuclear TigeRES",
+    "logo_url": "/images/teams/ntr_1789898570995.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "EU"
+  },
+  "Wildcard": {
+    "name": "Wildcard",
+    "logo_url": "/images/teams/wildcard_1789901682480.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "AM"
+  },
+  "TYLOO": {
+    "name": "TYLOO",
+    "logo_url": "/images/teams/tyloo_1789901956953.png",
+    "description": "",
+    "games": [
+      "CS2",
+      "VALORANT"
+    ],
+    "region": "AS"
+  },
+  "The MongolZ": {
+    "name": "The MongolZ",
+    "logo_url": "/images/teams/mongolz_1789902095977.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "AS"
+  },
+  "B8": {
+    "name": "B8",
+    "logo_url": "/images/teams/b8_1790353498521.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "EU"
+  },
+  "Betclic Apogee Esports": {
+    "name": "Betclic Apogee Esports",
+    "logo_url": "/images/teams/bae_1790353575510.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "EU"
+  },
+  "DENDELE CS": {
+    "name": "DENDELE CS",
+    "logo_url": "/images/teams/dendele_1790353741303.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "AM"
+  },
+  "BBL Esports": {
+    "name": "BBL Esports",
+    "logo_url": "/images/teams/bbl_1790353924585.png",
+    "description": "",
+    "games": [
+      "CS2",
+      "VALORANT"
+    ],
+    "region": "EU"
+  },
+  "FOKUS": {
+    "name": "FOKUS",
+    "logo_url": "/images/teams/fokus_1790354170216.webp",
+    "description": "",
+    "games": [
+      "CS2",
+      "VALORANT"
+    ],
+    "region": "EU"
+  },
+  "Iberian Soul": {
+    "name": "Iberian Soul",
+    "logo_url": "/images/teams/is_1790354526685.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "EU"
+  },
+  "IC Esports": {
+    "name": "IC Esports",
+    "logo_url": "/images/teams/ic_1790354552482.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "EU"
+  },
+  "INFINITE": {
+    "name": "INFINITE",
+    "logo_url": "/images/teams/infifnite_1790354604628.png",
+    "description": "",
+    "games": [
+      "CS2"
+    ],
+    "region": "EU"
+  },
+  "Sashi Esport": {
+    "name": "Sashi Esport",
+    "logo_url": "/images/teams/sashi_1790355178173.png",
+    "description": "",
+    "games": [
       "CS2"
     ],
     "region": "EU"

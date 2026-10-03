@@ -117,6 +117,8 @@ export default function Navbar() {
               {isAdmin && (
                 <Link
                   href="/admin"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-[10px] font-bold text-accent hover:text-accent/90 transition-colors duration-200 font-sans uppercase tracking-wider bg-accent/10 border border-accent/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 hover:bg-accent/15"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>

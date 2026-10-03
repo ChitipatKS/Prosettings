@@ -13,6 +13,7 @@ import CS2CrosshairPreview, {
   CS2_COLOR_PRESETS,
   CS2_STYLES
 } from '@/components/CS2CrosshairPreview';
+import TeamLogoImg from '@/components/TeamLogoImg';
 
 type Country = {
   name: string;
@@ -977,7 +978,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                 onClick={() => fileInputRef.current?.click()}
                 className="flex-1 h-9 bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50 text-[10px] font-bold uppercase tracking-wider font-mono rounded-lg border border-zinc-700 transition-all text-white cursor-pointer text-center flex items-center justify-center"
               >
-                {uploadingImage ? 'Uploading...' : 'Upload Image'}
+                {uploadingImage ? 'Uploading...' : 'Upload'}
               </button>
               {profileImgUrl && (
                 <button
@@ -1020,6 +1021,16 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
             <div ref={dropdownRef} className="space-y-1.5 relative">
               <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Team Name</label>
               <div className="relative">
+                {team && (
+                  <div className="absolute left-2.5 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+                    <TeamLogoImg
+                      teamName={team}
+                      dbLogoUrl={teams.find(t => t.name.toLowerCase() === team.toLowerCase())?.logo_url}
+                      className="w-5 h-5 rounded-md bg-zinc-850 border border-white/5 shrink-0 flex items-center justify-center p-0.5"
+                      imgClassName="w-full h-full object-contain"
+                    />
+                  </div>
+                )}
                 <input
                   type="text"
                   ref={teamInputRef}
@@ -1031,7 +1042,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                   }}
                   onFocus={() => setShowTeamDropdown(true)}
                   placeholder="Select or type to filter..."
-                  className="w-full h-10 bg-black/40 border border-zinc-800 rounded-lg px-3 pr-10 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono"
+                  className={`w-full h-10 bg-black/40 border border-zinc-800 rounded-lg ${team ? 'pl-9' : 'px-3'} pr-10 text-xs text-white placeholder-zinc-700 focus:outline-none focus:border-accent transition-all font-mono`}
                 />
                 <button
                   type="button"
@@ -1080,7 +1091,7 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                         const isSelected = team.toLowerCase() === t.name.toLowerCase();
                         return (
                           <div
-                            key={`team-opt-${t.id}`}
+                            key={`team-opt-${t.id || t.name}`}
                             onClick={() => {
                               setTeam(t.name);
                               setTeamId(t.id);
@@ -1093,9 +1104,12 @@ export default function PlayerForm({ title, isEdit = false, playerId }: PlayerFo
                                 : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200 border border-transparent'
                             }`}
                           >
-                            <div className="w-5 h-5 rounded-md bg-zinc-850 border border-white/5 overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold text-accent font-mono">
-                              {t.name[0]?.toUpperCase()}
-                            </div>
+                            <TeamLogoImg
+                              teamName={t.name}
+                              dbLogoUrl={t.logo_url}
+                              className="w-5 h-5 rounded-md bg-zinc-850 border border-white/5 shrink-0 flex items-center justify-center p-0.5"
+                              imgClassName="w-full h-full object-contain"
+                            />
                             <span>{t.name}</span>
                           </div>
                         );

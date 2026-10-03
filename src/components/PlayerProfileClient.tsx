@@ -65,6 +65,155 @@ const isNumeric = (val: string | number) => {
   return /\d/.test(String(val));
 };
 
+export function MouseLeftClickIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="2" width="14" height="20" rx="7" stroke="currentColor" strokeWidth="1.8" className="text-zinc-500" />
+      <line x1="5" y1="9.5" x2="19" y2="9.5" stroke="currentColor" strokeWidth="1.4" className="text-zinc-600" />
+      <line x1="12" y1="2" x2="12" y2="9.5" stroke="currentColor" strokeWidth="1.4" className="text-zinc-600" />
+      <path
+        d="M 12 2.2 A 6.8 6.8 0 0 0 5.2 9 L 5.2 9.5 L 12 9.5 Z"
+        fill="currentColor"
+        className="text-white"
+      />
+    </svg>
+  );
+}
+
+export function MouseRightClickIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="2" width="14" height="20" rx="7" stroke="currentColor" strokeWidth="1.8" className="text-zinc-500" />
+      <line x1="5" y1="9.5" x2="19" y2="9.5" stroke="currentColor" strokeWidth="1.4" className="text-zinc-600" />
+      <line x1="12" y1="2" x2="12" y2="9.5" stroke="currentColor" strokeWidth="1.4" className="text-zinc-600" />
+      <path
+        d="M 12 2.2 A 6.8 6.8 0 0 1 18.8 9 L 18.8 9.5 L 12 9.5 Z"
+        fill="currentColor"
+        className="text-white"
+      />
+    </svg>
+  );
+}
+
+export function MouseMiddleClickIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="2" width="14" height="20" rx="7" stroke="currentColor" strokeWidth="1.8" className="text-zinc-500" />
+      <line x1="5" y1="9.5" x2="19" y2="9.5" stroke="currentColor" strokeWidth="1.4" className="text-zinc-600" />
+      <line x1="12" y1="2" x2="12" y2="9.5" stroke="currentColor" strokeWidth="1.4" className="text-zinc-600" />
+      <rect x="10.5" y="3.5" width="3" height="5" rx="1.5" fill="currentColor" className="text-white" />
+    </svg>
+  );
+}
+
+const CANONICAL_KEYBINDS_ORDER: Record<string, string[]> = {
+  Weapons: [
+    'Fire',
+    'Alternate Fire',
+    'Toggle Zoom Level',
+    'Aim Down Sights',
+    'Sniper Rifle Aim',
+    'Operator Zoom',
+    'Operator Zoom Mode',
+    'Auto Re-enter Scope',
+    'Reload',
+    'Inspect Weapon',
+    'Equip Primary Weapon',
+    'Equip Secondary Weapon',
+    'Equip Melee Weapon',
+    'Equip Spike',
+    'Cycle to Next Weapon',
+    'Cycle to Previous Weapon',
+    'Drop Equipped Item',
+    'Use / Defuse Object'
+  ],
+  Movement: [
+    'Forward',
+    'Strafe Left',
+    'Back',
+    'Strafe Right',
+    'Jump',
+    'Walk',
+    'Crouch'
+  ],
+  Abilities: [
+    'Ability 1',
+    'Ability 2',
+    'Ability 3 (Signature)',
+    'Ultimate Ability'
+  ],
+  Communication: [
+    'Ping',
+    'Team Push to Talk',
+    'Party Push to Talk'
+  ],
+  Interface: [
+    'Show Map',
+    'Show Scoreboard'
+  ]
+};
+
+export function renderKeyBadge(action: string, keyName: string) {
+  const normKey = String(keyName).trim().toLowerCase();
+  const normAction = String(action).trim().toLowerCase();
+
+  const isLeftClick =
+    normKey === 'l-click' ||
+    normKey === 'leftmousebutton' ||
+    (normAction === 'fire' && normKey.includes('click'));
+
+  const isRightClick =
+    normKey === 'r-click' ||
+    normKey === 'rightmousebutton' ||
+    (normAction === 'alternate fire' && normKey.includes('click'));
+
+  const isMiddleClick =
+    normKey === 'm-click' ||
+    normKey === 'middlemousebutton' ||
+    normKey === 'wheel click' ||
+    normKey === 'middle mouse button' ||
+    (normAction === 'toggle zoom level' && normKey.includes('click'));
+
+  if (isLeftClick) {
+    return (
+      <span
+        className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-750 text-white font-mono text-[10px] font-bold shadow-sm shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
+        title="Left Click"
+      >
+        <MouseLeftClickIcon className="w-3.5 h-3.5" />
+      </span>
+    );
+  }
+
+  if (isRightClick) {
+    return (
+      <span
+        className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-750 text-white font-mono text-[10px] font-bold shadow-sm shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
+        title="Right Click"
+      >
+        <MouseRightClickIcon className="w-3.5 h-3.5" />
+      </span>
+    );
+  }
+
+  if (isMiddleClick) {
+    return (
+      <span
+        className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-750 text-white font-mono text-[10px] font-bold shadow-sm shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
+        title="Middle Click"
+      >
+        <MouseMiddleClickIcon className="w-3.5 h-3.5" />
+      </span>
+    );
+  }
+
+  return (
+    <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-750 text-white font-mono text-[10px] font-bold shadow-sm shrink-0 inline-flex items-center justify-center h-[22px]">
+      {String(keyName)}
+    </span>
+  );
+}
+
 function SettingRow({ label, value }: { label: string; value: string | number | null | undefined }) {
   const isValNumeric = value !== null && value !== undefined && isNumeric(value);
   return (
@@ -396,7 +545,155 @@ export default function PlayerProfileClient({
                   title="Controls / Keybinds" 
                 />
 
-                <EmptyState message="Keybind data coming soon — stay tuned!" />
+                {settingsJson.keybinds && typeof settingsJson.keybinds === 'object' ? (() => {
+                  const rawKeybinds = settingsJson.keybinds as Record<string, Record<string, string>>;
+
+                  const getCategoryItems = (categoryName: string): [string, string][] => {
+                    const matchedCatKey = Object.keys(rawKeybinds).find(
+                      k => k.toLowerCase() === categoryName.toLowerCase()
+                    );
+                    if (!matchedCatKey) return [];
+                    const rawCat = rawKeybinds[matchedCatKey];
+                    if (!rawCat || typeof rawCat !== 'object') return [];
+
+                    const orderedActions = CANONICAL_KEYBINDS_ORDER[categoryName] || [];
+                    const items: [string, string][] = [];
+
+                    for (const action of orderedActions) {
+                      const matchedActionKey = Object.keys(rawCat).find(
+                        k => k.toLowerCase() === action.toLowerCase()
+                      );
+                      if (!matchedActionKey) continue;
+                      const val = rawCat[matchedActionKey];
+                      if (val && typeof val === 'string' && val.trim() !== '' && val.trim().toLowerCase() !== 'none') {
+                        items.push([action, val.trim()]);
+                      }
+                    }
+                    return items;
+                  };
+
+                  const weaponsItems = getCategoryItems('Weapons');
+                  const movementItems = getCategoryItems('Movement');
+                  const abilitiesItems = getCategoryItems('Abilities');
+                  const commsItems = getCategoryItems('Communication');
+                  const interfaceItems = getCategoryItems('Interface');
+
+                  const totalCount = weaponsItems.length + movementItems.length + abilitiesItems.length + commsItems.length + interfaceItems.length;
+                  if (totalCount === 0) {
+                    return <EmptyState message="Keybind data coming soon — stay tuned!" />;
+                  }
+
+                  return (
+                    <div className="space-y-4">
+                      {/* Main Categories in 2-column grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3.5 items-start">
+                        {/* Col 1: Weapons & Abilities */}
+                        <div className="space-y-3.5">
+                          {weaponsItems.length > 0 && (
+                            <div className="space-y-1.5">
+                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                                Weapons
+                              </p>
+                              <div className="space-y-1">
+                                {weaponsItems.map(([action, keyName]) => (
+                                  <div
+                                    key={action}
+                                    className="flex items-center justify-between py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 transition-colors"
+                                  >
+                                    <span className="text-[11px] text-zinc-400 font-sans truncate mr-2">{action}</span>
+                                    {renderKeyBadge(action, keyName)}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {abilitiesItems.length > 0 && (
+                            <div className="space-y-1.5">
+                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                                Abilities
+                              </p>
+                              <div className="space-y-1">
+                                {abilitiesItems.map(([action, keyName]) => (
+                                  <div
+                                    key={action}
+                                    className="flex items-center justify-between py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 transition-colors"
+                                  >
+                                    <span className="text-[11px] text-zinc-400 font-sans truncate mr-2">{action}</span>
+                                    {renderKeyBadge(action, keyName)}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Col 2: Movement & Communication */}
+                        <div className="space-y-3.5">
+                          {movementItems.length > 0 && (
+                            <div className="space-y-1.5">
+                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                                Movement
+                              </p>
+                              <div className="space-y-1">
+                                {movementItems.map(([action, keyName]) => (
+                                  <div
+                                    key={action}
+                                    className="flex items-center justify-between py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 transition-colors"
+                                  >
+                                    <span className="text-[11px] text-zinc-400 font-sans truncate mr-2">{action}</span>
+                                    {renderKeyBadge(action, keyName)}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {commsItems.length > 0 && (
+                            <div className="space-y-1.5">
+                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                                Communication
+                              </p>
+                              <div className="space-y-1">
+                                {commsItems.map(([action, keyName]) => (
+                                  <div
+                                    key={action}
+                                    className="flex items-center justify-between py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 transition-colors"
+                                  >
+                                    <span className="text-[11px] text-zinc-400 font-sans truncate mr-2">{action}</span>
+                                    {renderKeyBadge(action, keyName)}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Interface Category as compact inline pills */}
+                      {interfaceItems.length > 0 && (
+                        <div className="pt-2 border-t border-white/[0.04] space-y-1.5">
+                          <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                            Interface
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {interfaceItems.map(([action, keyName]) => (
+                              <div
+                                key={action}
+                                className="inline-flex items-center gap-2 py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 border border-zinc-800/40 transition-colors"
+                              >
+                                <span className="text-[11px] text-zinc-400 font-sans">{action}</span>
+                                {renderKeyBadge(action, keyName)}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })() : (
+                  <EmptyState message="Keybind data coming soon — stay tuned!" />
+                )}
               </div>
             </div>
 

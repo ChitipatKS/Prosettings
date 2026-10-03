@@ -115,6 +115,194 @@ function renderGameLogo(slug: string) {
   );
 }
 
+const DEFAULT_GAMES_LIST = [
+  { slug: 'cs2', name: 'CS2', fullName: 'Counter-Strike 2' },
+  { slug: 'valorant', name: 'VALORANT', fullName: 'VALORANT' },
+];
+
+function GameSearchSelect({
+  options = DEFAULT_GAMES_LIST,
+  selectedValue,
+  onChange,
+}: {
+  options?: { slug: string; name: string; fullName?: string }[];
+  selectedValue: string;
+  onChange: (val: string) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const selectedGameObj = options.find(g => g.slug.toLowerCase() === (selectedValue || '').toLowerCase());
+
+  const displayValue = selectedGameObj
+    ? selectedGameObj.name
+    : "All Games";
+
+  const filteredOptions = searchQuery.trim().length > 0
+    ? options.filter(g =>
+      g.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      g.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (g.fullName && g.fullName.toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+    : options;
+
+  return (
+    <div className="relative w-full sm:w-[180px]" ref={dropdownRef}>
+      {/* Trigger Button */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full h-11 bg-black/40 border rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold transition-all cursor-pointer ${
+          selectedValue && selectedValue !== 'all'
+            ? 'border-accent/50 text-white bg-accent/5'
+            : 'border-border-custom hover:border-zinc-700 text-zinc-300'
+        }`}
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          {selectedGameObj ? (
+            selectedGameObj.slug === 'valorant' ? (
+              <img src="/images/valorant-logo.png" alt="VALORANT" className="w-4 h-4 rounded object-cover shrink-0" />
+            ) : selectedGameObj.slug === 'cs2' ? (
+              <img src="/images/cs2-logo.png" alt="CS2" className="w-4 h-4 rounded object-cover shrink-0" />
+            ) : (
+              <div className="w-4 h-4 rounded bg-zinc-800 flex items-center justify-center text-[8px] font-bold text-zinc-400 shrink-0">
+                {selectedGameObj.slug.slice(0, 2).toUpperCase()}
+              </div>
+            )
+          ) : (
+            <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <rect x="2" y="6" width="20" height="12" rx="4" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h4m-2-2v4m7-2h.01m3 0h.01" />
+            </svg>
+          )}
+          <span className="truncate">{displayValue}</span>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          {selectedValue && selectedValue !== 'all' && (
+            <span
+              onClick={(e) => {
+                e.stopPropagation();
+                onChange('all');
+                setSearchQuery('');
+              }}
+              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
+              title="Clear selection"
+            >
+              ×
+            </span>
+          )}
+          <svg
+            className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
+            style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </button>
+
+      {/* Dropdown Panel */}
+      {isOpen && (
+        <div className="absolute z-50 w-full mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in-50 duration-150 font-sans">
+          {/* Search Input Box */}
+          <div className="p-2 border-b border-zinc-900 flex items-center gap-2 relative">
+            <span className="absolute left-4 text-zinc-500">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search game..."
+              autoFocus
+              className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-sans"
+            />
+          </div>
+
+          {/* Options Scroll List */}
+          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-800">
+            {/* "All Games" Option */}
+            <div
+              onMouseDown={(e) => {
+                e.preventDefault();
+                onChange('all');
+                setSearchQuery('');
+                setIsOpen(false);
+              }}
+              className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
+                selectedValue === 'all' || !selectedValue
+                  ? 'bg-accent/15 text-accent font-bold'
+                  : 'text-zinc-400 hover:bg-zinc-800/30 hover:text-white'
+              }`}
+            >
+              <div className="w-4 h-4 rounded bg-zinc-800 border border-zinc-700/50 shrink-0 flex items-center justify-center">
+                <svg className="w-2.5 h-2.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <rect x="2" y="6" width="20" height="12" rx="4" />
+                </svg>
+              </div>
+              <span>All Games</span>
+            </div>
+
+            {filteredOptions.length === 0 ? (
+              <div className="px-4 py-3 text-xs text-zinc-500 italic">
+                No matching games found
+              </div>
+            ) : (
+              filteredOptions.map((game) => {
+                const isSelected = game.slug.toLowerCase() === (selectedValue || '').toLowerCase();
+                return (
+                  <div
+                    key={game.slug}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onChange(game.slug);
+                      setIsOpen(false);
+                    }}
+                    className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
+                      isSelected
+                        ? 'bg-accent/15 text-accent font-bold'
+                        : 'text-zinc-300 hover:bg-zinc-800/30 hover:text-white'
+                    }`}
+                  >
+                    {game.slug === 'valorant' ? (
+                      <img src="/images/valorant-logo.png" alt="VALORANT" className="w-4 h-4 rounded object-cover shrink-0 shadow-sm" />
+                    ) : game.slug === 'cs2' ? (
+                      <img src="/images/cs2-logo.png" alt="CS2" className="w-4 h-4 rounded object-cover shrink-0 shadow-sm" />
+                    ) : (
+                      <div className="w-4 h-4 rounded bg-zinc-800 border border-zinc-700/50 shrink-0 flex items-center justify-center text-[8px] font-bold text-zinc-400">
+                        {game.slug.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                    <span className="truncate">{game.name}</span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function TeamSearchSelect({
   options,
@@ -714,30 +902,11 @@ function PlayersDirectoryContent() {
 
         {/* Right Side: Filters Group */}
         <div className="flex flex-col sm:flex-row gap-3">
-          {/* Game Segment Selector */}
-          <div className="flex bg-black/40 border border-border-custom p-1 rounded-xl items-center">
-            <button
-              onClick={() => setSelectedGame('all')}
-              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${selectedGame === 'all' ? 'bg-accent text-accent-fg shadow-lg' : 'text-zinc-400 hover:text-white'
-                }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setSelectedGame('cs2')}
-              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${selectedGame === 'cs2' ? 'bg-amber-500/10 text-accent border border-accent/20' : 'text-zinc-400 hover:text-white'
-                }`}
-            >
-              CS2
-            </button>
-            <button
-              onClick={() => setSelectedGame('valorant')}
-              className={`h-9 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider font-mono transition-all cursor-pointer ${selectedGame === 'valorant' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'text-zinc-400 hover:text-white'
-                }`}
-            >
-              VALORANT
-            </button>
-          </div>
+          {/* Game Dropdown */}
+          <GameSearchSelect
+            selectedValue={selectedGame}
+            onChange={setSelectedGame}
+          />
 
           {/* Team Dropdown */}
           <TeamSearchSelect

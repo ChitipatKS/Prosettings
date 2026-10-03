@@ -74,12 +74,6 @@ export default function SensConverter() {
 
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-4">
-        <Link
-          href="/"
-          className="text-xs font-bold text-zinc-500 hover:text-white transition-colors duration-200 font-mono tracking-wider flex items-center gap-1 justify-center"
-        >
-          BACK TO HOME
-        </Link>
         <h1 className="text-4xl font-extrabold tracking-tight text-white font-display">
           Mouse <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">Sensitivity Converter</span>
         </h1>

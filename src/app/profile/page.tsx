@@ -6,6 +6,12 @@ import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import PlayerProfileClient from '@/components/PlayerProfileClient';
 import TeamLogoImg from '@/components/TeamLogoImg';
+import ValorantConfigUploader from '@/components/ValorantConfigUploader';
+import { ParsedValorantSettings } from '@/lib/valorantConfigParser';
+import ValorantSettingsEditor, { ValorantCrosshairItem } from '@/components/ValorantSettingsEditor';
+import CS2SettingsEditor from '@/components/CS2SettingsEditor';
+import { CS2CrosshairSettings } from '@/components/CS2CrosshairPreview';
+import { parseValorantCrosshairToFields } from '@/components/CrosshairPreview';
 
 type Player = {
   id: number;
@@ -221,7 +227,7 @@ function CountrySearchSelect({
   options,
   selectedValue,
   onChange,
-  placeholder = "Search country..."
+  placeholder = "Select country..."
 }: {
   label: string;
   options: { code: string; name: string }[];
@@ -231,19 +237,24 @@ function CountrySearchSelect({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const selectedCountry = options.find(c => c.code === selectedValue);
-
+  // Close dropdown on click outside
   useEffect(() => {
-    if (selectedCountry) {
-      setSearchQuery(`${selectedCountry.name} (${selectedCountry.code})`);
-    } else if (!selectedValue) {
-      setSearchQuery('');
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
     }
-  }, [selectedCountry, selectedValue]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  const displayOptions = searchQuery.trim().length > 0 && !selectedCountry
+  const selectedCountry = options.find(c => c.code.toUpperCase() === (selectedValue || '').toUpperCase());
+
+  const filteredOptions = searchQuery.trim().length > 0
     ? options.filter(c =>
         c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.code.toLowerCase().includes(searchQuery.toLowerCase())
@@ -251,94 +262,464 @@ function CountrySearchSelect({
     : options;
 
   return (
-    <div className="relative space-y-1.5 w-full">
+    <div className="relative space-y-1.5 w-full" ref={dropdownRef}>
       <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 font-mono">
         {label}
       </label>
+
+      {/* Trigger Button */}
       <div className="relative">
-        <input
-          ref={inputRef}
-          type="text"
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setIsOpen(true);
-            if (e.target.value === '') {
-              onChange('');
-            }
-          }}
-          onFocus={() => {
-            if (inputRef.current) {
-              inputRef.current.select();
-            }
-            setIsOpen(true);
-          }}
-          onBlur={() => {
-            setTimeout(() => {
-              setIsOpen(false);
-              if (selectedCountry) {
-                setSearchQuery(`${selectedCountry.name} (${selectedCountry.code})`);
-              } else {
-                setSearchQuery('');
-              }
-            }, 200);
-          }}
-          placeholder={placeholder}
-          className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 pr-10 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
-        />
-
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-          {selectedValue && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onChange('');
-                setSearchQuery('');
-              }}
-              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
-              title="Clear selection"
-            >
-              ×
-            </button>
-          )}
-          <span
-            className="text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
-            style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-          >
-            ▼
-          </span>
-        </div>
-
-        {isOpen && searchQuery.trim().length > 0 && (
-          <div className="absolute z-50 w-full mt-1.5 max-h-60 overflow-y-auto bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-800">
-            {displayOptions.length === 0 ? (
-              <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
-                No matching countries found
-              </div>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full h-11 bg-black/40 border border-zinc-800 hover:border-zinc-700 focus:border-accent/50 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs text-zinc-300 transition-all cursor-pointer font-sans"
+        >
+          <div className="flex items-center gap-2.5 min-w-0">
+            {selectedCountry ? (
+              <img
+                src={`https://flagcdn.com/16x12/${selectedCountry.code.toLowerCase()}.png`}
+                alt={selectedCountry.code}
+                className="w-4 h-3 object-cover rounded-[2px] shrink-0"
+              />
             ) : (
-              displayOptions.map((country) => {
-                const isSelected = country.code === selectedValue;
-                return (
-                  <div
-                    key={country.code}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      onChange(country.code);
-                      setSearchQuery(`${country.name} (${country.code})`);
-                      setIsOpen(false);
+              <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-19m0 0a5 5 0 005 5h4a5 5 0 015-5h2v10H9a5 5 0 00-5 5H3" />
+              </svg>
+            )}
+            <span className={selectedCountry ? "text-white font-medium truncate" : "text-zinc-500 truncate"}>
+              {selectedCountry ? `${selectedCountry.name} (${selectedCountry.code})` : placeholder}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 shrink-0">
+            {selectedValue && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChange('');
+                  setSearchQuery('');
+                }}
+                className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+                title="Clear selection"
+              >
+                ×
+              </span>
+            )}
+            <svg
+              className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
+              style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </button>
+
+        {/* Dropdown Panel */}
+        {isOpen && (
+          <div className="absolute right-0 z-50 w-full mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in duration-150">
+            {/* Search Input Box */}
+            <div className="p-2 border-b border-zinc-900 flex items-center gap-2 relative">
+              <span className="absolute left-4 text-zinc-500">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search country..."
+                autoFocus
+                className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-mono"
+              />
+            </div>
+
+            {/* Options Scroll List */}
+            <div className="max-h-60 overflow-y-auto divide-y divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-800">
+              {filteredOptions.length === 0 ? (
+                <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
+                  No matching countries found
+                </div>
+              ) : (
+                filteredOptions.map((country) => {
+                  const isSelected = country.code.toUpperCase() === (selectedValue || '').toUpperCase();
+                  return (
+                    <div
+                      key={country.code}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        onChange(country.code);
+                        setIsOpen(false);
+                      }}
+                      className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
+                        isSelected
+                          ? 'bg-accent/15 text-accent font-bold'
+                          : 'text-zinc-300 hover:bg-zinc-800/40 hover:text-white'
+                      }`}
+                    >
+                      <img
+                        src={`https://flagcdn.com/20x15/${country.code.toLowerCase()}.png`}
+                        alt={country.code}
+                        className="w-5 h-3.5 object-cover rounded-[2px] shrink-0 shadow-sm"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                      <span className="font-sans">{country.name} ({country.code})</span>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CalendarDatePicker({
+  label,
+  value,
+  onChange,
+  placeholder = "Select birth date..."
+}: {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parse initial date
+  const parsedDate = value ? new Date(value + 'T00:00:00') : null;
+  const initialYear = parsedDate && !isNaN(parsedDate.getTime()) ? parsedDate.getFullYear() : 2000;
+  const initialMonth = parsedDate && !isNaN(parsedDate.getTime()) ? parsedDate.getMonth() : 0;
+
+  const [currentYear, setCurrentYear] = useState(initialYear);
+  const [currentMonth, setCurrentMonth] = useState(initialMonth);
+
+  useEffect(() => {
+    if (value) {
+      const d = new Date(value + 'T00:00:00');
+      if (!isNaN(d.getTime())) {
+        setCurrentYear(d.getFullYear());
+        setCurrentMonth(d.getMonth());
+      }
+    }
+  }, [value]);
+
+  // Click outside to close
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const MONTH_NAMES = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const DAYS_OF_WEEK = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+
+  // Calculate days in month
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+
+  // Year list for dropdown (1950 to current year)
+  const currentActualYear = new Date().getFullYear();
+  const yearsList = Array.from({ length: currentActualYear - 1950 + 1 }, (_, i) => currentActualYear - i);
+
+  const [isMonthSelectOpen, setIsMonthSelectOpen] = useState(false);
+  const [isYearSelectOpen, setIsYearSelectOpen] = useState(false);
+  const yearListRef = useRef<HTMLDivElement>(null);
+  const monthListRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to selected year when Year dropdown opens
+  useEffect(() => {
+    if (isYearSelectOpen && yearListRef.current) {
+      const selectedEl = yearListRef.current.querySelector('[data-selected="true"]') as HTMLElement;
+      if (selectedEl) {
+        yearListRef.current.scrollTop = selectedEl.offsetTop - 60;
+      }
+    }
+  }, [isYearSelectOpen]);
+
+  const handlePrevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(prev => prev - 1);
+    } else {
+      setCurrentMonth(prev => prev - 1);
+    }
+    setIsMonthSelectOpen(false);
+    setIsYearSelectOpen(false);
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(prev => prev + 1);
+    } else {
+      setCurrentMonth(prev => prev + 1);
+    }
+    setIsMonthSelectOpen(false);
+    setIsYearSelectOpen(false);
+  };
+
+  const handleSelectDay = (day: number) => {
+    const mm = String(currentMonth + 1).padStart(2, '0');
+    const dd = String(day).padStart(2, '0');
+    const dateStr = `${currentYear}-${mm}-${dd}`;
+    onChange(dateStr);
+    setIsOpen(false);
+    setIsMonthSelectOpen(false);
+    setIsYearSelectOpen(false);
+  };
+
+  // Format date display (e.g. October 15, 2000 or 2000-10-15)
+  const formattedDisplay = value ? (() => {
+    const d = new Date(value + 'T00:00:00');
+    if (isNaN(d.getTime())) return value;
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  })() : '';
+
+  return (
+    <div className="relative space-y-1.5 w-full" ref={containerRef}>
+      <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 font-mono">
+        {label}
+      </label>
+      
+      {/* Trigger Button */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => {
+            setIsOpen(!isOpen);
+            setIsMonthSelectOpen(false);
+            setIsYearSelectOpen(false);
+          }}
+          className="w-full h-11 bg-black/40 border border-zinc-800 hover:border-zinc-700 focus:border-accent/50 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs text-left transition-all cursor-pointer font-sans"
+        >
+          <div className="flex items-center gap-2.5 min-w-0">
+            <svg className="w-4 h-4 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className={formattedDisplay ? "text-white font-medium truncate" : "text-zinc-500 truncate font-mono"}>
+              {formattedDisplay || placeholder}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 shrink-0">
+            {value && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChange('');
+                }}
+                className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+                title="Clear date"
+              >
+                ×
+              </span>
+            )}
+            <svg
+              className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
+              style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </button>
+
+        {/* Calendar Dropdown */}
+        {isOpen && (
+          <div className="absolute left-0 sm:left-auto right-0 z-50 w-full sm:w-[320px] mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-2xl p-4 shadow-2xl space-y-3.5 animate-in fade-in duration-150">
+            {/* Calendar Controls */}
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-zinc-900 relative">
+              <button
+                type="button"
+                onClick={handlePrevMonth}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/40 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer text-sm font-bold"
+              >
+                ‹
+              </button>
+
+              <div className="flex items-center gap-2">
+                {/* Custom Month select */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMonthSelectOpen(!isMonthSelectOpen);
+                      setIsYearSelectOpen(false);
                     }}
-                    className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors ${
+                    className="h-8 px-2.5 bg-black/60 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 rounded-lg text-xs text-white font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>{MONTH_NAMES[currentMonth]}</span>
+                    <span className="text-[8px] text-zinc-500 transition-transform duration-200" style={{ transform: isMonthSelectOpen ? 'rotate(180deg)' : 'none' }}>▼</span>
+                  </button>
+
+                  {isMonthSelectOpen && (
+                    <div
+                      ref={monthListRef}
+                      className="absolute left-0 top-full mt-1.5 z-50 w-32 max-h-48 overflow-y-auto bg-[#14141E] border border-zinc-750 rounded-xl shadow-2xl p-1 divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-700 animate-in fade-in duration-100"
+                    >
+                      {MONTH_NAMES.map((name, idx) => (
+                        <button
+                          key={name}
+                          type="button"
+                          onClick={() => {
+                            setCurrentMonth(idx);
+                            setIsMonthSelectOpen(false);
+                          }}
+                          className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
+                            currentMonth === idx
+                              ? 'bg-accent/20 text-accent font-bold'
+                              : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                          }`}
+                        >
+                          {name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Custom Year select with scrollable list */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsYearSelectOpen(!isYearSelectOpen);
+                      setIsMonthSelectOpen(false);
+                    }}
+                    className="h-8 px-2.5 bg-black/60 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 rounded-lg text-xs text-white font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>{currentYear}</span>
+                    <span className="text-[8px] text-zinc-500 transition-transform duration-200" style={{ transform: isYearSelectOpen ? 'rotate(180deg)' : 'none' }}>▼</span>
+                  </button>
+
+                  {isYearSelectOpen && (
+                    <div
+                      ref={yearListRef}
+                      className="absolute right-0 sm:left-0 top-full mt-1.5 z-50 w-24 max-h-48 overflow-y-auto bg-[#14141E] border border-zinc-750 rounded-xl shadow-2xl p-1 divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-700 animate-in fade-in duration-100"
+                    >
+                      {yearsList.map((yr) => (
+                        <button
+                          key={yr}
+                          data-selected={currentYear === yr ? "true" : "false"}
+                          type="button"
+                          onClick={() => {
+                            setCurrentYear(yr);
+                            setIsYearSelectOpen(false);
+                          }}
+                          className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
+                            currentYear === yr
+                              ? 'bg-accent/20 text-accent font-bold'
+                              : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                          }`}
+                        >
+                          {yr}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleNextMonth}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/40 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer text-sm font-bold"
+              >
+                ›
+              </button>
+            </div>
+
+            {/* Days of week */}
+            <div className="grid grid-cols-7 gap-1 text-center">
+              {DAYS_OF_WEEK.map((day) => (
+                <span key={day} className="text-[10px] font-bold text-zinc-500 font-mono py-0.5">
+                  {day}
+                </span>
+              ))}
+            </div>
+
+            {/* Days grid */}
+            <div className="grid grid-cols-7 gap-1">
+              {/* Empty leading days */}
+              {Array.from({ length: firstDayIndex }).map((_, i) => (
+                <div key={`empty-${i}`} className="h-8" />
+              ))}
+
+              {/* Month days */}
+              {Array.from({ length: daysInMonth }).map((_, i) => {
+                const dayNum = i + 1;
+                const mm = String(currentMonth + 1).padStart(2, '0');
+                const dd = String(dayNum).padStart(2, '0');
+                const thisDateStr = `${currentYear}-${mm}-${dd}`;
+                const isSelected = value === thisDateStr;
+
+                return (
+                  <button
+                    key={dayNum}
+                    type="button"
+                    onClick={() => handleSelectDay(dayNum)}
+                    className={`h-8 rounded-lg text-xs font-mono flex items-center justify-center transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-accent/15 text-accent font-bold'
-                        : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
+                        ? 'bg-accent text-black font-bold shadow-md shadow-accent/20'
+                        : 'text-zinc-300 hover:bg-zinc-800/80 hover:text-white'
                     }`}
                   >
-                    {country.name} ({country.code})
-                  </div>
+                    {dayNum}
+                  </button>
                 );
-              })
-            )}
+              })}
+            </div>
+
+            {/* Quick action footer */}
+            <div className="flex items-center justify-between pt-2 border-t border-zinc-900 text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => {
+                  onChange('');
+                  setIsOpen(false);
+                }}
+                className="text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const today = new Date();
+                  const mm = String(today.getMonth() + 1).padStart(2, '0');
+                  const dd = String(today.getDate()).padStart(2, '0');
+                  onChange(`${today.getFullYear()}-${mm}-${dd}`);
+                  setIsOpen(false);
+                }}
+                className="text-accent hover:underline cursor-pointer"
+              >
+                Today
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -355,6 +736,8 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -366,6 +749,8 @@ export default function ProfilePage() {
   const [birthDate, setBirthDate] = useState('');
   const [description, setDescription] = useState('');
   const [profileImgUrl, setProfileImgUrl] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const imageFileInputRef = useRef<HTMLInputElement>(null);
   const [team, setTeam] = useState('Community Member');
   const [countriesList, setCountriesList] = useState<{ code: string; name: string }[]>([]);
 
@@ -376,6 +761,7 @@ export default function ProfilePage() {
   });
 
   // VALORANT settings
+  const [valRole, setValRole] = useState('');
   const [valDpi, setValDpi] = useState('800');
   const [valSens, setValSens] = useState('0.35');
   const [valHz, setValHz] = useState('1000');
@@ -387,14 +773,78 @@ export default function ProfilePage() {
   const [valRapidTrigger, setValRapidTrigger] = useState('');
   const [valActuationPoint, setValActuationPoint] = useState('');
   const [valPollingRate, setValPollingRate] = useState('');
+  const [valExtraSettings, setValExtraSettings] = useState<Record<string, any>>({});
+  const [showConfigUploader, setShowConfigUploader] = useState(false);
+  const [uploadSuccessNotice, setUploadSuccessNotice] = useState<string | null>(null);
+
+  // VALORANT Advanced Settings
+  const [valDisplayMode, setValDisplayMode] = useState('Fullscreen');
+  const [valNvidiaReflex, setValNvidiaReflex] = useState('On + Boost');
+  const [valMultithreaded, setValMultithreaded] = useState('On');
+  const [valMaterialQuality, setValMaterialQuality] = useState('Low');
+  const [valTextureQuality, setValTextureQuality] = useState('Low');
+  const [valDetailQuality, setValDetailQuality] = useState('Low');
+  const [valUiQuality, setValUiQuality] = useState('Low');
+  const [valVignette, setValVignette] = useState('Off');
+  const [valVsync, setValVsync] = useState('Off');
+  const [valAntiAliasing, setValAntiAliasing] = useState('None');
+  const [valAnisotropic, setValAnisotropic] = useState('1x');
+  const [valImproveClarity, setValImproveClarity] = useState('Off');
+  const [valBloom, setValBloom] = useState('Off');
+  const [valDistortion, setValDistortion] = useState('Off');
+  const [valCastShadows, setValCastShadows] = useState('Off');
+  const [valMapRotate, setValMapRotate] = useState('Rotate');
+  const [valMapFixedOrientation, setValMapFixedOrientation] = useState('Always the same');
+  const [valMapKeepCentered, setValMapKeepCentered] = useState('On');
+  const [valMapMinimapSize, setValMapMinimapSize] = useState('1.03');
+  const [valMapMinimapZoom, setValMapMinimapZoom] = useState('0.9');
+  const [valMapVisionCones, setValMapVisionCones] = useState('On');
+  const [valCrosshairs, setValCrosshairs] = useState<ValorantCrosshairItem[]>([
+    {
+      id: '1',
+      name: 'Primary Crosshair',
+      crosshair_code: '0;P;c;5;h;0;d;0;0b;1;0t;1;0l;4;0o;2;0a;1;1b;0',
+      crosshair_color: 'Cyan',
+      crosshair_outline: 'Off',
+      crosshair_dot: 'Off',
+      crosshair_inner: '1 / 4 / 2 / 2',
+      crosshair_outer: 'Off',
+      crosshair_thickness: '1'
+    }
+  ]);
 
   // CS2 settings
+  const [csRole, setCsRole] = useState('');
   const [csDpi, setCsDpi] = useState('800');
   const [csSens, setCsSens] = useState('1.0');
   const [csHz, setCsHz] = useState('1000');
   const [csZoomSens, setCsZoomSens] = useState('1.0');
   const [csRes, setCsRes] = useState('1280x960');
   const [csAspect, setCsAspect] = useState('4:3');
+
+  // CS2 Advanced Settings
+  const [csDisplayMode, setCsDisplayMode] = useState('Fullscreen');
+  const [csNvidiaReflex, setCsNvidiaReflex] = useState('Enabled + Boost');
+  const [csMultithreaded, setCsMultithreaded] = useState('Enabled');
+  const [csMaterialQuality, setCsMaterialQuality] = useState('Low');
+  const [csTextureQuality, setCsTextureQuality] = useState('Low');
+  const [csVsync, setCsVsync] = useState('Disabled');
+  const [csAntiAliasing, setCsAntiAliasing] = useState('None');
+  const [csAnisotropic, setCsAnisotropic] = useState('Bilinear');
+  const [csCrosshairs, setCsCrosshairs] = useState<CS2CrosshairSettings[]>([
+    {
+      id: '1',
+      name: 'Primary Crosshair',
+      crosshair_code: 'CSGO-7O24P-e2eW3-9v4sH-v2wPn-Q3PxF',
+      crosshair_color: 'Green',
+      style: 4,
+      size: 2,
+      gap: -3,
+      thickness: 1,
+      dot: false,
+      outline: false
+    }
+  ]);
 
   // Gear dropdown states
   const [gearOptions, setGearOptions] = useState<{
@@ -479,15 +929,15 @@ export default function ProfilePage() {
         if (profile) {
           setIsProfileCreated(profile.is_profile_created);
           setUsername(profile.username || '');
-          setFullName(profile.Full_name || profile.full_name || profile.real_name || '');
+          setFullName(profile.real_name || profile.Full_name || profile.full_name || '');
           setSelectedCountryCode(profile.country_code || '');
           setNationality(profile.nationality || '');
-          setBirthDate(profile.birth_date || '');
-          setDescription(profile.description || '');
-          setProfileImgUrl(profile.profile_img_url || '');
+          const socials = profile.social_links || {};
+          setBirthDate(profile.birth_date || socials.birth_date || '');
+          setDescription(profile.description || socials.description || '');
+          setProfileImgUrl(profile.profile_img_url || socials.profile_img_url || '');
 
           // Load social links
-          const socials = profile.social_links || {};
           setTwitter(socials.twitter || socials.x || '');
           setTwitch(socials.twitch || '');
           setInstagram(socials.instagram || '');
@@ -516,6 +966,61 @@ export default function ProfilePage() {
             setValRapidTrigger(settings.valorant.settings_data?.rapid_trigger || '');
             setValActuationPoint(settings.valorant.settings_data?.actuation_point || '');
             setValPollingRate(settings.valorant.settings_data?.polling_rate || '');
+
+            if (settings.valorant.settings_data) {
+              const sd = settings.valorant.settings_data;
+              if (settings.valorant.game_role) setValRole(settings.valorant.game_role);
+              if (sd.display_mode) setValDisplayMode(sd.display_mode);
+              if (sd.nvidia_reflex) setValNvidiaReflex(sd.nvidia_reflex);
+              if (sd.multithreaded_rendering) setValMultithreaded(sd.multithreaded_rendering);
+              if (sd.material_quality) setValMaterialQuality(sd.material_quality);
+              if (sd.texture_quality) setValTextureQuality(sd.texture_quality);
+              if (sd.detail_quality) setValDetailQuality(sd.detail_quality);
+              if (sd.ui_quality) setValUiQuality(sd.ui_quality);
+              if (sd.vignette) setValVignette(sd.vignette);
+              if (sd.vsync) setValVsync(sd.vsync);
+              if (sd.anti_aliasing) setValAntiAliasing(sd.anti_aliasing);
+              if (sd.anisotropic_filtering) setValAnisotropic(sd.anisotropic_filtering);
+              if (sd.improve_clarity) setValImproveClarity(sd.improve_clarity);
+              if (sd.bloom) setValBloom(sd.bloom);
+              if (sd.distortion) setValDistortion(sd.distortion);
+              if (sd.cast_shadows) setValCastShadows(sd.cast_shadows);
+              if (sd.map_rotate) setValMapRotate(sd.map_rotate);
+              if (sd.map_fixed_orientation) setValMapFixedOrientation(sd.map_fixed_orientation);
+              if (sd.map_keep_centered) setValMapKeepCentered(sd.map_keep_centered);
+              if (sd.map_minimap_size) setValMapMinimapSize(sd.map_minimap_size);
+              if (sd.map_minimap_zoom) setValMapMinimapZoom(sd.map_minimap_zoom);
+              if (sd.map_vision_cones) setValMapVisionCones(sd.map_vision_cones);
+
+              if (Array.isArray(sd.crosshairs) && sd.crosshairs.length > 0) {
+                setValCrosshairs(sd.crosshairs.map((c: any, idx: number) => {
+                  const fields = c.crosshair_code && c.crosshair_code.includes(';')
+                    ? parseValorantCrosshairToFields(c.crosshair_code)
+                    : {};
+                  return {
+                    id: c.id || String(idx + 1),
+                    name: c.name || `Crosshair ${idx + 1}`,
+                    crosshair_code: c.crosshair_code || '',
+                    ...c,
+                    ...fields
+                  };
+                }));
+              } else if (sd.crosshair_code) {
+                const fields = sd.crosshair_code.includes(';')
+                  ? parseValorantCrosshairToFields(sd.crosshair_code)
+                  : {};
+                setValCrosshairs([{
+                  id: '1',
+                  name: sd.crosshair_name || 'Primary Crosshair',
+                  crosshair_code: sd.crosshair_code,
+                  ...fields
+                }]);
+              }
+
+              setValExtraSettings({
+                ...sd
+              });
+            }
           }
 
           // Load cs2 values if exist
@@ -526,6 +1031,34 @@ export default function ProfilePage() {
             setCsZoomSens(settings.cs2.zoom_sens?.toString() || '1.0');
             setCsRes(settings.cs2.resolution || '1280x960');
             setCsAspect(settings.cs2.aspect_ratio || '4:3');
+            if (settings.cs2.game_role) setCsRole(settings.cs2.game_role);
+
+            const csd = settings.cs2.settings_data || {};
+            if (csd.display_mode) setCsDisplayMode(csd.display_mode);
+            if (csd.nvidia_reflex) setCsNvidiaReflex(csd.nvidia_reflex);
+            if (csd.multithreaded_rendering) setCsMultithreaded(csd.multithreaded_rendering);
+            if (csd.material_quality) setCsMaterialQuality(csd.material_quality);
+            if (csd.texture_quality) setCsTextureQuality(csd.texture_quality);
+            if (csd.vsync) setCsVsync(csd.vsync);
+            if (csd.anti_aliasing) setCsAntiAliasing(csd.anti_aliasing);
+            if (csd.anisotropic_filtering) setCsAnisotropic(csd.anisotropic_filtering);
+
+            if (Array.isArray(csd.crosshairs) && csd.crosshairs.length > 0) {
+              setCsCrosshairs(csd.crosshairs);
+            } else if (csd.crosshair_code) {
+              setCsCrosshairs([{
+                id: '1',
+                name: 'Primary Crosshair',
+                crosshair_code: csd.crosshair_code,
+                crosshair_color: 'Green',
+                style: 4,
+                size: 2,
+                gap: -3,
+                thickness: 1,
+                dot: false,
+                outline: false
+              }]);
+            }
           }
 
           // Set active gear dropdowns
@@ -609,6 +1142,7 @@ export default function ProfilePage() {
     const gameSettings: any = {};
     if (gamesPlayed.valorant) {
       gameSettings.valorant = {
+        game_role: valRole.trim() || 'Community Member',
         mouse_dpi: parseFloat(valDpi) || 800,
         in_game_sens: parseFloat(valSens) || 0.35,
         mouse_hz: parseInt(valHz, 10) || 1000,
@@ -617,23 +1151,60 @@ export default function ProfilePage() {
         aspect_ratio: valAspect || '16:9',
         refresh_rate: null,
         settings_data: {
+          ...valExtraSettings,
           enemy_highlight_color: valEnemyHighlight,
-          crosshair_code: valCrosshairCode.trim() || undefined,
+          crosshair_code: (valCrosshairs[0]?.crosshair_code || valCrosshairCode).trim() || undefined,
+          crosshair_name: valCrosshairs[0]?.name || undefined,
+          crosshairs: valCrosshairs,
           rapid_trigger: valRapidTrigger.trim() || undefined,
           actuation_point: valActuationPoint.trim() || undefined,
-          polling_rate: valPollingRate.trim() || undefined
+          polling_rate: valPollingRate.trim() || undefined,
+          display_mode: valDisplayMode,
+          nvidia_reflex: valNvidiaReflex,
+          multithreaded_rendering: valMultithreaded,
+          material_quality: valMaterialQuality,
+          texture_quality: valTextureQuality,
+          detail_quality: valDetailQuality,
+          ui_quality: valUiQuality,
+          vignette: valVignette,
+          vsync: valVsync,
+          anti_aliasing: valAntiAliasing,
+          anisotropic_filtering: valAnisotropic,
+          improve_clarity: valImproveClarity,
+          bloom: valBloom,
+          distortion: valDistortion,
+          cast_shadows: valCastShadows,
+          map_rotate: valMapRotate,
+          map_fixed_orientation: valMapFixedOrientation,
+          map_keep_centered: valMapKeepCentered,
+          map_minimap_size: valMapMinimapSize,
+          map_minimap_zoom: valMapMinimapZoom,
+          map_vision_cones: valMapVisionCones
         }
       };
     }
     if (gamesPlayed.cs2) {
       gameSettings.cs2 = {
+        game_role: csRole.trim() || 'Community Member',
         mouse_dpi: parseFloat(csDpi) || 800,
         in_game_sens: parseFloat(csSens) || 1.0,
         mouse_hz: parseInt(csHz, 10) || 1000,
         zoom_sens: parseFloat(csZoomSens) || 1.0,
         resolution: csRes || '1280x960',
         aspect_ratio: csAspect || '4:3',
-        refresh_rate: null
+        refresh_rate: null,
+        settings_data: {
+          display_mode: csDisplayMode,
+          nvidia_reflex: csNvidiaReflex,
+          multithreaded_rendering: csMultithreaded,
+          material_quality: csMaterialQuality,
+          texture_quality: csTextureQuality,
+          vsync: csVsync,
+          anti_aliasing: csAntiAliasing,
+          anisotropic_filtering: csAnisotropic,
+          crosshairs: csCrosshairs,
+          crosshair_code: csCrosshairs[0]?.crosshair_code || undefined
+        }
       };
     }
 
@@ -658,37 +1229,51 @@ export default function ProfilePage() {
       youtube: youtube.trim(),
       tiktok: tiktok.trim(),
       discord: discord.trim(),
-      facebook: facebook.trim()
+      facebook: facebook.trim(),
+      // Safely persist extended profile info in JSONB to avoid PGRST204 column errors
+      birth_date: birthDate || null,
+      description: description.trim() || null,
+      profile_img_url: profileImgUrl.trim() || null
     };
 
     const cleanUsername = username.trim() || email?.split('@')[0] || 'User';
 
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('user_profiles')
         .update({
           username: cleanUsername,
-          Full_name: fullName.trim() || null,
+          real_name: fullName.trim() || null,
           nationality: natName,
           country_code: selectedCountryCode,
-          birth_date: birthDate || null,
-          description: description.trim() || null,
-          profile_img_url: profileImgUrl.trim() || null,
           is_profile_created: true,
           game_settings: gameSettings,
           gear_ids: gearIds,
           social_links: socialLinks,
           updated_at: new Date().toISOString()
         })
-        .eq('id', userId);
+        .eq('id', userId)
+        .select();
 
       if (error) {
         setErrorMsg(error.message);
+      } else if (!data || data.length === 0) {
+        setErrorMsg('Unable to save profile. Please check if your login session has expired.');
       } else {
         setUsername(cleanUsername);
+        setFullName(fullName.trim());
         setNationality(natName);
         setIsProfileCreated(true);
         setIsEditing(false);
+        setValExtraSettings(prev => ({
+          ...prev,
+          crosshairs: valCrosshairs,
+          crosshair_name: valCrosshairs[0]?.name || undefined,
+          crosshair_code: (valCrosshairs[0]?.crosshair_code || valCrosshairCode).trim() || undefined,
+        }));
+        if (valCrosshairs.length > 0) {
+          setValCrosshairCode(valCrosshairs[0]?.crosshair_code || '');
+        }
 
         // Refresh selected gears list
         if (gearIds.length > 0) {
@@ -709,6 +1294,116 @@ export default function ProfilePage() {
       setErrorMsg(err.message || 'An error occurred while saving.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDeleteProfile = async () => {
+    if (!userId) return;
+    setDeleting(true);
+    setErrorMsg(null);
+
+    try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({
+          real_name: null,
+          nationality: null,
+          country_code: null,
+          is_profile_created: false,
+          game_settings: {},
+          gear_ids: [],
+          social_links: {},
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (error) {
+        setErrorMsg(error.message);
+      } else {
+        setIsProfileCreated(false);
+        setIsEditing(false);
+        setShowDeleteModal(false);
+        setFullName('');
+        setSelectedCountryCode('');
+        setNationality('');
+        setBirthDate('');
+        setDescription('');
+        setProfileImgUrl('');
+        setGamesPlayed({ valorant: false, cs2: false });
+        setSelectedGears([]);
+        setSelectedMouseId('');
+        setSelectedKeyboardId('');
+        setSelectedMousepadId('');
+        setSelectedHeadsetId('');
+        setTwitter('');
+        setTwitch('');
+        setInstagram('');
+        setYoutube('');
+        setTiktok('');
+        setDiscord('');
+        setFacebook('');
+        setValExtraSettings({});
+        router.refresh();
+      }
+    } catch (err: any) {
+      setErrorMsg(err?.message || 'Failed to delete profile.');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setErrorMsg('Please select a valid image file (PNG, JPG, WebP).');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMsg('Image file size must be under 5MB.');
+      return;
+    }
+
+    setUploadingImage(true);
+    setErrorMsg(null);
+
+    try {
+      const fileExt = file.name.split('.').pop() || 'jpg';
+      const fileName = `avatar-${userId || 'user'}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('player-profiles')
+        .upload(filePath, file, { upsert: true });
+
+      if (!uploadError) {
+        const { data: { publicUrl } } = supabase.storage
+          .from('player-profiles')
+          .getPublicUrl(filePath);
+        setProfileImgUrl(publicUrl);
+      } else {
+        // Fallback: Read as base64 data URL
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+            setProfileImgUrl(reader.result);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (err: any) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          setProfileImgUrl(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadingImage(false);
+      e.target.value = '';
     }
   };
 
@@ -766,7 +1461,7 @@ export default function ProfilePage() {
   if (gamesPlayed.valorant) {
     constructedSettingsData.push({
       id: 1,
-      game_role: 'Community Member',
+      game_role: valRole.trim() || 'Community Member',
       mouse_dpi: parseFloat(valDpi) || 800,
       mouse_hz: parseInt(valHz, 10) || 1000,
       in_game_sens: parseFloat(valSens) || 0.35,
@@ -775,12 +1470,36 @@ export default function ProfilePage() {
       aspect_ratio: valAspect || '16:9',
       refresh_rate: null,
       settings_data: {
+        ...valExtraSettings,
         scoped_sens: valScopedSens,
         enemy_highlight_color: valEnemyHighlight,
-        crosshair_code: valCrosshairCode || undefined,
+        crosshair_code: (valCrosshairs[0]?.crosshair_code || valCrosshairCode).trim() || undefined,
+        crosshair_name: valCrosshairs[0]?.name || undefined,
+        crosshairs: valCrosshairs,
         rapid_trigger: valRapidTrigger || undefined,
         actuation_point: valActuationPoint || undefined,
-        polling_rate: valPollingRate || undefined
+        polling_rate: valPollingRate || undefined,
+        display_mode: valDisplayMode,
+        nvidia_reflex: valNvidiaReflex,
+        multithreaded_rendering: valMultithreaded,
+        material_quality: valMaterialQuality,
+        texture_quality: valTextureQuality,
+        detail_quality: valDetailQuality,
+        ui_quality: valUiQuality,
+        vignette: valVignette,
+        vsync: valVsync,
+        anti_aliasing: valAntiAliasing,
+        anisotropic_filtering: valAnisotropic,
+        improve_clarity: valImproveClarity,
+        bloom: valBloom,
+        distortion: valDistortion,
+        cast_shadows: valCastShadows,
+        map_rotate: valMapRotate,
+        map_fixed_orientation: valMapFixedOrientation,
+        map_keep_centered: valMapKeepCentered,
+        map_minimap_size: valMapMinimapSize,
+        map_minimap_zoom: valMapMinimapZoom,
+        map_vision_cones: valMapVisionCones
       },
       games: {
         id: 2,
@@ -793,7 +1512,7 @@ export default function ProfilePage() {
   if (gamesPlayed.cs2) {
     constructedSettingsData.push({
       id: 2,
-      game_role: 'Community Member',
+      game_role: csRole.trim() || 'Community Member',
       mouse_dpi: parseFloat(csDpi) || 800,
       mouse_hz: parseInt(csHz, 10) || 1000,
       in_game_sens: parseFloat(csSens) || 1.0,
@@ -802,7 +1521,17 @@ export default function ProfilePage() {
       aspect_ratio: csAspect || '4:3',
       refresh_rate: null,
       settings_data: {
-        zoom_sens: csZoomSens
+        zoom_sens: csZoomSens,
+        display_mode: csDisplayMode,
+        nvidia_reflex: csNvidiaReflex,
+        multithreaded_rendering: csMultithreaded,
+        material_quality: csMaterialQuality,
+        texture_quality: csTextureQuality,
+        vsync: csVsync,
+        anti_aliasing: csAntiAliasing,
+        anisotropic_filtering: csAnisotropic,
+        crosshairs: csCrosshairs,
+        crosshair_code: csCrosshairs[0]?.crosshair_code || undefined
       },
       games: {
         id: 3,
@@ -811,6 +1540,178 @@ export default function ProfilePage() {
       }
     });
   }
+
+  const handleApplyValorantConfig = async (settings: ParsedValorantSettings, dpiInput: string, hzInput: string) => {
+    setGamesPlayed(prev => ({ ...prev, valorant: true }));
+
+    const resolvedDpi = dpiInput || valDpi;
+    const resolvedHz = hzInput || valHz;
+    const resolvedSens = settings.mouseSensitivity.toString();
+    const resolvedScopedSens = settings.scopedSens.toString();
+    const resolvedRes = settings.resolution;
+    const resolvedAspect = settings.aspectRatio;
+    const resolvedHighlight = settings.enemyHighlightColor;
+    const resolvedCrosshair = settings.crosshairCode || valCrosshairCode;
+
+    if (dpiInput) setValDpi(dpiInput);
+    if (hzInput) setValHz(hzInput);
+    setValSens(resolvedSens);
+    setValScopedSens(resolvedScopedSens);
+    setValRes(resolvedRes);
+    setValAspect(resolvedAspect);
+    setValEnemyHighlight(resolvedHighlight);
+    if (settings.crosshairCode) {
+      setValCrosshairCode(settings.crosshairCode);
+    }
+
+    // Format all crosshair profiles so the arrows appear and allow cycling through all in-game crosshairs!
+    let formattedCrosshairs: any[] = [];
+    if (settings.crosshairProfiles && settings.crosshairProfiles.length > 0) {
+      const nameCounts: Record<string, number> = {};
+      formattedCrosshairs = settings.crosshairProfiles.map((p, idx) => {
+        const baseName = p.name || 'Crosshair';
+        nameCounts[baseName] = (nameCounts[baseName] || 0) + 1;
+        const displayName = nameCounts[baseName] > 1 ? `${baseName} (${nameCounts[baseName]})` : baseName;
+        const fields = p.code && p.code.includes(';') ? parseValorantCrosshairToFields(p.code) : {};
+
+        // Also check if raw profile is available to ensure 100% precision from RiotUserSettings.ini
+        const rawP = p.raw?.primary;
+        const rawInnerMove = rawP?.innerLines?.bShowMovementError;
+        const rawInnerShoot = rawP?.innerLines?.bShowShootingError;
+        const rawOuterShow = rawP?.outerLines?.bShowLines;
+        const rawOuterMove = rawP?.outerLines?.bShowMovementError;
+        const rawOuterShoot = rawP?.outerLines?.bShowShootingError;
+
+        return {
+          id: String(Date.now() + idx),
+          name: displayName,
+          crosshair_code: p.code,
+          ...fields,
+          ...(rawInnerMove !== undefined ? { inner_movement_error: Boolean(rawInnerMove) } : {}),
+          ...(rawInnerShoot !== undefined ? { inner_firing_error: Boolean(rawInnerShoot) } : {}),
+          ...(rawOuterShow === false ? { outer_movement_error: false, outer_firing_error: false } : {
+            ...(rawOuterMove !== undefined ? { outer_movement_error: Boolean(rawOuterMove) } : {}),
+            ...(rawOuterShoot !== undefined ? { outer_firing_error: Boolean(rawOuterShoot) } : {}),
+          })
+        };
+      });
+
+      // Put the active profile at index 0 so it displays first
+      if (settings.activeCrosshairProfileName) {
+        const activeIdx = formattedCrosshairs.findIndex(
+          p => p.name.toLowerCase() === settings.activeCrosshairProfileName.toLowerCase() ||
+               p.name.toLowerCase().startsWith(settings.activeCrosshairProfileName.toLowerCase())
+        );
+        if (activeIdx > 0) {
+          const [activeItem] = formattedCrosshairs.splice(activeIdx, 1);
+          formattedCrosshairs.unshift(activeItem);
+        }
+      }
+    } else if (settings.crosshairCode) {
+      const fields = settings.crosshairCode.includes(';') ? parseValorantCrosshairToFields(settings.crosshairCode) : {};
+      formattedCrosshairs = [{
+        id: '1',
+        name: settings.activeCrosshairProfileName || 'Primary Crosshair',
+        crosshair_code: settings.crosshairCode,
+        ...fields
+      }];
+    }
+
+    if (settings.displayMode) setValDisplayMode(settings.displayMode);
+    if (settings.nvidiaReflex) setValNvidiaReflex(settings.nvidiaReflex);
+    if (settings.multithreadedRendering) setValMultithreaded(settings.multithreadedRendering);
+    if (settings.materialQuality) setValMaterialQuality(settings.materialQuality);
+    if (settings.textureQuality) setValTextureQuality(settings.textureQuality);
+    if (settings.detailQuality) setValDetailQuality(settings.detailQuality);
+    if (settings.uiQuality) setValUiQuality(settings.uiQuality);
+    if (settings.vignette) setValVignette(settings.vignette);
+    if (settings.vsync) setValVsync(settings.vsync);
+    if (settings.antiAliasing) setValAntiAliasing(settings.antiAliasing);
+    if (settings.anisotropicFiltering) setValAnisotropic(settings.anisotropicFiltering);
+    if (settings.improveClarity) setValImproveClarity(settings.improveClarity);
+    if (settings.bloom) setValBloom(settings.bloom);
+    if (settings.distortion) setValDistortion(settings.distortion);
+    if (settings.castShadows) setValCastShadows(settings.castShadows);
+    if (settings.minimapRotate) setValMapRotate(settings.minimapRotate);
+    if (settings.minimapFixedOrientation) setValMapFixedOrientation(settings.minimapFixedOrientation);
+    if (settings.minimapKeepCentered) setValMapKeepCentered(settings.minimapKeepCentered);
+    if (settings.minimapSize) setValMapMinimapSize(settings.minimapSize);
+    if (settings.minimapZoom) setValMapMinimapZoom(settings.minimapZoom);
+    if (settings.minimapVisionCones) setValMapVisionCones(settings.minimapVisionCones);
+    if (formattedCrosshairs.length > 0) setValCrosshairs(formattedCrosshairs);
+
+    const extra = {
+      display_mode: settings.displayMode,
+      vsync: settings.vsync,
+      frame_rate_limit: settings.frameRateLimit,
+      nvidia_reflex: settings.nvidiaReflex,
+      material_quality: settings.materialQuality,
+      texture_quality: settings.textureQuality,
+      detail_quality: settings.detailQuality,
+      ui_quality: settings.uiQuality,
+      vignette: settings.vignette,
+      anti_aliasing: settings.antiAliasing,
+      anisotropic_filtering: settings.anisotropicFiltering,
+      improve_clarity: settings.improveClarity,
+      bloom: settings.bloom,
+      distortion: settings.distortion,
+      cast_shadows: settings.castShadows,
+      multithreaded_rendering: settings.multithreadedRendering,
+      map_rotate: settings.minimapRotate,
+      map_fixed_orientation: settings.minimapFixedOrientation,
+      map_keep_centered: settings.minimapKeepCentered,
+      map_minimap_size: settings.minimapSize,
+      map_minimap_zoom: settings.minimapZoom,
+      map_vision_cones: settings.minimapVisionCones,
+      keybinds: settings.keybinds,
+      crosshair_name: settings.activeCrosshairProfileName,
+      crosshairs: formattedCrosshairs
+    };
+    setValExtraSettings(extra);
+
+    // Auto-save to Supabase immediately if logged in
+    if (userId) {
+      try {
+        const { data: currentProf } = await supabase
+          .from('user_profiles')
+          .select('game_settings')
+          .eq('id', userId)
+          .maybeSingle();
+
+        const existingSettings = currentProf?.game_settings || {};
+        const updatedGameSettings = {
+          ...existingSettings,
+          valorant: {
+            mouse_dpi: parseFloat(resolvedDpi) || 800,
+            in_game_sens: parseFloat(resolvedSens) || 0.35,
+            mouse_hz: parseInt(resolvedHz, 10) || 1000,
+            scoped_sens: parseFloat(resolvedScopedSens) || 1.0,
+            resolution: resolvedRes,
+            aspect_ratio: resolvedAspect,
+            refresh_rate: null,
+            settings_data: {
+              enemy_highlight_color: resolvedHighlight,
+              crosshair_code: resolvedCrosshair || undefined,
+              ...extra
+            }
+          }
+        };
+
+        await supabase
+          .from('user_profiles')
+          .update({
+            game_settings: updatedGameSettings,
+            is_profile_created: true
+          })
+          .eq('id', userId);
+      } catch (err) {
+        console.error('Auto-save error:', err);
+      }
+    }
+
+    setUploadSuccessNotice(`Config imported successfully! Found ${formattedCrosshairs.length} crosshairs (Active: "${settings.activeCrosshairProfileName}"), Sens: ${settings.mouseSensitivity}, Res: ${settings.resolution}. All Video, Graphics, Minimap, and Keybinds loaded!`);
+    setShowConfigUploader(false);
+  };
 
   const profileDataForClient = {
     id: 0,
@@ -861,7 +1762,11 @@ export default function ProfilePage() {
 
           <div className="border-b border-zinc-800/80 pb-4">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
-              Edit <span className="text-accent">Gamer Profile</span>
+              {isProfileCreated ? (
+                <>Edit <span className="text-accent">Profile</span></>
+              ) : (
+                <>Create <span className="text-accent">Your Profile</span></>
+              )}
             </h1>
             <p className="text-xs text-zinc-500 font-mono mt-1">
               Customize your setup, crosshair, sensitivity, and gear to display on your profile.
@@ -909,28 +1814,90 @@ export default function ProfilePage() {
                   options={countriesList}
                   selectedValue={selectedCountryCode}
                   onChange={setSelectedCountryCode}
-                  placeholder="Type to search country..."
+                  placeholder="Select country..."
                 />
 
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Birth Date</label>
-                  <input
-                    type="date"
-                    value={birthDate}
-                    onChange={(e) => setBirthDate(e.target.value)}
-                    className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
-                  />
-                </div>
+                <CalendarDatePicker
+                  label="Birth Date"
+                  value={birthDate}
+                  onChange={setBirthDate}
+                  placeholder="Select birth date..."
+                />
 
-                <div className="space-y-1.5 md:col-span-2">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Profile Image URL</label>
-                  <input
-                    type="text"
-                    value={profileImgUrl}
-                    onChange={(e) => setProfileImgUrl(e.target.value)}
-                    placeholder="https://... (Direct image link)"
-                    className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
-                  />
+                {/* Profile Image - Upload from device & Direct URL */}
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">
+                    Profile Picture / Avatar
+                  </label>
+
+                  <div className="p-4 bg-black/30 border border-zinc-800/80 rounded-2xl flex flex-col sm:flex-row items-center gap-5">
+                    {/* Avatar Preview */}
+                    <div className="relative w-20 h-20 rounded-2xl bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center text-accent text-2xl font-bold overflow-hidden shrink-0 shadow-inner group">
+                      {profileImgUrl ? (
+                        <img
+                          src={profileImgUrl}
+                          alt="Profile Preview"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <span>{username ? username[0].toUpperCase() : '?'}</span>
+                      )}
+                      {uploadingImage && (
+                        <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center gap-1">
+                          <div className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                          <span className="text-[9px] text-accent font-mono">Uploading</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Upload button & URL input */}
+                    <div className="flex-1 w-full space-y-3">
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        <input
+                          type="file"
+                          ref={imageFileInputRef}
+                          onChange={handleImageUpload}
+                          accept="image/*"
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          disabled={uploadingImage}
+                          onClick={() => imageFileInputRef.current?.click()}
+                          className="px-4 h-9.5 bg-zinc-850 hover:bg-zinc-750 border border-zinc-700 text-white text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-2 shadow-sm active:scale-98"
+                        >
+                          <svg className="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                          </svg>
+                          <span>{uploadingImage ? 'Uploading...' : 'Upload'}</span>
+                        </button>
+
+                        {profileImgUrl && (
+                          <button
+                            type="button"
+                            onClick={() => setProfileImgUrl('')}
+                            className="px-3.5 h-9.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Direct URL input */}
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={profileImgUrl}
+                          onChange={(e) => setProfileImgUrl(e.target.value)}
+                          placeholder="Or paste image URL (https://...)"
+                          className="w-full h-10 bg-black/50 border border-zinc-800 focus:border-accent/50 rounded-xl px-3.5 text-xs text-white placeholder-zinc-600 focus:outline-none transition-all font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-1.5 md:col-span-2">
@@ -948,9 +1915,37 @@ export default function ProfilePage() {
 
             {/* Block 2: Game Settings */}
             <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
-                2. Game Specific Settings
-              </h2>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono">
+                  2. Game Specific Settings
+                </h2>
+                <button
+                  type="button"
+                  onClick={() => setShowConfigUploader(true)}
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-semibold font-sans transition-all active:scale-95 shadow-sm cursor-pointer"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  <span>Upload VALORANT Config</span>
+                </button>
+              </div>
+
+              {uploadSuccessNotice && (
+                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-sans flex items-start justify-between gap-3 animate-in fade-in duration-200">
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>{uploadSuccessNotice}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setUploadSuccessNotice(null)}
+                    className="text-emerald-400/60 hover:text-emerald-300 text-sm leading-none font-mono"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
 
               <div className="space-y-6">
                 <div className="flex gap-6 items-center">
@@ -976,103 +1971,129 @@ export default function ProfilePage() {
 
                 {/* VALORANT Inputs */}
                 {gamesPlayed.valorant && (
-                  <div className="border border-red-500/20 bg-red-500/[0.01] p-6 rounded-xl space-y-4">
-                    <h3 className="text-xs font-bold text-red-400 font-mono flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
-                      VALORANT Settings
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">DPI</label>
-                        <input type="number" value={valDpi} onChange={e => setValDpi(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Sensitivity</label>
-                        <input type="number" step="0.001" value={valSens} onChange={e => setValSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Scoped Sens</label>
-                        <input type="number" step="0.1" value={valScopedSens} onChange={e => setValScopedSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Hz</label>
-                        <input type="number" value={valHz} onChange={e => setValHz(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Resolution</label>
-                        <input type="text" value={valRes} onChange={e => setValRes(e.target.value)} placeholder="e.g. 1920x1080" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Aspect Ratio</label>
-                        <input type="text" value={valAspect} onChange={e => setValAspect(e.target.value)} placeholder="e.g. 16:9" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Enemy Highlight Color</label>
-                        <select value={valEnemyHighlight} onChange={e => setValEnemyHighlight(e.target.value)} className="w-full h-9 bg-[#0F0F15] border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white focus:outline-none focus:border-accent/50">
-                          <option value="Red (Default)">Red (Default)</option>
-                          <option value="Purple">Purple</option>
-                          <option value="Yellow (Deuteranopia)">Yellow (Deuteranopia)</option>
-                          <option value="Yellow (Protanopia)">Yellow (Protanopia)</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Crosshair Profile Code</label>
-                        <input type="text" value={valCrosshairCode} onChange={e => setValCrosshairCode(e.target.value)} placeholder="0;P;c;5;o;1;d;1..." className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Rapid Trigger / Actuation</label>
-                        <input type="text" value={valRapidTrigger} onChange={e => setValRapidTrigger(e.target.value)} placeholder="e.g. 0.1mm" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                    </div>
-                    <div className="text-[10px] text-zinc-500 font-mono">
-                      Calculated VALORANT eDPI: <span className="text-red-400 font-bold">{((parseFloat(valDpi) || 0) * (parseFloat(valSens) || 0)).toFixed(2)}</span>
-                    </div>
-                  </div>
+                  <ValorantSettingsEditor
+                    valRole={valRole}
+                    setValRole={setValRole}
+                    valDpi={valDpi}
+                    setValDpi={setValDpi}
+                    valSens={valSens}
+                    setValSens={setValSens}
+                    valHz={valHz}
+                    setValHz={setValHz}
+                    valScopedSens={valScopedSens}
+                    setValScopedSens={setValScopedSens}
+                    valRes={valRes}
+                    setValRes={setValRes}
+                    valAspect={valAspect}
+                    setValAspect={setValAspect}
+                    valEnemyHighlight={valEnemyHighlight}
+                    setValEnemyHighlight={setValEnemyHighlight}
+                    valRapidTrigger={valRapidTrigger}
+                    setValRapidTrigger={setValRapidTrigger}
+
+                    valDisplayMode={valDisplayMode}
+                    setValDisplayMode={setValDisplayMode}
+                    valNvidiaReflex={valNvidiaReflex}
+                    setValNvidiaReflex={setValNvidiaReflex}
+                    valMultithreaded={valMultithreaded}
+                    setValMultithreaded={setValMultithreaded}
+                    valMaterialQuality={valMaterialQuality}
+                    setValMaterialQuality={setValMaterialQuality}
+                    valTextureQuality={valTextureQuality}
+                    setValTextureQuality={setValTextureQuality}
+                    valDetailQuality={valDetailQuality}
+                    setValDetailQuality={setValDetailQuality}
+                    valUiQuality={valUiQuality}
+                    setValUiQuality={setValUiQuality}
+                    valVignette={valVignette}
+                    setValVignette={setValVignette}
+                    valVsync={valVsync}
+                    setValVsync={setValVsync}
+                    valAntiAliasing={valAntiAliasing}
+                    setValAntiAliasing={setValAntiAliasing}
+                    valAnisotropic={valAnisotropic}
+                    setValAnisotropic={setValAnisotropic}
+                    valImproveClarity={valImproveClarity}
+                    setValImproveClarity={setValImproveClarity}
+                    valBloom={valBloom}
+                    setValBloom={setValBloom}
+                    valDistortion={valDistortion}
+                    setValDistortion={setValDistortion}
+                    valCastShadows={valCastShadows}
+                    setValCastShadows={setValCastShadows}
+
+                    valMapRotate={valMapRotate}
+                    setValMapRotate={setValMapRotate}
+                    valMapFixedOrientation={valMapFixedOrientation}
+                    setValMapFixedOrientation={setValMapFixedOrientation}
+                    valMapKeepCentered={valMapKeepCentered}
+                    setValMapKeepCentered={setValMapKeepCentered}
+                    valMapMinimapSize={valMapMinimapSize}
+                    setValMapMinimapSize={setValMapMinimapSize}
+                    valMapMinimapZoom={valMapMinimapZoom}
+                    setValMapMinimapZoom={setValMapMinimapZoom}
+                    valMapVisionCones={valMapVisionCones}
+                    setValMapVisionCones={setValMapVisionCones}
+
+                    valCrosshairs={valCrosshairs}
+                    setValCrosshairs={setValCrosshairs}
+
+                    onReuploadConfig={() => setShowConfigUploader(true)}
+                    configLinkedBadge={
+                      valExtraSettings && Object.keys(valExtraSettings).length > 0 ? (
+                        <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-[11px] font-mono text-zinc-300">
+                          <span className="flex items-center gap-2 text-red-400 font-semibold">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Config File Linked
+                          </span>
+                          <span className="text-zinc-400">
+                            {valExtraSettings.crosshair_name ? `Crosshair: "${valExtraSettings.crosshair_name}" • ` : ''}
+                            Video, Graphics, Minimap & Keybinds Active
+                          </span>
+                        </div>
+                      ) : null
+                    }
+                  />
                 )}
 
                 {/* CS2 Inputs */}
                 {gamesPlayed.cs2 && (
-                  <div className="border border-amber-500/20 bg-amber-500/[0.01] p-6 rounded-xl space-y-4">
-                    <h3 className="text-xs font-bold text-amber-400 font-mono flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-                      CS2 Settings
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">DPI</label>
-                        <input type="number" value={csDpi} onChange={e => setCsDpi(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Sensitivity</label>
-                        <input type="number" step="0.001" value={csSens} onChange={e => setCsSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Zoom Sens</label>
-                        <input type="number" step="0.1" value={csZoomSens} onChange={e => setCsZoomSens(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Hz</label>
-                        <input type="number" value={csHz} onChange={e => setCsHz(e.target.value)} className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Resolution</label>
-                        <input type="text" value={csRes} onChange={e => setCsRes(e.target.value)} placeholder="e.g. 1280x960" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">Aspect Ratio</label>
-                        <input type="text" value={csAspect} onChange={e => setCsAspect(e.target.value)} placeholder="e.g. 4:3" className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white" />
-                      </div>
-                    </div>
-                    <div className="text-[10px] text-zinc-500 font-mono">
-                      Calculated CS2 eDPI: <span className="text-amber-400 font-bold">{((parseFloat(csDpi) || 0) * (parseFloat(csSens) || 0)).toFixed(2)}</span>
-                    </div>
-                  </div>
+                  <CS2SettingsEditor
+                    csRole={csRole}
+                    setCsRole={setCsRole}
+                    csDpi={csDpi}
+                    setCsDpi={setCsDpi}
+                    csSens={csSens}
+                    setCsSens={setCsSens}
+                    csHz={csHz}
+                    setCsHz={setCsHz}
+                    csZoomSens={csZoomSens}
+                    setCsZoomSens={setCsZoomSens}
+                    csRes={csRes}
+                    setCsRes={setCsRes}
+                    csAspect={csAspect}
+                    setCsAspect={setCsAspect}
+
+                    csDisplayMode={csDisplayMode}
+                    setCsDisplayMode={setCsDisplayMode}
+                    csNvidiaReflex={csNvidiaReflex}
+                    setCsNvidiaReflex={setCsNvidiaReflex}
+                    csMultithreaded={csMultithreaded}
+                    setCsMultithreaded={setCsMultithreaded}
+                    csMaterialQuality={csMaterialQuality}
+                    setCsMaterialQuality={setCsMaterialQuality}
+                    csTextureQuality={csTextureQuality}
+                    setCsTextureQuality={setCsTextureQuality}
+                    csVsync={csVsync}
+                    setCsVsync={setCsVsync}
+                    csAntiAliasing={csAntiAliasing}
+                    setCsAntiAliasing={setCsAntiAliasing}
+                    csAnisotropic={csAnisotropic}
+                    setCsAnisotropic={setCsAnisotropic}
+
+                    csCrosshairs={csCrosshairs}
+                    setCsCrosshairs={setCsCrosshairs}
+                  />
                 )}
               </div>
             </div>
@@ -1151,23 +2172,45 @@ export default function ProfilePage() {
             </div>
 
             {/* Form Actions */}
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                disabled={saving}
-                className="px-6 h-11 bg-accent text-accent-fg hover:bg-accent/90 disabled:opacity-50 text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase shadow-[0_0_20px_rgba(245,158,11,0.15)] active:scale-98 cursor-pointer flex-1 md:flex-none md:min-w-[150px]"
-              >
-                {saving ? 'Saving...' : 'Save Profile'}
-              </button>
-              {isProfileCreated && (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="px-6 h-11 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer"
-                >
-                  Cancel
-                </button>
+            <div className="space-y-4">
+              {errorMsg && (
+                <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono p-4 rounded-xl flex items-center justify-between">
+                  <span>⚠️ {errorMsg}</span>
+                  <button type="button" onClick={() => setErrorMsg(null)} className="text-zinc-500 hover:text-white cursor-pointer ml-3">✕</button>
+                </div>
               )}
+              <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
+                {isProfileCreated && (
+                  <button
+                    type="button"
+                    disabled={saving || deleting}
+                    onClick={() => setShowDeleteModal(true)}
+                    className="px-4 h-11 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 hover:text-red-300 text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer flex items-center gap-2"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Delete Profile
+                  </button>
+                )}
+                {isProfileCreated && (
+                  <button
+                    type="button"
+                    disabled={saving || deleting}
+                    onClick={() => setIsEditing(false)}
+                    className="px-6 h-11 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  disabled={saving || deleting}
+                  className="px-6 h-11 bg-accent text-accent-fg hover:bg-accent/90 disabled:opacity-50 text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase shadow-[0_0_20px_rgba(245,158,11,0.15)] active:scale-98 cursor-pointer min-w-[150px]"
+                >
+                  {saving ? (isProfileCreated ? 'Saving...' : 'Creating...') : (isProfileCreated ? 'Save Profile' : 'Create Profile')}
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -1185,12 +2228,14 @@ export default function ProfilePage() {
               Showcase your setup, sensitivity values, configurations, and social media channels inside a custom card that looks exactly like a pro player profile!
             </p>
           </div>
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-6 py-3 bg-accent text-accent-fg hover:bg-accent/90 shadow-[0_0_25px_rgba(245,158,11,0.2)] text-xs font-bold rounded-xl tracking-wider font-mono uppercase transition-all active:scale-98 cursor-pointer"
-          >
-            CREATE MY PROFILE
-          </button>
+          <div className="flex items-center justify-center">
+            <button
+              onClick={() => setIsEditing(true)}
+              className="px-6 py-3 bg-accent text-accent-fg hover:bg-accent/90 shadow-[0_0_25px_rgba(245,158,11,0.2)] text-xs font-bold rounded-xl tracking-wider font-mono uppercase transition-all active:scale-98 cursor-pointer"
+            >
+              CREATE MY PROFILE
+            </button>
+          </div>
         </div>
       ) : (
         /* ==================== CREATED PROFILE VIEW MODE (Matching Player Page) ==================== */
@@ -1386,6 +2431,19 @@ export default function ProfilePage() {
                   );
                 })()}
 
+                {/* Upload Config Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowConfigUploader(true)}
+                  className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 font-sans font-bold text-xs rounded-xl flex items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Upload VALORANT Saved/Config folder"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  <span>UPLOAD CONFIG</span>
+                </button>
+
                 {/* Edit Profile Button */}
                 <button
                   onClick={() => setIsEditing(true)}
@@ -1532,6 +2590,55 @@ export default function ProfilePage() {
                   })}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showConfigUploader && (
+        <ValorantConfigUploader
+          currentDpi={valDpi}
+          currentHz={valHz}
+          onApplySettings={handleApplyValorantConfig}
+          onClose={() => setShowConfigUploader(false)}
+        />
+      )}
+
+      {/* Delete Profile Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-[#12121A] border border-red-500/30 rounded-2xl p-6 shadow-[0_0_50px_rgba(239,68,68,0.2)] space-y-5">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 shrink-0">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-white font-display">Delete Profile</h3>
+                <p className="text-xs text-zinc-400 font-sans leading-relaxed">
+                  Are you sure you want to delete your profile? This will permanently remove your setup, game settings, gear, and social links.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 h-10 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white text-xs font-bold rounded-xl font-mono transition-all uppercase cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={handleDeleteProfile}
+                className="px-5 h-10 bg-red-600 hover:bg-red-500 text-white text-xs font-bold rounded-xl font-mono transition-all uppercase shadow-[0_0_20px_rgba(239,68,68,0.3)] cursor-pointer"
+              >
+                {deleting ? 'Deleting...' : 'Yes, Delete Profile'}
+              </button>
             </div>
           </div>
         </div>

@@ -132,7 +132,7 @@ export default function AdminTeamsPage() {
   const fetchTeams = async (silent: boolean = false) => {
     try {
       if (!silent) setLoading(true);
-      const res = await fetch('/api/teams');
+      const res = await fetch(`/api/teams?t=${Date.now()}`, { cache: 'no-store' });
       const data = await res.json();
       if (data.teamObjects) {
         setTeams(data.teamObjects);
@@ -153,7 +153,7 @@ export default function AdminTeamsPage() {
 
   const fetchAllPlayers = async () => {
     try {
-      const res = await fetch('/api/players?all=true');
+      const res = await fetch(`/api/players?all=true&t=${Date.now()}`, { cache: 'no-store' });
       const data = await res.json();
       if (data.players) {
         setAllPlayers(data.players);
@@ -188,7 +188,19 @@ export default function AdminTeamsPage() {
     const parsedGames = Array.isArray(t.games)
       ? t.games
       : (typeof t.games === 'string' && t.games ? t.games.split(',') : []);
-    setSelectedGames(parsedGames);
+    const normalizedGames = Array.from(
+      new Set(
+        parsedGames
+          .map(g => {
+            const trimmed = (g || '').trim();
+            if (trimmed.toLowerCase() === 'cs2' || trimmed.toLowerCase() === 'csgo') return 'CS2';
+            if (trimmed.toUpperCase() === 'VALORANT') return 'VALORANT';
+            return trimmed;
+          })
+          .filter(Boolean)
+      )
+    );
+    setSelectedGames(normalizedGames);
 
     setTeamRegion(t.region || '');
 
@@ -340,6 +352,7 @@ export default function AdminTeamsPage() {
 
       const payload = {
         id: editingTeam?.id || null,
+        old_name: editingTeam?.name || null,
         name: teamName.trim(),
         logo_url: finalLogoUrl,
         description: teamDescription,
@@ -359,6 +372,30 @@ export default function AdminTeamsPage() {
       const resData = await res.json();
       if (!res.ok || resData.error) {
         throw new Error(resData.error || 'Failed to save team');
+      }
+
+      // Optimistic update of local teams state
+      const updatedTeamObj: TeamObj = {
+        id: resData.team?.id || editingTeam?.id || null,
+        name: teamName.trim(),
+        logo_url: finalLogoUrl || editingTeam?.logo_url || null,
+        description: teamDescription,
+        games: selectedGames,
+        region: teamRegion,
+        players: editingTeam?.players || []
+      };
+
+      if (editingTeam) {
+        setTeams(prev =>
+          prev.map(item => {
+            const isMatch =
+              (editingTeam.id && item.id === editingTeam.id) ||
+              (item.name.toLowerCase().trim() === editingTeam.name.toLowerCase().trim());
+            return isMatch ? updatedTeamObj : item;
+          })
+        );
+      } else {
+        setTeams(prev => [...prev, updatedTeamObj].sort((a, b) => a.name.localeCompare(b.name)));
       }
 
       setMessage({ type: 'success', text: `Team "${teamName}" saved successfully!` });
@@ -381,13 +418,24 @@ export default function AdminTeamsPage() {
       async () => {
         try {
           // Optimistically remove the team from the UI state
-          setTeams(prev => prev.filter(item => item.id !== t.id && item.name !== t.name));
+          setTeams(prev =>
+            prev.filter(item => {
+              if (t.id && item.id && item.id === t.id) return false;
+              if (item.name.toLowerCase().trim() === t.name.toLowerCase().trim()) return false;
+              return true;
+            })
+          );
 
-          const res = await fetch(`/api/teams?id=${t.id || ''}&name=${encodeURIComponent(t.name)}`, {
+          const res = await fetch(`/api/teams?id=${encodeURIComponent(t.id || '')}&name=${encodeURIComponent(t.name)}`, {
             method: 'DELETE'
           });
-          if (!res.ok) throw new Error('Delete failed');
-          fetchTeams(true); // Silent reload to sync team statistics in background
+          const resData = await res.json().catch(() => ({}));
+          if (!res.ok || resData.error) throw new Error(resData.error || 'Delete failed');
+
+          await Promise.all([
+            fetchTeams(true),
+            fetchAllPlayers()
+          ]);
         } catch (e: any) {
           fetchTeams(); // Rollback if error occurs
           showConfirm(
@@ -561,9 +609,21 @@ export default function AdminTeamsPage() {
                 </thead>
                 <tbody className="divide-y divide-white/5 text-xs font-sans">
                   {paginatedTeams.map((t, idx) => {
-                    const gamesArr = Array.isArray(t.games)
+                    const rawGamesArr = Array.isArray(t.games)
                       ? t.games
                       : (typeof t.games === 'string' && t.games ? t.games.split(',') : []);
+                    const gamesArr = Array.from(
+                      new Set(
+                        rawGamesArr
+                          .map(g => {
+                            const trimmed = (g || '').trim();
+                            if (trimmed.toLowerCase() === 'cs2' || trimmed.toLowerCase() === 'csgo') return 'CS2';
+                            if (trimmed.toUpperCase() === 'VALORANT') return 'VALORANT';
+                            return trimmed;
+                          })
+                          .filter(Boolean)
+                      )
+                    );
                     const playerCount = t.players?.length || allPlayers.filter(p => p.team && p.team.toLowerCase() === t.name.toLowerCase()).length;
 
                     return (

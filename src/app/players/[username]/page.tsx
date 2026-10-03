@@ -380,6 +380,16 @@ export default async function PlayerProfilePage({ params }: PageProps) {
   const brandColors = getTeamBrandColors(player.team);
   const realName = player.Full_name || player.full_name || player.real_name;
 
+  let teamLogoUrl: string | null = null;
+  if (player.team) {
+    const { data: teamData } = await supabase
+      .from('teams')
+      .select('logo_url')
+      .ilike('name', player.team)
+      .maybeSingle();
+    teamLogoUrl = teamData?.logo_url || null;
+  }
+
   return (
     <div className="relative flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Ambient orbs */}
@@ -421,7 +431,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                 {player.team && (
                   <Link href={`/teams?team=${encodeURIComponent(player.team)}`}>
                     <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-lg font-sans tracking-wide border cursor-pointer transition-all duration-300 ${brandColors.bg} ${brandColors.border} ${brandColors.text} ${brandColors.glow}`}>
-                      <TeamLogoImg teamName={player.team} className="w-4 h-4" />
+                      <TeamLogoImg teamName={player.team} dbLogoUrl={teamLogoUrl} className="w-4 h-4" />
                       <span>{player.team}</span>
                     </span>
                   </Link>

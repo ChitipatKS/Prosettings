@@ -33,7 +33,7 @@ function RegisterForm() {
     setSuccessMsg(null);
 
     if (!isSupabaseConfigured) {
-      setErrorMsg('ยังไม่ได้เชื่อมต่อ Supabase: กรุณาสร้างไฟล์ .env.local พร้อมระบุ NEXT_PUBLIC_SUPABASE_URL และ NEXT_PUBLIC_SUPABASE_ANON_KEY');
+      setErrorMsg('Supabase is not configured. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your .env.local file.');
       return;
     }
 
@@ -59,9 +59,12 @@ function RegisterForm() {
       if (error) {
         setErrorMsg(error.message);
       } else {
-        // If email confirmation is required, Supabase returns user but session is null
-        if (data.user && !data.session) {
-          setSuccessMsg('Account created! Please check your email for the confirmation link.');
+        // Supabase with Email Enumeration Protection returns data.user with empty identities array if user already exists
+        if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          setErrorMsg('This email is already registered. Please sign in instead.');
+        } else if (data.user && !data.session) {
+          // If email confirmation is required, Supabase returns user but session is null
+          setSuccessMsg('Verification email sent! Please check your inbox and click the confirmation link to activate your account.');
         } else {
           // If auto-logged in, redirect
           router.push(redirectTo);
@@ -70,7 +73,7 @@ function RegisterForm() {
       }
     } catch (err: any) {
       if (err?.message === 'Failed to fetch' || err?.name === 'TypeError') {
-        setErrorMsg('ไม่สามารถเชื่อมต่อไปยัง Supabase ได้ (Failed to fetch) ตรวจสอบ URL ใน .env.local หรือการเชื่อมต่ออินเทอร์เน็ต');
+        setErrorMsg('Unable to connect to Supabase (Failed to fetch). Please check your internet connection or Supabase URL.');
       } else {
         setErrorMsg(err?.message || 'An unexpected error occurred.');
       }

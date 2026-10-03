@@ -20,6 +20,10 @@ export default function TeamLogoImg({
   const [customLogoUrl, setCustomLogoUrl] = useState<string | undefined>(undefined);
 
   useEffect(() => {
+    setHasError(false);
+  }, [teamName, dbLogoUrl]);
+
+  useEffect(() => {
     if (!dbLogoUrl && teamName) {
       const map = getCustomLogoMap();
       const norm = teamName.toLowerCase().trim();

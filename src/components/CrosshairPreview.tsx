@@ -26,7 +26,7 @@ type Props = {
 };
 
 // Map color names to CSS colors (corrected to match Valorant in-game values)
-const COLOR_MAP: Record<string, string> = {
+export const COLOR_MAP: Record<string, string> = {
   'cyan': '#00FFFF',
   'green': '#00FF00',
   'white': '#FFFFFF',
@@ -42,7 +42,7 @@ const COLOR_MAP: Record<string, string> = {
 };
 
 // Valorant Color code mapping (corrected to match in-game values)
-const VAL_COLOR_INDEX: Record<string, { hex: string; name: string }> = {
+export const VAL_COLOR_INDEX: Record<string, { hex: string; name: string }> = {
   '0': { hex: '#FFFFFF', name: 'White' },
   '1': { hex: '#00FF00', name: 'Green' },
   '2': { hex: '#7FFF00', name: 'Yellow Green' },
@@ -128,9 +128,9 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
   let outerOffset = 10;
   let outerOpacity = 1;
   let innerMovementError = false;
-  let innerFiringError = true;
-  let outerMovementError = true;
-  let outerFiringError = true;
+  let innerFiringError = false;
+  let outerMovementError = false;
+  let outerFiringError = false;
 
   const rawCode = (settings?.crosshair_code || '').trim();
 
@@ -212,7 +212,11 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
       if (isNaN(innerOpacity)) innerOpacity = 1;
     }
     if (valMap['0m'] !== undefined) innerMovementError = valMap['0m'] === '1';
-    if (valMap['0f'] !== undefined) innerFiringError = valMap['0f'] === '1';
+    if (valMap['0f'] !== undefined) {
+      innerFiringError = valMap['0f'] === '1';
+    } else if (valMap['0s'] !== undefined && (valMap['0s'] === '0' || valMap['0s'] === '1')) {
+      innerFiringError = valMap['0s'] === '1';
+    }
 
     // Outer lines
     if (valMap['1b'] !== undefined) {
@@ -239,11 +243,19 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
       if (isNaN(outerOpacity)) outerOpacity = 1;
     }
     if (valMap['1m'] !== undefined) outerMovementError = valMap['1m'] === '1';
-    if (valMap['1f'] !== undefined) outerFiringError = valMap['1f'] === '1';
-  }
+    if (valMap['1f'] !== undefined) {
+      outerFiringError = valMap['1f'] === '1';
+    } else if (valMap['1s'] !== undefined && (valMap['1s'] === '0' || valMap['1s'] === '1')) {
+      outerFiringError = valMap['1s'] === '1';
+    }
 
-  // Allow explicit structured fields to override/refine settings
-  if (settings?.crosshair_color) {
+    if (!outerShow) {
+      outerMovementError = false;
+      outerFiringError = false;
+    }
+  } else {
+    // Allow explicit structured fields to override/refine settings ONLY if no code was parsed
+    if (settings?.crosshair_color) {
     const colorStr = settings.crosshair_color.toLowerCase().trim();
     if (colorStr.startsWith('#')) {
       color = colorStr;
@@ -334,6 +346,9 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
     if (!isNaN(t) && t > 0) innerThickness = t;
   }
 
+  }
+
+  // Allow explicit structured fields on settings object to refine error values if provided
   if (settings?.inner_movement_error !== undefined && settings.inner_movement_error !== null) {
     innerMovementError = Boolean(settings.inner_movement_error);
   }
@@ -345,6 +360,11 @@ export function parseCrosshairDetails(settings?: CrosshairSettings | null) {
   }
   if (settings?.outer_firing_error !== undefined && settings.outer_firing_error !== null) {
     outerFiringError = Boolean(settings.outer_firing_error);
+  }
+
+  if (!outerShow) {
+    outerMovementError = false;
+    outerFiringError = false;
   }
 
   return {
@@ -415,19 +435,11 @@ export function parseValorantCrosshairToFields(code: string) {
 }
 
 /**
- * Generates an exact 1:1 valid Valorant crosshair import code
+ * Encodes parsed crosshair parameters into an exact 1:1 valid Valorant crosshair import code
  */
-export function getCrosshairExportCode(settings?: CrosshairSettings | null): string {
-  if (!settings) return "0;P;c;5;h;0;f;0;0t;2;0l;4;0o;2;0a;1;0f;0;1b;0";
-
-  if (settings.crosshair_code && settings.crosshair_code.trim().startsWith('CSGO-')) {
-    return settings.crosshair_code.trim();
-  }
-
-  const parsed = parseCrosshairDetails(settings);
-
+export function encodeValorantCrosshair(parsed: ReturnType<typeof parseCrosshairDetails>): string {
   let cIndex = '0';
-  const cLower = parsed.colorName.toLowerCase();
+  const cLower = (parsed.colorName || '').toLowerCase();
   if (cLower.includes('white')) cIndex = '0';
   else if (cLower.includes('yellow green')) cIndex = '2';
   else if (cLower.includes('green yellow')) cIndex = '3';
@@ -494,6 +506,24 @@ export function getCrosshairExportCode(settings?: CrosshairSettings | null): str
   }
 
   return codeParts.join(';');
+}
+
+/**
+ * Generates an exact 1:1 valid Valorant crosshair import code
+ */
+export function getCrosshairExportCode(settings?: CrosshairSettings | null): string {
+  if (!settings) return "0;P;c;5;h;0;f;0;0t;2;0l;4;0o;2;0a;1;0f;0;1b;0";
+
+  if (settings.crosshair_code && settings.crosshair_code.trim().startsWith('CSGO-')) {
+    return settings.crosshair_code.trim();
+  }
+
+  if (settings.crosshair_code && settings.crosshair_code.trim().includes(';')) {
+    return settings.crosshair_code.trim();
+  }
+
+  const parsed = parseCrosshairDetails(settings);
+  return encodeValorantCrosshair(parsed);
 }
 
 export default function CrosshairPreview({
