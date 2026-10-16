@@ -261,9 +261,9 @@ function StatHighlight({ label, value, accent = false }: { label: string; value:
 
   if (accent) {
     return (
-      <div className="bg-accent/[0.05] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3 rounded-xl transition-all duration-300 flex flex-col gap-1">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans">{label}</span>
-        <span className={`text-lg font-extrabold ${isEmpty ? 'text-zinc-700 font-display' : isValNumeric ? 'text-accent font-mono font-medium' : 'text-accent font-display'}`}>
+      <div className="bg-amber-500/[0.08] dark:bg-accent/[0.05] border border-amber-500/20 dark:border-accent/20 hover:border-amber-500/40 dark:hover:border-accent/40 hover:bg-amber-500/[0.12] dark:hover:bg-accent/[0.08] p-3 rounded-xl transition-all duration-300 flex flex-col gap-1">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-accent/80 font-sans">{label}</span>
+        <span className={`text-lg font-extrabold ${isEmpty ? 'text-zinc-400 dark:text-zinc-700 font-display' : isValNumeric ? 'text-amber-600 dark:text-accent font-mono font-medium' : 'text-amber-600 dark:text-accent font-display'}`}>
           {displayValue}
         </span>
       </div>
@@ -271,9 +271,9 @@ function StatHighlight({ label, value, accent = false }: { label: string; value:
   }
 
   return (
-    <div className="bg-[#12121A]/40 border border-border-custom hover:border-border-hover/60 p-3 rounded-xl transition-all duration-300 flex flex-col gap-1">
+    <div className="bg-zinc-50 dark:bg-[#12121A]/40 border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-border-hover/60 p-3 rounded-xl transition-all duration-300 flex flex-col gap-1 shadow-sm dark:shadow-none">
       <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans">{label}</span>
-      <span className={`text-lg font-bold ${isEmpty ? 'text-zinc-700 font-display' : isValNumeric ? 'font-mono font-medium text-white' : 'font-display text-white'}`}>
+      <span className={`text-lg font-bold ${isEmpty ? 'text-zinc-400 dark:text-zinc-700 font-display' : isValNumeric ? 'font-mono font-medium text-zinc-900 dark:text-white' : 'font-display text-zinc-900 dark:text-white'}`}>
         {displayValue}
       </span>
     </div>
@@ -299,9 +299,9 @@ export default async function PlayerProfilePage({ params }: PageProps) {
   if (playerError) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-sm font-bold text-white mt-2 font-display">Database Connection Error</h2>
+        <h2 className="text-sm font-bold text-zinc-900 dark:text-white mt-2 font-display">Database Connection Error</h2>
         <p className="text-zinc-500 text-xs mt-1 font-mono">{playerError.message}</p>
-        <Link href="/" className="mt-4 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-xs font-semibold font-mono">
+        <Link href="/" className="mt-4 px-4 py-2 bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-zinc-900 dark:text-white rounded-lg text-xs font-semibold font-mono">
           RETURN TO HOME
         </Link>
       </div>
@@ -400,7 +400,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
       <div className="relative z-10 mb-6">
         <Link
           href="/players"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 hover:text-white transition-colors duration-200 font-mono"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors duration-200 font-mono"
         >
           ← BACK TO PLAYERS
         </Link>
@@ -409,11 +409,11 @@ export default async function PlayerProfilePage({ params }: PageProps) {
       {/* ================================================ */}
       {/* SECTION 1: PROFILE HEADER (Full Width) */}
       {/* ================================================ */}
-      <section className="relative z-10 bg-card backdrop-blur-[8px] border border-border-custom p-6 sm:p-8 rounded-2xl mb-10 hover:border-border-hover transition-all duration-300">
+      <section className="relative z-10 bg-white/95 dark:bg-card backdrop-blur-[8px] border border-zinc-200 dark:border-border-custom p-6 sm:p-8 rounded-2xl mb-10 hover:border-zinc-300 dark:hover:border-border-hover transition-all duration-300 shadow-sm dark:shadow-none">
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
           <div className="flex flex-col md:flex-row md:items-start gap-6 flex-1 min-w-0">
             {/* Avatar */}
-            <div className="w-32 h-32 md:w-40 md:h-40 min-w-32 min-h-32 md:min-w-40 md:min-h-40 max-w-32 max-h-32 md:max-w-40 md:max-h-40 aspect-square rounded-2xl bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shrink-0 shadow-[0_0_30px_rgba(245,158,11,0.05)]">
+            <div className="w-32 h-32 md:w-40 md:h-40 min-w-32 min-h-32 md:min-w-40 md:min-h-40 max-w-32 max-h-32 md:max-w-40 md:max-h-40 aspect-square rounded-2xl bg-zinc-100 dark:bg-[#1A1A24] border border-zinc-200 dark:border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shrink-0 shadow-[0_0_30px_rgba(245,158,11,0.05)]">
               {player.profile_img_url ? (
                 <img src={player.profile_img_url} alt={player.username} className="h-full w-full object-cover" />
               ) : (
@@ -423,8 +423,8 @@ export default async function PlayerProfilePage({ params }: PageProps) {
 
             {/* Info */}
             <div className="flex-1 min-w-0 space-y-3">
-              <div className="flex flex-wrap items-baseline gap-3">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight font-display flex items-center gap-3">
                   {player.username}
                   <FavoriteButton playerId={player.id} />
                 </h1>
@@ -436,15 +436,42 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                     </span>
                   </Link>
                 )}
+
+                {primarySettings?.game_role && primarySettings.game_role !== 'Community Member' && (() => {
+                  const rName = primarySettings.game_role.trim();
+                  const roleLower = rName.toLowerCase();
+                  const roleIcons: Record<string, string> = {
+                    duelist: '/images/roles/duelist.png',
+                    initiator: '/images/roles/initiator.png',
+                    controller: '/images/roles/controller.png',
+                    sentinel: '/images/roles/sentinel.png',
+                    flex: '/images/roles/flex.png',
+                  };
+                  const iconSrc = roleIcons[roleLower];
+
+                  return (
+                    <span
+                      className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-lg font-sans tracking-wide border bg-zinc-100 dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-700/30 text-zinc-700 dark:text-zinc-300 leading-none transition-colors hover:border-zinc-300 dark:hover:border-zinc-600/50"
+                      title={`Role: ${rName}`}
+                    >
+                      {iconSrc ? (
+                        <img src={iconSrc} alt={rName} className="w-3.5 h-3.5 object-contain shrink-0" />
+                      ) : (
+                        <img src="/images/valorant-logo.png" alt="VALORANT" className="w-3.5 h-3.5 rounded object-cover shrink-0" />
+                      )}
+                      <span>{rName}</span>
+                    </span>
+                  );
+                })()}
               </div>
 
               {/* Meta row */}
-              <div className="flex flex-wrap items-center text-xs sm:text-sm text-zinc-400 font-sans gap-x-3 gap-y-1.5">
+              <div className="flex flex-wrap items-center text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-sans gap-x-3 gap-y-1.5">
                 {realName && (
-                  <span className="font-semibold text-zinc-200">{realName}</span>
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-200">{realName}</span>
                 )}
                 {realName && (player.nationality || player.country_code || player.birth_date) && (
-                  <span className="text-zinc-700 font-bold">•</span>
+                  <span className="text-zinc-300 dark:text-zinc-700 font-bold">•</span>
                 )}
                 {player.nationality && (
                   <span className="flex items-center gap-1.5">
@@ -469,11 +496,11 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                   </span>
                 )}
                 {(player.nationality || player.country_code) && player.birth_date && (
-                  <span className="text-zinc-700 font-bold">•</span>
+                  <span className="text-zinc-300 dark:text-zinc-700 font-bold">•</span>
                 )}
                 {player.birth_date && (
                   <span className="flex items-center gap-1.5">
-                    <svg className="h-3.5 w-3.5 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <svg className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                       <line x1="16" y1="2" x2="16" y2="6" />
                       <line x1="8" y1="2" x2="8" y2="6" />
@@ -487,11 +514,9 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                 )}
               </div>
 
-
-
               {/* Description placeholder */}
-              <div className="border-l-2 border-zinc-700/50 pl-4 py-0.5 max-w-2xl pt-1">
-                <p className="text-xs text-zinc-400 leading-relaxed italic font-sans">
+              <div className="border-l-2 border-zinc-200 dark:border-zinc-700/50 pl-4 py-0.5 max-w-2xl pt-1">
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed italic font-sans">
                   {(player as any).bio || "Description ex: Professional Esports player. Best known for exceptional playstyle, high-level game sense, and contribution to team strategies in competitive tournaments."}
                 </p>
               </div>
@@ -513,14 +538,14 @@ export default async function PlayerProfilePage({ params }: PageProps) {
               if (!hasAnySocial) return null;
 
               return (
-                <div className="flex items-center gap-1 bg-[#12121A]/60 border border-border-custom px-2 py-1.5 rounded-xl">
+                <div className="flex items-center gap-1 bg-zinc-100 dark:bg-[#12121A]/60 border border-zinc-200 dark:border-border-custom px-2 py-1.5 rounded-xl shadow-sm dark:shadow-none">
                   {/* Twitter / X */}
                   {twitterLink && (
                     <a
                       href={formatSocialUrl(twitterLink, 'twitter')}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-white/10 rounded-lg transition-all duration-200"
                       title="Twitter / X"
                     >
                       <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -535,7 +560,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                       href={formatSocialUrl(twitchLink, 'twitch')}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#9146FF] hover:bg-[#9146FF]/10 rounded-lg transition-all duration-200"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-[#9146FF] hover:bg-[#9146FF]/10 rounded-lg transition-all duration-200"
                       title="Twitch"
                     >
                       <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -550,7 +575,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                       href={formatSocialUrl(instagramLink, 'instagram')}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#E1306C] hover:bg-[#E1306C]/10 rounded-lg transition-all duration-200"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-[#E1306C] hover:bg-[#E1306C]/10 rounded-lg transition-all duration-200"
                       title="Instagram"
                     >
                       <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -566,7 +591,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                       href={formatSocialUrl(youtubeLink, 'youtube')}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#FF0000] hover:bg-[#FF0000]/10 rounded-lg transition-all duration-200"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-[#FF0000] hover:bg-[#FF0000]/10 rounded-lg transition-all duration-200"
                       title="YouTube"
                     >
                       <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -581,7 +606,7 @@ export default async function PlayerProfilePage({ params }: PageProps) {
                       href={formatSocialUrl(tiktokLink, 'tiktok')}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#00F2FE] hover:bg-[#00F2FE]/10 rounded-lg transition-all duration-200"
+                      className="w-7 h-7 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-[#00F2FE] hover:bg-[#00F2FE]/10 rounded-lg transition-all duration-200"
                       title="TikTok"
                     >
                       <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">

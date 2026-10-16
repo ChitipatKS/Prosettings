@@ -7,11 +7,13 @@ import Link from 'next/link';
 import PlayerProfileClient from '@/components/PlayerProfileClient';
 import TeamLogoImg from '@/components/TeamLogoImg';
 import ValorantConfigUploader from '@/components/ValorantConfigUploader';
-import { ParsedValorantSettings } from '@/lib/valorantConfigParser';
+import { ParsedValorantSettings, DEFAULT_KEYBINDS } from '@/lib/valorantConfigParser';
 import ValorantSettingsEditor, { ValorantCrosshairItem } from '@/components/ValorantSettingsEditor';
+import { VALORANT_ROLES } from '@/components/ValorantRoleSelect';
 import CS2SettingsEditor from '@/components/CS2SettingsEditor';
 import { CS2CrosshairSettings } from '@/components/CS2CrosshairPreview';
 import { parseValorantCrosshairToFields } from '@/components/CrosshairPreview';
+import { normalizeDiscordAvatar } from '@/lib/avatar';
 
 type Player = {
   id: number;
@@ -153,7 +155,7 @@ function GearSearchSelect({
             }, 200);
           }}
           placeholder={placeholder}
-          className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 pr-10 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
+          className="w-full h-11 bg-white dark:bg-black/40 border border-border-custom rounded-xl px-4 pr-10 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-accent transition-all font-mono shadow-xs"
         />
 
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
@@ -166,14 +168,14 @@ function GearSearchSelect({
                 setSearchQuery('');
                 setIsUserTyping(false);
               }}
-              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+              className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
               title="Clear selection"
             >
               ×
             </button>
           )}
           <span
-            className="text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
+            className="text-zinc-400 dark:text-zinc-500 pointer-events-none text-[8px] transition-transform duration-200"
             style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
           >
             ▼
@@ -181,7 +183,7 @@ function GearSearchSelect({
         </div>
 
         {isOpen && isUserTyping && searchQuery.trim().length > 0 && (
-          <div className="absolute z-50 w-full mt-1.5 max-h-60 overflow-y-auto bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-800">
+          <div className="absolute z-50 w-full mt-1.5 max-h-60 overflow-y-auto bg-card border border-border-custom rounded-xl shadow-xl divide-y divide-zinc-150 dark:divide-zinc-900 scrollbar-thin">
             {filteredOptions.length === 0 ? (
               <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
                 No matching gears found
@@ -202,7 +204,7 @@ function GearSearchSelect({
                     className={`px-4 py-2.5 text-xs font-mono cursor-pointer transition-colors flex items-center justify-between ${
                       isSelected
                         ? 'bg-accent/15 text-accent font-bold'
-                        : 'text-zinc-300 hover:bg-zinc-800/50 hover:text-white'
+                        : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-white'
                     }`}
                   >
                     <span>{product.name}</span>
@@ -272,7 +274,7 @@ function CountrySearchSelect({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full h-11 bg-black/40 border border-zinc-800 hover:border-zinc-700 focus:border-accent/50 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs text-zinc-300 transition-all cursor-pointer font-sans"
+          className="w-full h-11 bg-white dark:bg-black/40 border border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700 focus:border-accent rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs text-zinc-700 dark:text-zinc-300 transition-all cursor-pointer font-sans shadow-xs"
         >
           <div className="flex items-center gap-2.5 min-w-0">
             {selectedCountry ? (
@@ -282,11 +284,11 @@ function CountrySearchSelect({
                 className="w-4 h-3 object-cover rounded-[2px] shrink-0"
               />
             ) : (
-              <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-19m0 0a5 5 0 005 5h4a5 5 0 015-5h2v10H9a5 5 0 00-5 5H3" />
               </svg>
             )}
-            <span className={selectedCountry ? "text-white font-medium truncate" : "text-zinc-500 truncate"}>
+            <span className={selectedCountry ? "text-zinc-900 dark:text-white font-medium truncate" : "text-zinc-400 dark:text-zinc-500 truncate"}>
               {selectedCountry ? `${selectedCountry.name} (${selectedCountry.code})` : placeholder}
             </span>
           </div>
@@ -299,14 +301,14 @@ function CountrySearchSelect({
                   onChange('');
                   setSearchQuery('');
                 }}
-                className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+                className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
                 title="Clear selection"
               >
                 ×
               </span>
             )}
             <svg
-              className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
+              className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 transition-transform duration-200"
               style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
               fill="none"
               viewBox="0 0 24 24"
@@ -320,10 +322,10 @@ function CountrySearchSelect({
 
         {/* Dropdown Panel */}
         {isOpen && (
-          <div className="absolute right-0 z-50 w-full mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in duration-150">
+          <div className="absolute right-0 z-50 w-full mt-1.5 bg-card border border-border-custom rounded-xl shadow-xl overflow-hidden flex flex-col animate-in fade-in duration-150">
             {/* Search Input Box */}
-            <div className="p-2 border-b border-zinc-900 flex items-center gap-2 relative">
-              <span className="absolute left-4 text-zinc-500">
+            <div className="p-2 border-b border-border-custom flex items-center gap-2 relative bg-zinc-50/50 dark:bg-transparent">
+              <span className="absolute left-4 text-zinc-400 dark:text-zinc-500">
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -334,12 +336,12 @@ function CountrySearchSelect({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search country..."
                 autoFocus
-                className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-mono"
+                className="w-full h-8.5 bg-white dark:bg-black/60 border border-border-custom rounded-lg pl-8 pr-3 text-[11px] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-accent transition-all font-mono shadow-xs"
               />
             </div>
 
             {/* Options Scroll List */}
-            <div className="max-h-60 overflow-y-auto divide-y divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-800">
+            <div className="max-h-60 overflow-y-auto divide-y divide-zinc-150 dark:divide-zinc-950 scrollbar-thin">
               {filteredOptions.length === 0 ? (
                 <div className="px-4 py-3 text-xs text-zinc-500 italic font-mono">
                   No matching countries found
@@ -358,7 +360,7 @@ function CountrySearchSelect({
                       className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
                         isSelected
                           ? 'bg-accent/15 text-accent font-bold'
-                          : 'text-zinc-300 hover:bg-zinc-800/40 hover:text-white'
+                          : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/40 hover:text-zinc-900 dark:hover:text-white'
                       }`}
                     >
                       <img
@@ -378,6 +380,141 @@ function CountrySearchSelect({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function SocialPlatformDropdown({
+  value,
+  onChange,
+  platforms
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  platforms: { id: string; label: string; placeholder: string; iconColor?: string }[];
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const selectedPlatform = platforms.find((p) => p.id === value) || platforms[0];
+
+  const renderIcon = (id: string, className = "w-3.5 h-3.5 shrink-0") => {
+    switch (id) {
+      case 'twitter':
+        return (
+          <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          </svg>
+        );
+      case 'discord':
+        return (
+          <svg className={`${className} text-[#5865F2]`} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+          </svg>
+        );
+      case 'twitch':
+        return (
+          <svg className={`${className} text-[#9146FF]`} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" fillRule="evenodd" clipRule="evenodd" />
+          </svg>
+        );
+      case 'youtube':
+        return (
+          <svg className={`${className} text-[#FF0000]`} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+          </svg>
+        );
+      case 'instagram':
+        return (
+          <svg className={`${className} text-[#E1306C]`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01" />
+          </svg>
+        );
+      case 'tiktok':
+        return (
+          <svg className={`${className} text-[#00F2FE]`} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.27 1.76-.23 1.02.14 2.16.92 2.85.8.72 1.95.91 2.97.62.91-.25 1.67-.98 1.9-1.9.15-.6.18-1.24.18-1.87V.02z" />
+          </svg>
+        );
+      case 'facebook':
+        return (
+          <svg className={`${className} text-[#1877F2]`} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full h-10 bg-white dark:bg-[#12121A] hover:bg-zinc-50 dark:hover:bg-[#181824] border border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700 focus:border-accent rounded-xl px-3 flex items-center justify-between gap-2.5 text-xs text-zinc-900 dark:text-white transition-all cursor-pointer font-sans shadow-xs"
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          {renderIcon(selectedPlatform.id)}
+          <span className="font-semibold truncate">{selectedPlatform.label}</span>
+        </div>
+        <svg
+          className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 shrink-0 transition-transform duration-200"
+          style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute left-0 top-full mt-1.5 z-50 w-full min-w-[200px] bg-card border border-border-custom rounded-xl shadow-xl p-1.5 divide-y divide-zinc-150 dark:divide-zinc-800/60 backdrop-blur-md animate-in fade-in duration-100">
+          <div className="space-y-0.5">
+            {platforms.map((plat) => {
+              const isSelected = plat.id === value;
+              return (
+                <button
+                  key={plat.id}
+                  type="button"
+                  onClick={() => {
+                    onChange(plat.id);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-sans transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-accent/15 text-accent font-bold'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/70 hover:text-zinc-900 dark:hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    {renderIcon(plat.id, 'w-4 h-4 shrink-0')}
+                    <span>{plat.label}</span>
+                  </div>
+                  {isSelected && (
+                    <span className="text-accent text-[11px] font-bold">✓</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -511,13 +648,13 @@ function CalendarDatePicker({
             setIsMonthSelectOpen(false);
             setIsYearSelectOpen(false);
           }}
-          className="w-full h-11 bg-black/40 border border-zinc-800 hover:border-zinc-700 focus:border-accent/50 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs text-left transition-all cursor-pointer font-sans"
+          className="w-full h-11 bg-white dark:bg-black/40 border border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700 focus:border-accent rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs text-left transition-all cursor-pointer font-sans shadow-xs"
         >
           <div className="flex items-center gap-2.5 min-w-0">
-            <svg className="w-4 h-4 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+            <svg className="w-4 h-4 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <span className={formattedDisplay ? "text-white font-medium truncate" : "text-zinc-500 truncate font-mono"}>
+            <span className={formattedDisplay ? "text-zinc-900 dark:text-white font-medium truncate" : "text-zinc-400 dark:text-zinc-500 truncate font-mono"}>
               {formattedDisplay || placeholder}
             </span>
           </div>
@@ -529,14 +666,14 @@ function CalendarDatePicker({
                   e.stopPropagation();
                   onChange('');
                 }}
-                className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
+                className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer font-mono leading-none"
                 title="Clear date"
               >
                 ×
               </span>
             )}
             <svg
-              className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
+              className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 transition-transform duration-200"
               style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
               fill="none"
               viewBox="0 0 24 24"
@@ -550,13 +687,13 @@ function CalendarDatePicker({
 
         {/* Calendar Dropdown */}
         {isOpen && (
-          <div className="absolute left-0 sm:left-auto right-0 z-50 w-full sm:w-[320px] mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-2xl p-4 shadow-2xl space-y-3.5 animate-in fade-in duration-150">
+          <div className="absolute left-0 sm:left-auto right-0 z-50 w-full sm:w-[320px] mt-1.5 bg-card border border-border-custom rounded-2xl p-4 shadow-2xl space-y-3.5 animate-in fade-in duration-150">
             {/* Calendar Controls */}
-            <div className="flex items-center justify-between gap-2 pb-3 border-b border-zinc-900 relative">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-border-custom relative">
               <button
                 type="button"
                 onClick={handlePrevMonth}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/40 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer text-sm font-bold"
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 dark:bg-black/40 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-border-custom text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer text-sm font-bold shadow-xs"
               >
                 ‹
               </button>
@@ -570,7 +707,7 @@ function CalendarDatePicker({
                       setIsMonthSelectOpen(!isMonthSelectOpen);
                       setIsYearSelectOpen(false);
                     }}
-                    className="h-8 px-2.5 bg-black/60 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 rounded-lg text-xs text-white font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="h-8 px-2.5 bg-zinc-100 dark:bg-black/60 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700 rounded-lg text-xs text-zinc-800 dark:text-white font-mono flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
                   >
                     <span>{MONTH_NAMES[currentMonth]}</span>
                     <span className="text-[8px] text-zinc-500 transition-transform duration-200" style={{ transform: isMonthSelectOpen ? 'rotate(180deg)' : 'none' }}>▼</span>
@@ -579,7 +716,7 @@ function CalendarDatePicker({
                   {isMonthSelectOpen && (
                     <div
                       ref={monthListRef}
-                      className="absolute left-0 top-full mt-1.5 z-50 w-32 max-h-48 overflow-y-auto bg-[#14141E] border border-zinc-750 rounded-xl shadow-2xl p-1 divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-700 animate-in fade-in duration-100"
+                      className="absolute left-0 top-full mt-1.5 z-50 w-32 max-h-48 overflow-y-auto bg-card border border-border-custom rounded-xl shadow-2xl p-1 divide-y divide-zinc-100 dark:divide-zinc-900 scrollbar-thin animate-in fade-in duration-100"
                     >
                       {MONTH_NAMES.map((name, idx) => (
                         <button
@@ -592,7 +729,7 @@ function CalendarDatePicker({
                           className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
                             currentMonth === idx
                               ? 'bg-accent/20 text-accent font-bold'
-                              : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                              : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white'
                           }`}
                         >
                           {name}
@@ -610,7 +747,7 @@ function CalendarDatePicker({
                       setIsYearSelectOpen(!isYearSelectOpen);
                       setIsMonthSelectOpen(false);
                     }}
-                    className="h-8 px-2.5 bg-black/60 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 rounded-lg text-xs text-white font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="h-8 px-2.5 bg-zinc-100 dark:bg-black/60 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700 rounded-lg text-xs text-zinc-800 dark:text-white font-mono flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
                   >
                     <span>{currentYear}</span>
                     <span className="text-[8px] text-zinc-500 transition-transform duration-200" style={{ transform: isYearSelectOpen ? 'rotate(180deg)' : 'none' }}>▼</span>
@@ -619,7 +756,7 @@ function CalendarDatePicker({
                   {isYearSelectOpen && (
                     <div
                       ref={yearListRef}
-                      className="absolute right-0 sm:left-0 top-full mt-1.5 z-50 w-24 max-h-48 overflow-y-auto bg-[#14141E] border border-zinc-750 rounded-xl shadow-2xl p-1 divide-y divide-zinc-900 scrollbar-thin scrollbar-thumb-zinc-700 animate-in fade-in duration-100"
+                      className="absolute right-0 sm:left-0 top-full mt-1.5 z-50 w-24 max-h-48 overflow-y-auto bg-card border border-border-custom rounded-xl shadow-2xl p-1 divide-y divide-zinc-100 dark:divide-zinc-900 scrollbar-thin animate-in fade-in duration-100"
                     >
                       {yearsList.map((yr) => (
                         <button
@@ -633,7 +770,7 @@ function CalendarDatePicker({
                           className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
                             currentYear === yr
                               ? 'bg-accent/20 text-accent font-bold'
-                              : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                              : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white'
                           }`}
                         >
                           {yr}
@@ -647,7 +784,7 @@ function CalendarDatePicker({
               <button
                 type="button"
                 onClick={handleNextMonth}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/40 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer text-sm font-bold"
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 dark:bg-black/40 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-border-custom text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer text-sm font-bold shadow-xs"
               >
                 ›
               </button>
@@ -684,8 +821,8 @@ function CalendarDatePicker({
                     onClick={() => handleSelectDay(dayNum)}
                     className={`h-8 rounded-lg text-xs font-mono flex items-center justify-center transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-accent text-black font-bold shadow-md shadow-accent/20'
-                        : 'text-zinc-300 hover:bg-zinc-800/80 hover:text-white'
+                        ? 'bg-accent text-accent-fg font-bold shadow-sm shadow-accent/20'
+                        : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 hover:text-zinc-900 dark:hover:text-white'
                     }`}
                   >
                     {dayNum}
@@ -695,14 +832,14 @@ function CalendarDatePicker({
             </div>
 
             {/* Quick action footer */}
-            <div className="flex items-center justify-between pt-2 border-t border-zinc-900 text-xs font-mono">
+            <div className="flex items-center justify-between pt-2 border-t border-border-custom text-xs font-mono">
               <button
                 type="button"
                 onClick={() => {
                   onChange('');
                   setIsOpen(false);
                 }}
-                className="text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
+                className="text-zinc-500 hover:text-red-500 transition-colors cursor-pointer"
               >
                 Clear
               </button>
@@ -743,6 +880,8 @@ export default function ProfilePage() {
 
   // Form profile states
   const [username, setUsername] = useState('');
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+  const [checkingUsername, setCheckingUsername] = useState(false);
   const [fullName, setFullName] = useState('');
   const [selectedCountryCode, setSelectedCountryCode] = useState('');
   const [nationality, setNationality] = useState('');
@@ -752,6 +891,7 @@ export default function ProfilePage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const imageFileInputRef = useRef<HTMLInputElement>(null);
   const [team, setTeam] = useState('Community Member');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [countriesList, setCountriesList] = useState<{ code: string; name: string }[]>([]);
 
   // Games and settings states
@@ -759,9 +899,10 @@ export default function ProfilePage() {
     valorant: false,
     cs2: false
   });
+  const [activeGameTab, setActiveGameTab] = useState<'valorant' | 'cs2'>('valorant');
 
   // VALORANT settings
-  const [valRole, setValRole] = useState('');
+  const [valRole, setValRole] = useState('Duelist');
   const [valDpi, setValDpi] = useState('800');
   const [valSens, setValSens] = useState('0.35');
   const [valHz, setValHz] = useState('1000');
@@ -876,6 +1017,42 @@ export default function ProfilePage() {
   const [discord, setDiscord] = useState('');
   const [facebook, setFacebook] = useState('');
 
+  // Dynamic Social Media Links list
+  type SocialPlatformId = 'twitter' | 'discord' | 'twitch' | 'youtube' | 'instagram' | 'tiktok' | 'facebook';
+  interface SocialEntry {
+    id: string;
+    platform: SocialPlatformId;
+    value: string;
+  }
+  const [socialEntries, setSocialEntries] = useState<SocialEntry[]>([]);
+
+  const SOCIAL_PLATFORMS: { id: SocialPlatformId; label: string; placeholder: string }[] = [
+    { id: 'twitter', label: 'Twitter / X', placeholder: '@handle or profile URL' },
+    { id: 'discord', label: 'Discord', placeholder: 'Discord username / tag' },
+    { id: 'twitch', label: 'Twitch', placeholder: 'twitch_username or channel URL' },
+    { id: 'youtube', label: 'YouTube', placeholder: '@channel or channel URL' },
+    { id: 'instagram', label: 'Instagram', placeholder: '@handle or profile URL' },
+    { id: 'tiktok', label: 'TikTok', placeholder: '@handle or profile URL' },
+    { id: 'facebook', label: 'Facebook', placeholder: 'Username or profile URL' },
+  ];
+
+  const handleAddSocialEntry = () => {
+    const used = new Set(socialEntries.map(s => s.platform));
+    const nextPlatform = SOCIAL_PLATFORMS.find(p => !used.has(p.id))?.id || 'twitter';
+    setSocialEntries(prev => [
+      ...prev,
+      { id: Math.random().toString(36).substring(2, 9), platform: nextPlatform, value: '' }
+    ]);
+  };
+
+  const handleUpdateSocialEntry = (id: string, updates: Partial<SocialEntry>) => {
+    setSocialEntries(prev => prev.map(e => e.id === id ? { ...e, ...updates } : e));
+  };
+
+  const handleRemoveSocialEntry = (id: string) => {
+    setSocialEntries(prev => prev.filter(e => e.id !== id));
+  };
+
   // Favorite pro players list
   const [favorites, setFavorites] = useState<Player[]>([]);
   const [removingFavoriteIds, setRemovingFavoriteIds] = useState<number[]>([]);
@@ -927,31 +1104,73 @@ export default function ProfilePage() {
           .maybeSingle();
 
         if (profile) {
-          setIsProfileCreated(profile.is_profile_created);
-          setUsername(profile.username || '');
-          setFullName(profile.real_name || profile.Full_name || profile.full_name || '');
+          const meta = user.user_metadata || {};
+          const fallbackAvatar = meta.avatar_url || meta.picture || '';
+          const discordDisplayName = meta.custom_claims?.global_name || meta.full_name || meta.name || '';
+          const discordHandle = meta.preferred_username || meta.user_name || '';
+          const discordName = discordDisplayName || discordHandle || '';
+
+          const isCreated = !!profile.is_profile_created;
+          setIsProfileCreated(isCreated);
+          setIsAdmin(Boolean(profile.is_admin));
+
+          // If creating profile (!isCreated), prioritize OAuth name
+          if (!isCreated) {
+            setUsername(profile.username || discordName || (user.email ? user.email.split('@')[0] : ''));
+            setFullName(profile.real_name || meta.full_name || meta.name || '');
+          } else {
+            setUsername(profile.username || discordName || '');
+            setFullName(profile.real_name || profile.Full_name || profile.full_name || meta.full_name || meta.name || '');
+          }
+
           setSelectedCountryCode(profile.country_code || '');
           setNationality(profile.nationality || '');
           const socials = profile.social_links || {};
           setBirthDate(profile.birth_date || socials.birth_date || '');
           setDescription(profile.description || socials.description || '');
-          setProfileImgUrl(profile.profile_img_url || socials.profile_img_url || '');
+          setProfileImgUrl(normalizeDiscordAvatar(profile.profile_img_url || socials.profile_img_url || fallbackAvatar || ''));
 
           // Load social links
-          setTwitter(socials.twitter || socials.x || '');
-          setTwitch(socials.twitch || '');
-          setInstagram(socials.instagram || '');
-          setYoutube(socials.youtube || '');
-          setTiktok(socials.tiktok || '');
-          setDiscord(socials.discord || '');
-          setFacebook(socials.facebook || '');
+          const loadedTwitter = socials.twitter || socials.x || '';
+          const loadedTwitch = socials.twitch || '';
+          const loadedInstagram = socials.instagram || '';
+          const loadedYoutube = socials.youtube || '';
+          const loadedTiktok = socials.tiktok || '';
+          const loadedDiscord = socials.discord || '';
+          const loadedFacebook = socials.facebook || '';
+
+          setTwitter(loadedTwitter);
+          setTwitch(loadedTwitch);
+          setInstagram(loadedInstagram);
+          setYoutube(loadedYoutube);
+          setTiktok(loadedTiktok);
+          setDiscord(loadedDiscord);
+          setFacebook(loadedFacebook);
+
+          // Populate dynamic socialEntries
+          const initialEntries: SocialEntry[] = [];
+          if (loadedTwitter) initialEntries.push({ id: 'tw-' + Math.random().toString(36).substring(2, 7), platform: 'twitter', value: loadedTwitter });
+          if (loadedDiscord) initialEntries.push({ id: 'dc-' + Math.random().toString(36).substring(2, 7), platform: 'discord', value: loadedDiscord });
+          if (loadedTwitch) initialEntries.push({ id: 'tc-' + Math.random().toString(36).substring(2, 7), platform: 'twitch', value: loadedTwitch });
+          if (loadedYoutube) initialEntries.push({ id: 'yt-' + Math.random().toString(36).substring(2, 7), platform: 'youtube', value: loadedYoutube });
+          if (loadedInstagram) initialEntries.push({ id: 'ig-' + Math.random().toString(36).substring(2, 7), platform: 'instagram', value: loadedInstagram });
+          if (loadedTiktok) initialEntries.push({ id: 'tk-' + Math.random().toString(36).substring(2, 7), platform: 'tiktok', value: loadedTiktok });
+          if (loadedFacebook) initialEntries.push({ id: 'fb-' + Math.random().toString(36).substring(2, 7), platform: 'facebook', value: loadedFacebook });
+          setSocialEntries(initialEntries);
 
           // Load games played
           const settings = profile.game_settings || {};
+          const hasVal = !!settings.valorant;
+          const hasCs = !!settings.cs2;
           setGamesPlayed({
-            valorant: !!settings.valorant,
-            cs2: !!settings.cs2
+            valorant: hasVal,
+            cs2: hasCs
           });
+          if (hasVal) {
+            setActiveGameTab('valorant');
+          } else if (hasCs) {
+            setActiveGameTab('cs2');
+          }
 
           // Load valorant values if exist
           if (settings.valorant) {
@@ -969,7 +1188,11 @@ export default function ProfilePage() {
 
             if (settings.valorant.settings_data) {
               const sd = settings.valorant.settings_data;
-              if (settings.valorant.game_role) setValRole(settings.valorant.game_role);
+              if (settings.valorant.game_role && settings.valorant.game_role !== 'Community Member') {
+                setValRole(settings.valorant.game_role);
+              } else {
+                setValRole('Duelist');
+              }
               if (sd.display_mode) setValDisplayMode(sd.display_mode);
               if (sd.nvidia_reflex) setValNvidiaReflex(sd.nvidia_reflex);
               if (sd.multithreaded_rendering) setValMultithreaded(sd.multithreaded_rendering);
@@ -1031,7 +1254,7 @@ export default function ProfilePage() {
             setCsZoomSens(settings.cs2.zoom_sens?.toString() || '1.0');
             setCsRes(settings.cs2.resolution || '1280x960');
             setCsAspect(settings.cs2.aspect_ratio || '4:3');
-            if (settings.cs2.game_role) setCsRole(settings.cs2.game_role);
+            if (settings.cs2.game_role) setCsRole(settings.cs2.game_role === 'Community Member' ? '' : settings.cs2.game_role);
 
             const csd = settings.cs2.settings_data || {};
             if (csd.display_mode) setCsDisplayMode(csd.display_mode);
@@ -1131,6 +1354,101 @@ export default function ProfilePage() {
     initPage();
   }, [router]);
 
+  const checkUsernameAvailability = async (candidate: string): Promise<boolean> => {
+    const clean = candidate.trim();
+    if (!clean) {
+      setUsernameError('Username is required.');
+      return false;
+    }
+    if (clean.length < 3) {
+      setUsernameError('Username must be at least 3 characters long.');
+      return false;
+    }
+
+    setCheckingUsername(true);
+    try {
+      // 1. Check if another user profile is using this username (case-insensitive)
+      let userQuery = supabase
+        .from('user_profiles')
+        .select('id')
+        .ilike('username', clean);
+
+      if (userId) {
+        userQuery = userQuery.neq('id', userId);
+      }
+
+      const { data: existingUser } = await userQuery.maybeSingle();
+
+      if (existingUser) {
+        const msg = `The username "${clean}" is already taken. Please choose another one.`;
+        setUsernameError(msg);
+        return false;
+      }
+
+      // 2. Check if a pro player is using this username (case-insensitive)
+      const { data: existingPlayer } = await supabase
+        .from('players')
+        .select('id')
+        .ilike('username', clean)
+        .maybeSingle();
+
+      if (existingPlayer) {
+        const msg = `The username "${clean}" is already taken. Please choose another one.`;
+        setUsernameError(msg);
+        return false;
+      }
+
+      setUsernameError(null);
+      return true;
+    } catch (err) {
+      console.warn('Username check warning:', err);
+      return true;
+    } finally {
+      setCheckingUsername(false);
+    }
+  };
+
+  const handleToggleValorant = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    const currentScrollY = window.scrollY;
+    setGamesPlayed(prev => {
+      const next = { ...prev, valorant: isChecked };
+      if (isChecked) {
+        setActiveGameTab('valorant');
+      } else if (next.cs2) {
+        setActiveGameTab('cs2');
+      }
+      return next;
+    });
+    // Prevent browser scroll-anchoring jumps / viewport shifts
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: currentScrollY, behavior: 'instant' });
+    });
+    setTimeout(() => {
+      window.scrollTo({ top: currentScrollY, behavior: 'instant' });
+    }, 25);
+  };
+
+  const handleToggleCs2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    const currentScrollY = window.scrollY;
+    setGamesPlayed(prev => {
+      const next = { ...prev, cs2: isChecked };
+      if (isChecked && !next.valorant) {
+        setActiveGameTab('cs2');
+      } else if (!isChecked && next.valorant) {
+        setActiveGameTab('valorant');
+      }
+      return next;
+    });
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: currentScrollY, behavior: 'instant' });
+    });
+    setTimeout(() => {
+      window.scrollTo({ top: currentScrollY, behavior: 'instant' });
+    }, 25);
+  };
+
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) return;
@@ -1141,8 +1459,9 @@ export default function ProfilePage() {
     // Build game settings
     const gameSettings: any = {};
     if (gamesPlayed.valorant) {
+      const cleanValRole = valRole.trim();
       gameSettings.valorant = {
-        game_role: valRole.trim() || 'Community Member',
+        game_role: cleanValRole && cleanValRole !== 'Community Member' ? cleanValRole : null,
         mouse_dpi: parseFloat(valDpi) || 800,
         in_game_sens: parseFloat(valSens) || 0.35,
         mouse_hz: parseInt(valHz, 10) || 1000,
@@ -1184,8 +1503,9 @@ export default function ProfilePage() {
       };
     }
     if (gamesPlayed.cs2) {
+      const cleanCsRole = csRole.trim();
       gameSettings.cs2 = {
-        game_role: csRole.trim() || 'Community Member',
+        game_role: cleanCsRole && cleanCsRole !== 'Community Member' ? cleanCsRole : null,
         mouse_dpi: parseFloat(csDpi) || 800,
         in_game_sens: parseFloat(csSens) || 1.0,
         mouse_hz: parseInt(csHz, 10) || 1000,
@@ -1218,25 +1538,48 @@ export default function ProfilePage() {
       .map(id => parseInt(id, 10))
       .filter(id => !isNaN(id) && id > 0);
 
-    // Get nationality name matching selected code
+    const cleanUsername = username.trim();
+    if (!cleanUsername) {
+      setErrorMsg('Username is required.');
+      setUsernameError('Username is required.');
+      setSaving(false);
+      return;
+    }
+
+    if (cleanUsername.length < 3) {
+      setErrorMsg('Username must be at least 3 characters long.');
+      setUsernameError('Username must be at least 3 characters long.');
+      setSaving(false);
+      return;
+    }
+
+    const isAvailable = await checkUsernameAvailability(cleanUsername);
+    if (!isAvailable) {
+      setErrorMsg(`The username "${cleanUsername}" is already taken. Please choose another one.`);
+      setSaving(false);
+      return;
+    }
+
+    // Get nationality name matching selected code (optional)
     const countryObj = countriesList.find(c => c.code === selectedCountryCode);
-    const natName = countryObj ? countryObj.name : nationality;
+    const natName = selectedCountryCode ? (countryObj ? countryObj.name : nationality) : null;
+    const finalCountryCode = selectedCountryCode ? selectedCountryCode : null;
+
+    const getSocialVal = (p: string) => socialEntries.find(s => s.platform === p)?.value.trim() || '';
 
     const socialLinks = {
-      twitter: twitter.trim(),
-      twitch: twitch.trim(),
-      instagram: instagram.trim(),
-      youtube: youtube.trim(),
-      tiktok: tiktok.trim(),
-      discord: discord.trim(),
-      facebook: facebook.trim(),
+      twitter: getSocialVal('twitter'),
+      twitch: getSocialVal('twitch'),
+      instagram: getSocialVal('instagram'),
+      youtube: getSocialVal('youtube'),
+      tiktok: getSocialVal('tiktok'),
+      discord: getSocialVal('discord'),
+      facebook: getSocialVal('facebook'),
       // Safely persist extended profile info in JSONB to avoid PGRST204 column errors
       birth_date: birthDate || null,
       description: description.trim() || null,
-      profile_img_url: profileImgUrl.trim() || null
+      profile_img_url: normalizeDiscordAvatar(profileImgUrl).trim() || null
     };
-
-    const cleanUsername = username.trim() || email?.split('@')[0] || 'User';
 
     try {
       const { data, error } = await supabase
@@ -1245,7 +1588,7 @@ export default function ProfilePage() {
           username: cleanUsername,
           real_name: fullName.trim() || null,
           nationality: natName,
-          country_code: selectedCountryCode,
+          country_code: finalCountryCode,
           is_profile_created: true,
           game_settings: gameSettings,
           gear_ids: gearIds,
@@ -1256,13 +1599,30 @@ export default function ProfilePage() {
         .select();
 
       if (error) {
-        setErrorMsg(error.message);
+        if (
+          error.code === '23505' ||
+          error.message?.toLowerCase().includes('duplicate key') ||
+          error.message?.toLowerCase().includes('unique constraint')
+        ) {
+          const msg = `The username "${cleanUsername}" is already taken. Please choose another one.`;
+          setErrorMsg(msg);
+          setUsernameError(msg);
+        } else {
+          setErrorMsg(error.message);
+        }
       } else if (!data || data.length === 0) {
         setErrorMsg('Unable to save profile. Please check if your login session has expired.');
       } else {
         setUsername(cleanUsername);
         setFullName(fullName.trim());
-        setNationality(natName);
+        setTwitter(getSocialVal('twitter'));
+        setTwitch(getSocialVal('twitch'));
+        setInstagram(getSocialVal('instagram'));
+        setYoutube(getSocialVal('youtube'));
+        setTiktok(getSocialVal('tiktok'));
+        setDiscord(getSocialVal('discord'));
+        setFacebook(getSocialVal('facebook'));
+        setNationality(natName || '');
         setIsProfileCreated(true);
         setIsEditing(false);
         setValExtraSettings(prev => ({
@@ -1286,6 +1646,11 @@ export default function ProfilePage() {
           }
         } else {
           setSelectedGears([]);
+        }
+
+        // Scroll to top of the page so the profile view starts at the header banner
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         router.refresh();
@@ -1342,6 +1707,7 @@ export default function ProfilePage() {
         setTiktok('');
         setDiscord('');
         setFacebook('');
+        setSocialEntries([]);
         setValExtraSettings({});
         router.refresh();
       }
@@ -1461,7 +1827,7 @@ export default function ProfilePage() {
   if (gamesPlayed.valorant) {
     constructedSettingsData.push({
       id: 1,
-      game_role: valRole.trim() || 'Community Member',
+      game_role: valRole.trim() && valRole.trim() !== 'Community Member' ? valRole.trim() : null,
       mouse_dpi: parseFloat(valDpi) || 800,
       mouse_hz: parseInt(valHz, 10) || 1000,
       in_game_sens: parseFloat(valSens) || 0.35,
@@ -1512,7 +1878,7 @@ export default function ProfilePage() {
   if (gamesPlayed.cs2) {
     constructedSettingsData.push({
       id: 2,
-      game_role: csRole.trim() || 'Community Member',
+      game_role: csRole.trim() && csRole.trim() !== 'Community Member' ? csRole.trim() : null,
       mouse_dpi: parseFloat(csDpi) || 800,
       mouse_hz: parseInt(csHz, 10) || 1000,
       in_game_sens: parseFloat(csSens) || 1.0,
@@ -1752,16 +2118,19 @@ export default function ProfilePage() {
             <div>
               <button
                 type="button"
-                onClick={() => setIsEditing(false)}
-                className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 hover:text-white transition-colors duration-200 font-mono cursor-pointer"
+                onClick={() => {
+                  setIsEditing(false);
+                  if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors duration-200 font-mono cursor-pointer"
               >
                 ← BACK TO PROFILE VIEW
               </button>
             </div>
           )}
 
-          <div className="border-b border-zinc-800/80 pb-4">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
+          <div className="border-b border-border-custom pb-4">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white font-display">
               {isProfileCreated ? (
                 <>Edit <span className="text-accent">Profile</span></>
               ) : (
@@ -1781,47 +2150,88 @@ export default function ProfilePage() {
             )}
 
             {/* Block 1: Basic Information */}
-            <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
-                1. Basic Profile Info
-              </h2>
+            <div className="bg-card border border-border-custom p-6 sm:p-8 rounded-2xl space-y-6 shadow-xs">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-custom pb-3">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-400 font-mono">
+                  1. Basic Profile Info
+                </h2>
+                {isAdmin ? (
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-lg font-sans tracking-wide border bg-red-500/15 border-red-500/40 text-red-500 dark:text-red-400 leading-none shadow-[0_0_12px_rgba(239,68,68,0.2)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.9)] animate-pulse"></span>
+                    Admin
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-lg font-sans tracking-wide border bg-zinc-100 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-700/50 text-zinc-700 dark:text-zinc-300 leading-none">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Community Member
+                  </span>
+                )}
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Username</label>
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="e.g. your_gamertag"
-                    className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
-                  />
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 font-mono">
+                    Username <span className="text-accent">* (Required)</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      value={username}
+                      onChange={(e) => {
+                        setUsername(e.target.value);
+                        if (usernameError) setUsernameError(null);
+                        if (errorMsg) setErrorMsg(null);
+                      }}
+                      onBlur={() => {
+                        if (username.trim()) {
+                          checkUsernameAvailability(username);
+                        }
+                      }}
+                      placeholder="Enter your username"
+                      className={`w-full h-11 bg-white dark:bg-black/40 border ${
+                        usernameError ? 'border-red-500/80 focus:border-red-500' : 'border-border-custom focus:border-accent'
+                      } rounded-xl px-4 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none transition-all font-mono shadow-xs`}
+                    />
+                    {checkingUsername && (
+                      <div className="absolute right-3.5 top-1/2 -translate-y-1/2">
+                        <div className="w-3.5 h-3.5 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                  {usernameError && (
+                    <p className="text-[11px] text-red-500 dark:text-red-400 font-sans mt-1">
+                      {usernameError}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Full Name / Real Name</label>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">
+                    Full Name / Real Name <span className="text-zinc-500 dark:text-zinc-600 font-sans normal-case">(Optional)</span>
+                  </label>
                   <input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="e.g. John Doe (Optional)"
-                    className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono"
+                    placeholder="Enter your full name (Optional)"
+                    className="w-full h-11 bg-white dark:bg-black/40 border border-border-custom rounded-xl px-4 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-accent transition-all font-mono shadow-xs"
                   />
                 </div>
 
                 <CountrySearchSelect
-                  label="Nationality / Country"
+                  label="Nationality / Country (Optional)"
                   options={countriesList}
                   selectedValue={selectedCountryCode}
                   onChange={setSelectedCountryCode}
-                  placeholder="Select country..."
+                  placeholder="Select country... (Optional)"
                 />
 
                 <CalendarDatePicker
-                  label="Birth Date"
+                  label="Birth Date (Optional)"
                   value={birthDate}
                   onChange={setBirthDate}
-                  placeholder="Select birth date..."
+                  placeholder="Select birth date... (Optional)"
                 />
 
                 {/* Profile Image - Upload from device & Direct URL */}
@@ -1830,16 +2240,20 @@ export default function ProfilePage() {
                     Profile Picture / Avatar
                   </label>
 
-                  <div className="p-4 bg-black/30 border border-zinc-800/80 rounded-2xl flex flex-col sm:flex-row items-center gap-5">
+                  <div className="p-4 bg-zinc-50 dark:bg-black/30 border border-border-custom rounded-2xl flex flex-col sm:flex-row items-center gap-5">
                     {/* Avatar Preview */}
-                    <div className="relative w-20 h-20 rounded-2xl bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center text-accent text-2xl font-bold overflow-hidden shrink-0 shadow-inner group">
+                    <div className="relative w-20 h-20 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border-2 border-border-custom flex items-center justify-center text-accent text-2xl font-bold overflow-hidden shrink-0 shadow-xs group">
                       {profileImgUrl ? (
                         <img
-                          src={profileImgUrl}
+                          src={normalizeDiscordAvatar(profileImgUrl)}
                           alt="Profile Preview"
+                          referrerPolicy="no-referrer"
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            (e.target as HTMLElement).style.display = 'none';
+                            const target = e.currentTarget;
+                            if (target.src.includes('cdn.discordapp.com/avatars/') && !target.src.includes('.webp')) {
+                              target.src = normalizeDiscordAvatar(target.src);
+                            }
                           }}
                         />
                       ) : (
@@ -1867,7 +2281,7 @@ export default function ProfilePage() {
                           type="button"
                           disabled={uploadingImage}
                           onClick={() => imageFileInputRef.current?.click()}
-                          className="px-4 h-9.5 bg-zinc-850 hover:bg-zinc-750 border border-zinc-700 text-white text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-2 shadow-sm active:scale-98"
+                          className="px-4 h-9.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-850 dark:hover:bg-zinc-750 border border-border-custom text-zinc-900 dark:text-white text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-2 shadow-xs active:scale-98"
                         >
                           <svg className="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -1879,7 +2293,7 @@ export default function ProfilePage() {
                           <button
                             type="button"
                             onClick={() => setProfileImgUrl('')}
-                            className="px-3.5 h-9.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+                            className="px-3.5 h-9.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-500 dark:text-red-400 text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all cursor-pointer"
                           >
                             Remove
                           </button>
@@ -1891,9 +2305,9 @@ export default function ProfilePage() {
                         <input
                           type="text"
                           value={profileImgUrl}
-                          onChange={(e) => setProfileImgUrl(e.target.value)}
+                          onChange={(e) => setProfileImgUrl(normalizeDiscordAvatar(e.target.value))}
                           placeholder="Or paste image URL (https://...)"
-                          className="w-full h-10 bg-black/50 border border-zinc-800 focus:border-accent/50 rounded-xl px-3.5 text-xs text-white placeholder-zinc-600 focus:outline-none transition-all font-mono"
+                          className="w-full h-10 bg-white dark:bg-black/50 border border-border-custom focus:border-accent rounded-xl px-3.5 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none transition-all font-mono shadow-xs"
                         />
                       </div>
                     </div>
@@ -1907,28 +2321,18 @@ export default function ProfilePage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Share a short bio about your playstyle, favorite roles, or accomplishments..."
-                    className="w-full bg-black/40 border border-zinc-800 rounded-xl p-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-sans resize-none"
+                    className="w-full bg-white dark:bg-black/40 border border-border-custom rounded-xl p-4 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-accent transition-all font-sans resize-none shadow-xs"
                   />
                 </div>
               </div>
             </div>
 
             {/* Block 2: Game Settings */}
-            <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono">
+            <div style={{ overflowAnchor: 'none' }} className="bg-card border border-border-custom p-6 sm:p-8 rounded-2xl space-y-6 shadow-xs">
+              <div className="border-b border-border-custom pb-3">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-400 font-mono">
                   2. Game Specific Settings
                 </h2>
-                <button
-                  type="button"
-                  onClick={() => setShowConfigUploader(true)}
-                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-semibold font-sans transition-all active:scale-95 shadow-sm cursor-pointer"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                  <span>Upload VALORANT Config</span>
-                </button>
               </div>
 
               {uploadSuccessNotice && (
@@ -1948,29 +2352,94 @@ export default function ProfilePage() {
               )}
 
               <div className="space-y-6">
-                <div className="flex gap-6 items-center">
-                  <label className="flex items-center gap-2.5 text-xs text-white font-mono cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={gamesPlayed.valorant}
-                      onChange={(e) => setGamesPlayed(prev => ({ ...prev, valorant: e.target.checked }))}
-                      className="h-4 w-4 rounded border-zinc-800 text-accent focus:ring-accent accent-accent"
-                    />
-                    Plays VALORANT
-                  </label>
-                  <label className="flex items-center gap-2.5 text-xs text-white font-mono cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={gamesPlayed.cs2}
-                      onChange={(e) => setGamesPlayed(prev => ({ ...prev, cs2: e.target.checked }))}
-                      className="h-4 w-4 rounded border-zinc-800 text-accent focus:ring-accent accent-accent"
-                    />
-                    Plays CS2
-                  </label>
+                {/* Game Selection Checkboxes + Game Tabs */}
+                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 px-4 py-2 min-h-[50px] rounded-xl bg-zinc-50 dark:bg-black/30 border border-border-custom transition-colors">
+                  {/* Left: Games Played Checkboxes */}
+                  <div className="flex items-center gap-6 py-1">
+                    <label className="flex items-center gap-2.5 text-xs text-zinc-800 dark:text-white font-mono cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={gamesPlayed.valorant}
+                        onChange={handleToggleValorant}
+                        className="h-4 w-4 rounded border-border-custom text-accent focus:ring-accent accent-accent cursor-pointer"
+                      />
+                      <img
+                        src="/images/valorant-logo.png"
+                        alt="VALORANT"
+                        className="w-4 h-4 rounded object-cover shrink-0"
+                      />
+                      <span>VALORANT</span>
+                    </label>
+
+                    <label className="flex items-center gap-2.5 text-xs text-zinc-800 dark:text-white font-mono cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={gamesPlayed.cs2}
+                        onChange={handleToggleCs2}
+                        className="h-4 w-4 rounded border-border-custom text-accent focus:ring-accent accent-accent cursor-pointer"
+                      />
+                      <img
+                        src="/images/cs2-logo.png"
+                        alt="CS2"
+                        className="w-4 h-4 rounded object-cover shrink-0"
+                      />
+                      <span>CS2</span>
+                    </label>
+                  </div>
+
+                  {/* Right: Game Tabs Switcher */}
+                  {(gamesPlayed.valorant || gamesPlayed.cs2) && (
+                    <div className="flex items-center gap-1 p-0.5 bg-zinc-100 dark:bg-black/60 border border-border-custom rounded-lg shrink-0">
+                      {gamesPlayed.valorant && (
+                        <button
+                          type="button"
+                          onClick={() => setActiveGameTab('valorant')}
+                          className={`px-3 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer flex items-center gap-1.5 leading-none ${
+                            activeGameTab === 'valorant'
+                              ? 'bg-red-500/15 text-red-500 dark:text-red-400 border border-red-500/30 shadow-xs'
+                              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-zinc-800/50 border border-transparent'
+                          }`}
+                        >
+                          <img
+                            src="/images/valorant-logo.png"
+                            alt="VALORANT"
+                            className="w-3.5 h-3.5 rounded object-cover shrink-0"
+                          />
+                          <span>VALORANT</span>
+                        </button>
+                      )}
+
+                      {gamesPlayed.cs2 && (
+                        <button
+                          type="button"
+                          onClick={() => setActiveGameTab('cs2')}
+                          className={`px-3 py-1 rounded-md text-xs font-mono font-semibold transition-all cursor-pointer flex items-center gap-1.5 leading-none ${
+                            activeGameTab === 'cs2'
+                              ? 'bg-amber-500/15 text-amber-500 dark:text-amber-400 border border-amber-500/30 shadow-xs'
+                              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-zinc-800/50 border border-transparent'
+                          }`}
+                        >
+                          <img
+                            src="/images/cs2-logo.png"
+                            alt="CS2"
+                            className="w-3.5 h-3.5 rounded object-cover shrink-0"
+                          />
+                          <span>CS2</span>
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                {/* VALORANT Inputs */}
-                {gamesPlayed.valorant && (
+                {/* Empty State when no games are checked */}
+                {!gamesPlayed.valorant && !gamesPlayed.cs2 && (
+                  <div className="p-8 text-center rounded-xl border border-dashed border-zinc-800 text-zinc-500 font-mono text-xs">
+                    Please check &quot;VALORANT&quot; or &quot;CS2&quot; above to configure in-game settings.
+                  </div>
+                )}
+
+                {/* VALORANT Inputs (shown when activeGameTab === 'valorant') */}
+                {gamesPlayed.valorant && activeGameTab === 'valorant' && (
                   <ValorantSettingsEditor
                     valRole={valRole}
                     setValRole={setValRole}
@@ -2038,6 +2507,9 @@ export default function ProfilePage() {
                     valCrosshairs={valCrosshairs}
                     setValCrosshairs={setValCrosshairs}
 
+                    valKeybinds={valExtraSettings?.keybinds || DEFAULT_KEYBINDS}
+                    setValKeybinds={(newBinds) => setValExtraSettings(prev => ({ ...prev, keybinds: newBinds }))}
+
                     onReuploadConfig={() => setShowConfigUploader(true)}
                     configLinkedBadge={
                       valExtraSettings && Object.keys(valExtraSettings).length > 0 ? (
@@ -2056,8 +2528,8 @@ export default function ProfilePage() {
                   />
                 )}
 
-                {/* CS2 Inputs */}
-                {gamesPlayed.cs2 && (
+                {/* CS2 Inputs (shown when activeGameTab === 'cs2') */}
+                {gamesPlayed.cs2 && activeGameTab === 'cs2' && (
                   <CS2SettingsEditor
                     csRole={csRole}
                     setCsRole={setCsRole}
@@ -2099,8 +2571,8 @@ export default function ProfilePage() {
             </div>
 
             {/* Block 3: Gear Selection */}
-            <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
+            <div className="bg-card border border-border-custom p-6 sm:p-8 rounded-2xl space-y-6 shadow-xs">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-400 font-mono border-b border-border-custom pb-3">
                 3. Select My Gear
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -2139,44 +2611,82 @@ export default function ProfilePage() {
             </div>
 
             {/* Block 4: Social Media Links */}
-            <div className="bg-card border border-zinc-800 p-6 sm:p-8 rounded-2xl space-y-6">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 font-mono border-b border-zinc-800 pb-3">
-                4. Social Media Links
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Twitter / X</label>
-                  <input type="text" value={twitter} onChange={e => setTwitter(e.target.value)} placeholder="@handle or URL" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
+            <div className="bg-card border border-border-custom p-6 sm:p-8 rounded-2xl space-y-5 shadow-xs">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-custom pb-3">
+                <div>
+                  <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-400 font-mono">
+                    4. Social Media Links {socialEntries.length > 0 && `(${socialEntries.length})`}
+                  </h2>
+                  <p className="text-zinc-500 text-[11px] font-sans mt-0.5">
+                    Optional: Add your social media links. Leave empty if you don&apos;t wish to display any channels.
+                  </p>
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Twitch</label>
-                  <input type="text" value={twitch} onChange={e => setTwitch(e.target.value)} placeholder="twitch_username" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Instagram</label>
-                  <input type="text" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="instagram_handle" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">YouTube</label>
-                  <input type="text" value={youtube} onChange={e => setYoutube(e.target.value)} placeholder="channel URL or @handle" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">TikTok</label>
-                  <input type="text" value={tiktok} onChange={e => setTiktok(e.target.value)} placeholder="@tiktok_handle" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-mono">Discord Username</label>
-                  <input type="text" value={discord} onChange={e => setDiscord(e.target.value)} placeholder="discord_tag" className="w-full h-11 bg-black/40 border border-zinc-800 rounded-xl px-4 text-xs text-white focus:outline-none focus:border-accent/50 transition-all font-mono" />
-                </div>
+                <button
+                  type="button"
+                  onClick={handleAddSocialEntry}
+                  disabled={socialEntries.length >= SOCIAL_PLATFORMS.length}
+                  className="px-3.5 h-8.5 bg-accent/10 hover:bg-accent/20 border border-accent/30 text-accent text-xs font-bold font-mono uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span>Add Social Link</span>
+                </button>
               </div>
+
+              {socialEntries.length > 0 && (
+                <div className="space-y-3 pt-1">
+                  {socialEntries.map((entry) => {
+                    const platInfo = SOCIAL_PLATFORMS.find((p) => p.id === entry.platform) || SOCIAL_PLATFORMS[0];
+                    return (
+                      <div
+                        key={entry.id}
+                        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 p-3 rounded-xl bg-zinc-50 dark:bg-black/30 border border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-all shadow-xs"
+                      >
+                        {/* Platform Selector Dropdown */}
+                        <div className="w-full sm:w-52 shrink-0">
+                          <SocialPlatformDropdown
+                            value={entry.platform}
+                            onChange={(newPlat) => handleUpdateSocialEntry(entry.id, { platform: newPlat as any })}
+                            platforms={SOCIAL_PLATFORMS}
+                          />
+                        </div>
+
+                        {/* Value / Handle / URL input */}
+                        <div className="flex-1 min-w-0">
+                          <input
+                            type="text"
+                            value={entry.value}
+                            onChange={(e) => handleUpdateSocialEntry(entry.id, { value: e.target.value })}
+                            placeholder={platInfo.placeholder}
+                            className="w-full h-10 bg-white dark:bg-black/40 border border-border-custom rounded-xl px-3.5 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-accent transition-all font-mono shadow-xs"
+                          />
+                        </div>
+
+                        {/* Remove button */}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSocialEntry(entry.id)}
+                          className="w-10 h-10 shrink-0 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-500 dark:text-red-400 rounded-xl flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                          title="Remove this link"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Form Actions */}
             <div className="space-y-4">
               {errorMsg && (
-                <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono p-4 rounded-xl flex items-center justify-between">
+                <div className="bg-red-500/10 border border-red-500/20 text-red-500 dark:text-red-400 text-xs font-mono p-4 rounded-xl flex items-center justify-between">
                   <span>⚠️ {errorMsg}</span>
-                  <button type="button" onClick={() => setErrorMsg(null)} className="text-zinc-500 hover:text-white cursor-pointer ml-3">✕</button>
+                  <button type="button" onClick={() => setErrorMsg(null)} className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white cursor-pointer ml-3">✕</button>
                 </div>
               )}
               <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
@@ -2185,7 +2695,7 @@ export default function ProfilePage() {
                     type="button"
                     disabled={saving || deleting}
                     onClick={() => setShowDeleteModal(true)}
-                    className="px-4 h-11 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 hover:text-red-300 text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer flex items-center gap-2"
+                    className="px-4 h-11 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer flex items-center gap-2"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -2197,8 +2707,11 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     disabled={saving || deleting}
-                    onClick={() => setIsEditing(false)}
-                    className="px-6 h-11 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer"
+                    onClick={() => {
+                      setIsEditing(false);
+                      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="px-6 h-11 bg-zinc-100 dark:bg-zinc-900 border border-border-custom hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-800 dark:text-white text-xs font-bold rounded-xl tracking-wider font-mono transition-all uppercase cursor-pointer shadow-xs"
                   >
                     Cancel
                   </button>
@@ -2216,15 +2729,15 @@ export default function ProfilePage() {
         </div>
       ) : !isProfileCreated ? (
         /* ==================== UNCREATED PROFILE CALL-TO-ACTION ==================== */
-        <div className="bg-[#12121A]/40 border border-dashed border-zinc-800 p-12 rounded-3xl flex flex-col items-center justify-center text-center space-y-6 max-w-xl mx-auto py-16 animate-in fade-in duration-300">
-          <div className="h-16 w-16 rounded-full bg-accent/5 border border-accent/20 flex items-center justify-center text-accent shadow-[0_0_20px_rgba(245,158,11,0.08)]">
+        <div className="bg-card border border-dashed border-border-custom p-12 rounded-3xl flex flex-col items-center justify-center text-center space-y-6 max-w-xl mx-auto py-16 animate-in fade-in duration-300 shadow-sm">
+          <div className="h-16 w-16 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shadow-sm">
             <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-white font-display">Create Your Custom Gamer Card</h2>
-            <p className="text-zinc-400 text-xs font-mono max-w-sm">
+            <h2 className="text-xl font-bold text-zinc-900 dark:text-white font-display">Create Your Custom Gamer Card</h2>
+            <p className="text-zinc-500 dark:text-zinc-400 text-xs font-mono max-w-sm">
               Showcase your setup, sensitivity values, configurations, and social media channels inside a custom card that looks exactly like a pro player profile!
             </p>
           </div>
@@ -2243,13 +2756,24 @@ export default function ProfilePage() {
           {/* ================================================ */}
           {/* SECTION 1: PROFILE HEADER (Full Width Banner) */}
           {/* ================================================ */}
-          <section className="relative z-10 bg-card backdrop-blur-[8px] border border-border-custom p-6 sm:p-8 rounded-2xl mb-10 hover:border-border-hover transition-all duration-300">
+          <section className="relative z-10 bg-card backdrop-blur-[8px] border border-border-custom p-6 sm:p-8 rounded-2xl mb-10 hover:border-border-hover transition-all duration-300 shadow-sm">
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
               <div className="flex flex-col md:flex-row md:items-start gap-6 flex-1 min-w-0">
                 {/* Avatar */}
-                <div className="w-32 h-32 md:w-40 md:h-40 min-w-32 min-h-32 md:min-w-40 md:min-h-40 max-w-32 max-h-32 md:max-w-40 md:max-h-40 aspect-square rounded-2xl bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shrink-0 shadow-[0_0_30px_rgba(245,158,11,0.05)]">
+                <div className="w-32 h-32 md:w-40 md:h-40 min-w-32 min-h-32 md:min-w-40 md:min-h-40 max-w-32 max-h-32 md:max-w-40 md:max-h-40 aspect-square rounded-2xl bg-zinc-100 dark:bg-[#1A1A24] border border-border-custom flex items-center justify-center font-black text-accent text-4xl md:text-5xl overflow-hidden shrink-0 shadow-sm">
                   {profileImgUrl ? (
-                    <img src={profileImgUrl} alt={username} className="h-full w-full object-cover" />
+                    <img
+                      src={normalizeDiscordAvatar(profileImgUrl)}
+                      alt={username}
+                      referrerPolicy="no-referrer"
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src.includes('cdn.discordapp.com/avatars/') && !target.src.includes('.webp')) {
+                          target.src = normalizeDiscordAvatar(target.src);
+                        }
+                      }}
+                    />
                   ) : (
                     username ? username[0].toUpperCase() : '?'
                   )}
@@ -2257,22 +2781,30 @@ export default function ProfilePage() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0 space-y-3">
-                  <div className="flex flex-wrap items-baseline gap-3">
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight font-display flex items-center gap-3">
                       {username}
                     </h1>
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-lg font-sans tracking-wide border bg-zinc-800/40 border-zinc-700/30 text-zinc-300">
-                      Community Member
-                    </span>
+                    {isAdmin ? (
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-lg font-sans tracking-wide border bg-red-500/15 border-red-500/40 text-red-500 dark:text-red-400 leading-none shadow-[0_0_12px_rgba(239,68,68,0.2)]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.9)] animate-pulse"></span>
+                        Admin
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-lg font-sans tracking-wide border bg-zinc-100 dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-700/30 text-zinc-700 dark:text-zinc-300 leading-none">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                        Community Member
+                      </span>
+                    )}
                   </div>
 
                   {/* Meta row */}
-                  <div className="flex flex-wrap items-center text-xs sm:text-sm text-zinc-400 font-sans gap-x-3 gap-y-1.5">
+                  <div className="flex flex-wrap items-center text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-sans gap-x-3 gap-y-1.5">
                     {fullName && (
-                      <span className="font-semibold text-zinc-200">{fullName}</span>
+                      <span className="font-semibold text-zinc-900 dark:text-zinc-200">{fullName}</span>
                     )}
                     {fullName && (nationality || selectedCountryCode || birthDate) && (
-                      <span className="text-zinc-700 font-bold">•</span>
+                      <span className="text-zinc-300 dark:text-zinc-700 font-bold">•</span>
                     )}
                     {nationality && (
                       <span className="flex items-center gap-1.5">
@@ -2297,11 +2829,11 @@ export default function ProfilePage() {
                       </span>
                     )}
                     {(nationality || selectedCountryCode) && birthDate && (
-                      <span className="text-zinc-700 font-bold">•</span>
+                      <span className="text-zinc-300 dark:text-zinc-700 font-bold">•</span>
                     )}
                     {birthDate && (
                       <span className="flex items-center gap-1.5">
-                        <svg className="h-3.5 w-3.5 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <svg className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                           <line x1="16" y1="2" x2="16" y2="6" />
                           <line x1="8" y1="2" x2="8" y2="6" />
@@ -2316,11 +2848,13 @@ export default function ProfilePage() {
                   </div>
 
                   {/* Description / Bio */}
-                  <div className="border-l-2 border-zinc-700/50 pl-4 py-0.5 max-w-2xl pt-1">
-                    <p className="text-xs text-zinc-400 leading-relaxed italic font-sans">
-                      {description || "Community gamer profile. Tracking in-game sensitivity, crosshair setup, and hardware peripherals."}
-                    </p>
-                  </div>
+                  {description ? (
+                    <div className="border-l-2 border-accent/40 dark:border-zinc-700/50 pl-4 py-0.5 max-w-2xl pt-1">
+                      <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed italic font-sans">
+                        {description}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
               </div>
 
@@ -2339,14 +2873,14 @@ export default function ProfilePage() {
                   if (!hasAnySocial) return null;
 
                   return (
-                    <div className="flex items-center gap-1 bg-[#12121A]/60 border border-border-custom px-2 py-1.5 rounded-xl">
+                    <div className="flex items-center gap-1 bg-zinc-100/80 dark:bg-[#12121A]/60 border border-border-custom px-2 py-1.5 rounded-xl shadow-xs">
                       {/* Twitter / X */}
                       {twitterLink && (
                         <a
                           href={formatSocialUrl(twitterLink, 'twitter')}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-white/10 rounded-lg transition-all duration-200"
                           title="Twitter / X"
                         >
                           <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -2361,7 +2895,7 @@ export default function ProfilePage() {
                           href={formatSocialUrl(twitchLink, 'twitch')}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#9146FF] hover:bg-[#9146FF]/10 rounded-lg transition-all duration-200"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#9146FF] hover:bg-[#9146FF]/10 rounded-lg transition-all duration-200"
                           title="Twitch"
                         >
                           <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -2376,7 +2910,7 @@ export default function ProfilePage() {
                           href={formatSocialUrl(instagramLink, 'instagram')}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#E1306C] hover:bg-[#E1306C]/10 rounded-lg transition-all duration-200"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#E1306C] hover:bg-[#E1306C]/10 rounded-lg transition-all duration-200"
                           title="Instagram"
                         >
                           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -2392,7 +2926,7 @@ export default function ProfilePage() {
                           href={formatSocialUrl(youtubeLink, 'youtube')}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#FF0000] hover:bg-[#FF0000]/10 rounded-lg transition-all duration-200"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#FF0000] hover:bg-[#FF0000]/10 rounded-lg transition-all duration-200"
                           title="YouTube"
                         >
                           <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -2407,7 +2941,7 @@ export default function ProfilePage() {
                           href={formatSocialUrl(tiktokLink, 'tiktok')}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#25F4EE] hover:bg-[#25F4EE]/10 rounded-lg transition-all duration-200"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#25F4EE] hover:bg-[#25F4EE]/10 rounded-lg transition-all duration-200"
                           title="TikTok"
                         >
                           <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -2419,7 +2953,7 @@ export default function ProfilePage() {
                       {/* Discord */}
                       {discordLink && (
                         <div
-                          className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-[#5865F2] hover:bg-[#5865F2]/10 rounded-lg transition-all duration-200 cursor-pointer"
+                          className="w-7 h-7 flex items-center justify-center text-zinc-500 hover:text-[#5865F2] hover:bg-[#5865F2]/10 rounded-lg transition-all duration-200 cursor-pointer"
                           title={`Discord: ${discordLink}`}
                         >
                           <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -2431,23 +2965,10 @@ export default function ProfilePage() {
                   );
                 })()}
 
-                {/* Upload Config Button */}
-                <button
-                  type="button"
-                  onClick={() => setShowConfigUploader(true)}
-                  className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 font-sans font-bold text-xs rounded-xl flex items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-95"
-                  title="Upload VALORANT Saved/Config folder"
-                >
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                  <span>UPLOAD CONFIG</span>
-                </button>
-
                 {/* Edit Profile Button */}
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="px-4 py-2 bg-accent hover:bg-accent/90 text-black font-bold font-sans rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg shadow-accent/20 active:scale-95"
+                  className="px-4 py-2 bg-accent hover:bg-accent/90 text-accent-fg font-bold font-sans rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-accent/20 active:scale-95"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
@@ -2458,7 +2979,7 @@ export default function ProfilePage() {
                 {/* Copy profile link */}
                 <button
                   onClick={handleCopyProfileLink}
-                  className="px-4 py-2 bg-[#12121A]/80 hover:bg-[#1A1A24] border border-border-custom hover:border-accent/40 text-accent font-mono text-xs font-bold rounded-xl flex items-center gap-2 transition-all duration-200 cursor-pointer shadow-sm"
+                  className="px-4 py-2 bg-zinc-100 hover:bg-zinc-200/80 dark:bg-[#12121A]/80 dark:hover:bg-[#1A1A24] border border-border-custom hover:border-accent/40 text-accent font-mono text-xs font-bold rounded-xl flex items-center gap-2 transition-all duration-200 cursor-pointer shadow-xs"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -2484,9 +3005,9 @@ export default function ProfilePage() {
               showComments={false}
             />
           ) : (
-            <div className="bg-[#12121A]/50 border border-zinc-800 p-8 rounded-2xl text-center space-y-4">
-              <h3 className="text-lg font-bold text-white font-display">No Game Settings Configured Yet</h3>
-              <p className="text-xs text-zinc-400 font-mono max-w-md mx-auto">
+            <div className="bg-card border border-border-custom p-8 rounded-2xl text-center space-y-4 shadow-xs">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-white font-display">No Game Settings Configured Yet</h3>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono max-w-md mx-auto">
                 You haven&apos;t added your sensitivity or game settings yet. Click &quot;Edit Profile&quot; above to add VALORANT or CS2 settings.
               </p>
               <button
@@ -2501,12 +3022,12 @@ export default function ProfilePage() {
           {/* ================================================ */}
           {/* SECTION 3: FAVORITES PRO PLAYERS (Bookmarks) */}
           {/* ================================================ */}
-          <div className="border-t border-zinc-800/80 pt-10">
-            <div className="bg-[#12121A]/50 border border-zinc-800 p-6 rounded-2xl space-y-6">
-              <div className="flex items-center justify-between border-b border-zinc-800/80 pb-4">
+          <div className="border-t border-border-custom pt-10">
+            <div className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl space-y-6 shadow-xs">
+              <div className="flex items-center justify-between border-b border-zinc-200/80 dark:border-zinc-800/80 pb-4">
                 <div>
                   <span className="text-[10px] font-bold text-accent font-sans uppercase tracking-widest">Bookmarks</span>
-                  <h2 className="text-xl font-extrabold text-white font-display mt-1">My Favorite Players</h2>
+                  <h2 className="text-xl font-extrabold text-zinc-900 dark:text-white font-display mt-1">My Favorite Players</h2>
                 </div>
                 <span className="text-xs text-zinc-500 font-sans font-semibold">
                   <span className="font-mono">{favorites.length}</span> {favorites.length === 1 ? 'Player' : 'Players'} saved
@@ -2514,7 +3035,7 @@ export default function ProfilePage() {
               </div>
 
               {favorites.length === 0 ? (
-                <div className="text-center py-10 bg-black/10 border border-dashed border-zinc-800/80 rounded-xl flex flex-col items-center justify-center space-y-3">
+                <div className="text-center py-10 bg-zinc-50/50 dark:bg-black/10 border border-dashed border-zinc-200 dark:border-zinc-800/80 rounded-xl flex flex-col items-center justify-center space-y-3">
                   <p className="text-xs font-bold text-zinc-500 font-sans italic">No bookmarked players yet.</p>
                   <Link href="/players" className="px-4 py-2 bg-accent/5 hover:bg-accent/10 text-accent border border-accent/15 rounded-lg text-[9px] font-bold font-sans uppercase tracking-wider transition-colors duration-200">
                     Browse Players
@@ -2528,7 +3049,7 @@ export default function ProfilePage() {
                       <Link
                         key={favPlayer.id}
                         href={`/players/${favPlayer.username}`}
-                        className={`bg-black/20 border border-zinc-800/80 p-4 rounded-xl flex items-center justify-between hover:border-accent/40 hover:bg-[#1A1A24]/30 group transition-all duration-[600ms] ease-out ${
+                        className={`bg-zinc-50/80 dark:bg-black/20 border border-zinc-200/80 dark:border-zinc-800/80 p-4 rounded-xl flex items-center justify-between hover:border-accent/40 hover:bg-zinc-100/90 dark:hover:bg-[#1A1A24]/40 group transition-all duration-[600ms] ease-out shadow-xs ${
                           isRemoving ? 'opacity-0 scale-95 pointer-events-none' : ''
                         }`}
                         style={{
@@ -2542,7 +3063,7 @@ export default function ProfilePage() {
                         }}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-full bg-[#1A1A24] border border-zinc-800 flex items-center justify-center font-bold text-accent text-xs overflow-hidden flex-shrink-0">
+                          <div className="h-9 w-9 rounded-full bg-zinc-200 dark:bg-[#1A1A24] border border-zinc-300 dark:border-zinc-800 flex items-center justify-center font-bold text-accent text-xs overflow-hidden shrink-0">
                             {favPlayer.profile_img_url ? (
                               <img
                                 src={favPlayer.profile_img_url}
@@ -2559,7 +3080,7 @@ export default function ProfilePage() {
                           </div>
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1.5">
-                              <span className="font-bold text-white text-xs group-hover:text-accent font-display transition-colors">
+                              <span className="font-bold text-zinc-900 dark:text-white text-xs group-hover:text-accent font-display transition-colors">
                                 {favPlayer.username}
                               </span>
                               {favPlayer.country_code && (
@@ -2578,7 +3099,7 @@ export default function ProfilePage() {
                         </div>
                         <button
                           onClick={(e) => handleRemoveFavorite(favPlayer.id, e)}
-                          className="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-900/50 hover:bg-accent/15 border border-zinc-800 hover:border-accent/30 text-accent transition-all duration-200 cursor-pointer"
+                          className="h-7 w-7 flex items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-900/50 hover:bg-accent/15 border border-zinc-200 dark:border-zinc-800 hover:border-accent/30 text-accent transition-all duration-200 cursor-pointer"
                           title="Remove Favorite"
                         >
                           <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">

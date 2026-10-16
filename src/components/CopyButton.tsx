@@ -34,7 +34,7 @@ export default function CopyButton({
         w-full text-[10px] font-bold py-2.5 px-4 rounded-lg transition-all duration-200 
         font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5
         ${copied 
-          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/15'
+          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 hover:bg-emerald-500/15'
           : className || 'bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40'
         }
       `}

@@ -166,10 +166,10 @@ function GameSearchSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full h-11 bg-black/40 border rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold transition-all cursor-pointer ${
+        className={`w-full h-11 bg-white dark:bg-black/40 border rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold transition-all cursor-pointer shadow-sm dark:shadow-none ${
           selectedValue && selectedValue !== 'all'
-            ? 'border-accent/50 text-white bg-accent/5'
-            : 'border-border-custom hover:border-zinc-700 text-zinc-300'
+            ? 'border-accent/50 text-accent font-bold bg-accent/5'
+            : 'border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-700 dark:text-zinc-300'
         }`}
       >
         <div className="flex items-center gap-2.5 min-w-0">
@@ -179,12 +179,12 @@ function GameSearchSelect({
             ) : selectedGameObj.slug === 'cs2' ? (
               <img src="/images/cs2-logo.png" alt="CS2" className="w-4 h-4 rounded object-cover shrink-0" />
             ) : (
-              <div className="w-4 h-4 rounded bg-zinc-800 flex items-center justify-center text-[8px] font-bold text-zinc-400 shrink-0">
+              <div className="w-4 h-4 rounded bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-[8px] font-bold text-zinc-600 dark:text-zinc-400 shrink-0">
                 {selectedGameObj.slug.slice(0, 2).toUpperCase()}
               </div>
             )
           ) : (
-            <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-4 h-4 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <rect x="2" y="6" width="20" height="12" rx="4" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h4m-2-2v4m7-2h.01m3 0h.01" />
             </svg>
@@ -199,14 +199,14 @@ function GameSearchSelect({
                 onChange('all');
                 setSearchQuery('');
               }}
-              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
+              className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
               title="Clear selection"
             >
               ×
             </span>
           )}
           <svg
-            className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
+            className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 transition-transform duration-200"
             style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
             fill="none"
             viewBox="0 0 24 24"
@@ -220,10 +220,10 @@ function GameSearchSelect({
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in-50 duration-150 font-sans">
+        <div className="absolute z-50 w-full mt-1.5 bg-white dark:bg-[#0F0F15] border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl dark:shadow-2xl overflow-hidden flex flex-col animate-in fade-in-50 duration-150 font-sans">
           {/* Search Input Box */}
-          <div className="p-2 border-b border-zinc-900 flex items-center gap-2 relative">
-            <span className="absolute left-4 text-zinc-500">
+          <div className="p-2 border-b border-zinc-100 dark:border-zinc-900 flex items-center gap-2 relative">
+            <span className="absolute left-4 text-zinc-400 dark:text-zinc-500">
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -234,12 +234,12 @@ function GameSearchSelect({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search game..."
               autoFocus
-              className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-sans"
+              className="w-full h-8.5 bg-zinc-50 dark:bg-black/60 border border-zinc-200 dark:border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-sans"
             />
           </div>
 
           {/* Options Scroll List */}
-          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-800">
+          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-800">
             {/* "All Games" Option */}
             <div
               onMouseDown={(e) => {
@@ -251,10 +251,10 @@ function GameSearchSelect({
               className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
                 selectedValue === 'all' || !selectedValue
                   ? 'bg-accent/15 text-accent font-bold'
-                  : 'text-zinc-400 hover:bg-zinc-800/30 hover:text-white'
+                  : 'text-zinc-700 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 hover:text-zinc-900 dark:hover:text-white'
               }`}
             >
-              <div className="w-4 h-4 rounded bg-zinc-800 border border-zinc-700/50 shrink-0 flex items-center justify-center">
+              <div className="w-4 h-4 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/50 shrink-0 flex items-center justify-center">
                 <svg className="w-2.5 h-2.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <rect x="2" y="6" width="20" height="12" rx="4" />
                 </svg>
@@ -280,7 +280,7 @@ function GameSearchSelect({
                     className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
                       isSelected
                         ? 'bg-accent/15 text-accent font-bold'
-                        : 'text-zinc-300 hover:bg-zinc-800/30 hover:text-white'
+                        : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 hover:text-zinc-900 dark:hover:text-white'
                     }`}
                   >
                     {game.slug === 'valorant' ? (
@@ -288,7 +288,7 @@ function GameSearchSelect({
                     ) : game.slug === 'cs2' ? (
                       <img src="/images/cs2-logo.png" alt="CS2" className="w-4 h-4 rounded object-cover shrink-0 shadow-sm" />
                     ) : (
-                      <div className="w-4 h-4 rounded bg-zinc-800 border border-zinc-700/50 shrink-0 flex items-center justify-center text-[8px] font-bold text-zinc-400">
+                      <div className="w-4 h-4 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/50 shrink-0 flex items-center justify-center text-[8px] font-bold text-zinc-600 dark:text-zinc-400">
                         {game.slug.slice(0, 2).toUpperCase()}
                       </div>
                     )}
@@ -345,10 +345,10 @@ function TeamSearchSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full h-11 bg-black/40 border border-border-custom hover:border-zinc-700 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold text-zinc-300 transition-all"
+        className="w-full h-11 bg-white dark:bg-black/40 border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold text-zinc-700 dark:text-zinc-300 transition-all shadow-sm dark:shadow-none cursor-pointer"
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
             <circle cx="9" cy="7" r="4" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75" />
@@ -363,14 +363,14 @@ function TeamSearchSelect({
                 onChange('all');
                 setSearchQuery('');
               }}
-              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
+              className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
               title="Clear selection"
             >
               ×
             </span>
           )}
           <svg
-            className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
+            className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 transition-transform duration-200"
             style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
             fill="none"
             viewBox="0 0 24 24"
@@ -384,10 +384,10 @@ function TeamSearchSelect({
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="absolute z-50 w-full mt-1.5 bg-white dark:bg-[#0F0F15] border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl dark:shadow-2xl overflow-hidden flex flex-col font-sans">
           {/* Search Input Box */}
-          <div className="p-2 border-b border-zinc-900 flex items-center gap-2 relative">
-            <span className="absolute left-4 text-zinc-500">
+          <div className="p-2 border-b border-zinc-100 dark:border-zinc-900 flex items-center gap-2 relative">
+            <span className="absolute left-4 text-zinc-400 dark:text-zinc-500">
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -398,12 +398,12 @@ function TeamSearchSelect({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search..."
               autoFocus
-              className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all"
+              className="w-full h-8.5 bg-zinc-50 dark:bg-black/60 border border-zinc-200 dark:border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-sans"
             />
           </div>
 
           {/* Options Scroll List */}
-          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-800">
+          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-800">
             {/* "All Teams" Option */}
             <div
               onMouseDown={(e) => {
@@ -415,11 +415,10 @@ function TeamSearchSelect({
               className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
                 selectedValue === 'all' || !selectedValue
                   ? 'bg-accent/15 text-accent font-bold'
-                  : 'text-zinc-400 hover:bg-zinc-800/30 hover:text-white'
+                  : 'text-zinc-700 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 hover:text-zinc-900 dark:hover:text-white'
               }`}
             >
-              {/* Blank logo container for team name (as the user requested) */}
-              <div className="w-5 h-5 rounded-md bg-zinc-900 border border-zinc-800/50 shrink-0"></div>
+              <div className="w-5 h-5 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/50 shrink-0"></div>
               <span>All Teams</span>
             </div>
 
@@ -442,13 +441,13 @@ function TeamSearchSelect({
                     className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
                       isSelected
                         ? 'bg-accent/15 text-accent font-bold'
-                        : 'text-zinc-300 hover:bg-zinc-800/30 hover:text-white'
+                        : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 hover:text-zinc-900 dark:hover:text-white'
                     }`}
                   >
                     {logo ? (
                       <img src={logo} alt={team} className="w-5 h-5 rounded-md object-cover shrink-0" />
                     ) : (
-                      <div className="w-5 h-5 rounded-md bg-zinc-900 border border-zinc-800/50 shrink-0"></div>
+                      <div className="w-5 h-5 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/50 shrink-0"></div>
                     )}
                     <span>{team}</span>
                   </div>
@@ -509,7 +508,7 @@ function CountrySearchSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full h-11 bg-black/40 border border-border-custom hover:border-zinc-700 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold text-zinc-300 transition-all cursor-pointer"
+        className="w-full h-11 bg-white dark:bg-black/40 border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700 rounded-xl px-4 flex items-center justify-between gap-2.5 text-xs font-bold text-zinc-700 dark:text-zinc-300 transition-all cursor-pointer shadow-sm dark:shadow-none"
       >
         <div className="flex items-center gap-2.5 min-w-0">
           {selectedCountry ? (
@@ -519,7 +518,7 @@ function CountrySearchSelect({
               className="w-4 h-3 object-cover rounded-[2px] shrink-0"
             />
           ) : (
-            <svg className="w-4 h-4 text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-4 h-4 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-19m0 0a5 5 0 005 5h4a5 5 0 015-5h2v10H9a5 5 0 00-5 5H3" />
             </svg>
           )}
@@ -535,14 +534,14 @@ function CountrySearchSelect({
                 onChange('all');
                 setSearchQuery('');
               }}
-              className="text-zinc-500 hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
+              className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 text-sm font-bold p-1 cursor-pointer leading-none"
               title="Clear selection"
             >
               ×
             </span>
           )}
           <svg
-            className="w-3.5 h-3.5 text-zinc-500 transition-transform duration-200"
+            className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 transition-transform duration-200"
             style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
             fill="none"
             viewBox="0 0 24 24"
@@ -556,10 +555,10 @@ function CountrySearchSelect({
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 z-50 w-full mt-1.5 bg-[#0F0F15] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="absolute right-0 z-50 w-full mt-1.5 bg-white dark:bg-[#0F0F15] border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl dark:shadow-2xl overflow-hidden flex flex-col font-sans">
           {/* Search Input Box */}
-          <div className="p-2 border-b border-zinc-900 flex items-center gap-2 relative">
-            <span className="absolute left-4 text-zinc-500">
+          <div className="p-2 border-b border-zinc-100 dark:border-zinc-900 flex items-center gap-2 relative">
+            <span className="absolute left-4 text-zinc-400 dark:text-zinc-500">
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -570,12 +569,12 @@ function CountrySearchSelect({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search..."
               autoFocus
-              className="w-full h-8.5 bg-black/60 border border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-mono"
+              className="w-full h-8.5 bg-zinc-50 dark:bg-black/60 border border-zinc-200 dark:border-zinc-850 rounded-lg pl-8 pr-3 text-[11px] text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-accent/40 transition-all font-mono"
             />
           </div>
 
           {/* Options Scroll List */}
-          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-800">
+          <div className="max-h-60 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-950 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-800">
             {/* "All Nations" Option */}
             <div
               onMouseDown={(e) => {
@@ -587,10 +586,10 @@ function CountrySearchSelect({
               className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
                 selectedValue === 'all' || !selectedValue
                   ? 'bg-accent/15 text-accent font-bold'
-                  : 'text-zinc-400 hover:bg-zinc-800/30 hover:text-white'
+                  : 'text-zinc-700 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 hover:text-zinc-900 dark:hover:text-white'
               }`}
             >
-              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4 shrink-0 text-zinc-400 dark:text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-19m0 0a5 5 0 005 5h4a5 5 0 015-5h2v10H9a5 5 0 00-5 5H3" />
               </svg>
               <span>All Nations</span>
@@ -614,7 +613,7 @@ function CountrySearchSelect({
                     className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center gap-2.5 ${
                       isSelected
                         ? 'bg-accent/15 text-accent font-bold'
-                        : 'text-zinc-300 hover:bg-zinc-800/30 hover:text-white'
+                        : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 hover:text-zinc-900 dark:hover:text-white'
                     }`}
                   >
                     <img
@@ -861,12 +860,12 @@ function PlayersDirectoryContent() {
     <div className="flex-1 w-full max-w-6xl mx-auto px-6 md:px-8 py-16 flex flex-col justify-between space-y-12 animate-in fade-in duration-300">
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border-custom pb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-zinc-200 dark:border-border-custom pb-8">
         <div className="space-y-2">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white font-display">
+          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white font-display">
             Esports <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">Athletes Directory</span>
           </h1>
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">
             Browse and inspect configurations of {pagination.total} professional players globally.
           </p>
         </div>
@@ -875,7 +874,7 @@ function PlayersDirectoryContent() {
         {(selectedGame !== 'all' || selectedTeam !== 'all' || selectedCountry !== 'all' || search) && (
           <button
             onClick={clearFilters}
-            className="self-start md:self-end px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-accent/40 text-xs font-mono font-bold text-zinc-300 hover:text-white transition-all cursor-pointer"
+            className="self-start md:self-end px-4 py-2 rounded-lg bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 hover:border-accent/40 text-xs font-mono font-bold text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-all cursor-pointer shadow-sm dark:shadow-none"
           >
             RESET ALL FILTERS
           </button>
@@ -883,11 +882,11 @@ function PlayersDirectoryContent() {
       </div>
 
       {/* Modern Filter Dashboard Bar */}
-      <div className="bg-[#12121A]/70 border border-border-custom p-6 rounded-2xl flex flex-col lg:flex-row gap-5 items-stretch lg:items-center justify-between">
+      <div className="bg-white/95 dark:bg-[#12121A]/70 border border-zinc-200 dark:border-border-custom shadow-sm dark:shadow-none p-6 rounded-2xl flex flex-col lg:flex-row gap-5 items-stretch lg:items-center justify-between">
         {/* Left Side: Search Box */}
         <div className="relative flex-1">
-          <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-500">
-            <svg className="h-4.5 w-4.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-400 dark:text-zinc-500">
+            <svg className="h-4.5 w-4.5 text-zinc-400 dark:text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </span>
@@ -896,7 +895,7 @@ function PlayersDirectoryContent() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Type player username, real name or team..."
-            className="w-full h-11 bg-black/40 border border-border-custom rounded-xl pl-11 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/15 transition-all"
+            className="w-full h-11 bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-border-custom rounded-xl pl-11 pr-4 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/15 transition-all"
           />
         </div>
 
@@ -929,12 +928,12 @@ function PlayersDirectoryContent() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
             {[...Array(12)].map((_, idx) => (
-              <div key={idx} className="bg-card border border-border-custom h-[290px] rounded-2xl"></div>
+              <div key={idx} className="bg-white/95 dark:bg-card border border-zinc-200 dark:border-border-custom h-[290px] rounded-2xl"></div>
             ))}
           </div>
         ) : players.length === 0 ? (
-          <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
-            <h3 className="text-sm font-bold text-white mt-4 font-display">No players match your criteria</h3>
+          <div className="text-center py-20 bg-white/95 dark:bg-card border border-zinc-200 dark:border-border-custom rounded-2xl shadow-sm dark:shadow-none">
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-white mt-4 font-display">No players match your criteria</h3>
             <p className="text-zinc-500 text-xs mt-1 font-mono">Try adjusting your filters or typing another name.</p>
           </div>
         ) : (
@@ -946,7 +945,7 @@ function PlayersDirectoryContent() {
                 <div
                   key={player.settings_id}
                   onClick={() => router.push(`/players/${player.username}`)}
-                  className="relative bg-[#12121A]/70 backdrop-blur-md border border-border-custom hover:border-zinc-700/80 rounded-2xl p-6 flex flex-col items-center justify-between text-center hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(245,158,11,0.02)] transition-all duration-300 group cursor-pointer min-h-[300px]"
+                  className="relative bg-white/95 dark:bg-[#12121A]/70 backdrop-blur-md border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-zinc-700/80 rounded-2xl p-6 flex flex-col items-center justify-between text-center hover:scale-[1.01] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_0_30px_rgba(245,158,11,0.02)] transition-all duration-300 group cursor-pointer min-h-[300px] shadow-sm dark:shadow-none"
                 >
                   <div className="absolute top-4 left-5 z-20 flex items-center gap-1.5 text-[10px] font-bold text-zinc-500 uppercase tracking-widest pointer-events-none max-w-[68%]">
                     <TeamLogoImg teamName={player.team} dbLogoUrl={player.team_logo_url} className="w-4.5 h-4.5" />
@@ -960,14 +959,14 @@ function PlayersDirectoryContent() {
                         e.stopPropagation();
                         toggleFavorite(player.player_id);
                       }}
-                      className="absolute top-3 right-4.5 z-20 p-1.5 rounded-full hover:bg-white/5 transition-all duration-200"
+                      className="absolute top-3 right-4.5 z-20 p-1.5 rounded-full hover:bg-zinc-100 dark:hover:bg-white/5 transition-all duration-200 cursor-pointer"
                       title={isFav ? "Remove from Favorites" : "Add to Favorites"}
                     >
                       <svg
                         className={`w-5 h-5 transition-all duration-300 active:scale-75 ${
                           isFav
                             ? 'fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(245,158,11,0.6)]'
-                            : 'fill-none text-zinc-650 hover:text-zinc-400'
+                            : 'fill-none text-zinc-400 dark:text-zinc-650 hover:text-amber-500'
                         }`}
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -984,7 +983,7 @@ function PlayersDirectoryContent() {
 
                   {/* 1. Portrait Circle Section */}
                   <div className="relative w-28 h-28 mx-auto mb-4 mt-4 shrink-0">
-                    <div className="w-full h-full rounded-full border-2 border-zinc-800/80 bg-gradient-to-b from-zinc-850 to-zinc-950 overflow-hidden flex items-center justify-center shadow-inner relative z-10">
+                    <div className="w-full h-full rounded-full border-2 border-zinc-200 dark:border-zinc-800/80 bg-gradient-to-b from-zinc-100 to-zinc-200 dark:from-zinc-850 dark:to-zinc-950 overflow-hidden flex items-center justify-center shadow-inner relative z-10">
                       {player.profile_img_url ? (
                         <img
                           src={player.profile_img_url}
@@ -992,7 +991,7 @@ function PlayersDirectoryContent() {
                           className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                         />
                       ) : (
-                        <div className="w-full h-full bg-zinc-900/60 flex items-center justify-center text-2xl font-black text-zinc-500 font-display leading-none">
+                        <div className="w-full h-full bg-zinc-100 dark:bg-zinc-900/60 flex items-center justify-center text-2xl font-black text-zinc-400 dark:text-zinc-500 font-display leading-none">
                           {player.username[0].toUpperCase()}
                         </div>
                       )}
@@ -1010,10 +1009,10 @@ function PlayersDirectoryContent() {
                   {/* 2. Info Details */}
                   <div className="w-full flex-1 flex flex-col justify-between pt-2 space-y-4">
                     <div className="space-y-1">
-                      <h3 className="font-extrabold text-[#FAFAFA] text-lg font-sans group-hover:text-accent transition-colors duration-300 line-clamp-1">
+                      <h3 className="font-extrabold text-zinc-900 dark:text-[#FAFAFA] text-lg font-sans group-hover:text-accent transition-colors duration-300 line-clamp-1">
                         {player.username}
                       </h3>
-                      <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-400 font-sans">
+                      <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-sans">
                         <span className="font-medium">{player.real_name || '-'}</span>
                         {player.country_code && (
                           <img
@@ -1029,7 +1028,7 @@ function PlayersDirectoryContent() {
                     {/* View Profile CTA */}
                     <div className="flex justify-center pt-1 w-full">
                       <div
-                        className="flex items-center justify-center gap-1.5 px-5 py-2 w-full max-w-[120px] rounded-lg text-xs font-bold bg-white/5 text-zinc-400 border border-white/5 group-hover:bg-accent/10 group-hover:text-accent group-hover:border-accent/20 transition-all duration-300"
+                        className="flex items-center justify-center gap-1.5 px-5 py-2 w-full max-w-[120px] rounded-lg text-xs font-bold bg-zinc-100 dark:bg-white/5 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-white/5 group-hover:bg-accent/10 group-hover:text-accent group-hover:border-accent/20 transition-all duration-300"
                       >
                         <span>View Profile</span>
                       </div>
@@ -1048,7 +1047,7 @@ function PlayersDirectoryContent() {
           <button
             onClick={() => handlePageChange(pagination.page - 1)}
             disabled={pagination.page <= 1 || loading}
-            className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-mono cursor-pointer"
+            className="px-4 py-2 bg-white dark:bg-black/40 hover:bg-zinc-100 dark:hover:bg-[#1A1A24]/40 disabled:opacity-30 text-zinc-800 dark:text-[#FAFAFA] text-xs font-bold rounded border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-mono cursor-pointer shadow-sm dark:shadow-none"
           >
             ← PREV
           </button>
@@ -1060,7 +1059,7 @@ function PlayersDirectoryContent() {
           <button
             onClick={() => handlePageChange(pagination.page + 1)}
             disabled={pagination.page >= pagination.pages || loading}
-            className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-mono cursor-pointer"
+            className="px-4 py-2 bg-white dark:bg-black/40 hover:bg-zinc-100 dark:hover:bg-[#1A1A24]/40 disabled:opacity-30 text-zinc-800 dark:text-[#FAFAFA] text-xs font-bold rounded border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-mono cursor-pointer shadow-sm dark:shadow-none"
           >
             NEXT →
           </button>

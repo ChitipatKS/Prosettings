@@ -106,7 +106,7 @@ export function MouseMiddleClickIcon({ className = "w-3.5 h-3.5" }: { className?
   );
 }
 
-const CANONICAL_KEYBINDS_ORDER: Record<string, string[]> = {
+export const CANONICAL_KEYBINDS_ORDER: Record<string, string[]> = {
   Weapons: [
     'Fire',
     'Alternate Fire',
@@ -146,10 +146,6 @@ const CANONICAL_KEYBINDS_ORDER: Record<string, string[]> = {
     'Ping',
     'Team Push to Talk',
     'Party Push to Talk'
-  ],
-  Interface: [
-    'Show Map',
-    'Show Scoreboard'
   ]
 };
 
@@ -177,7 +173,7 @@ export function renderKeyBadge(action: string, keyName: string) {
   if (isLeftClick) {
     return (
       <span
-        className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-750 text-white font-mono text-[10px] font-bold shadow-sm shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
+        className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-750 text-zinc-800 dark:text-white font-mono text-[10px] font-bold shadow-xs shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
         title="Left Click"
       >
         <MouseLeftClickIcon className="w-3.5 h-3.5" />
@@ -188,7 +184,7 @@ export function renderKeyBadge(action: string, keyName: string) {
   if (isRightClick) {
     return (
       <span
-        className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-750 text-white font-mono text-[10px] font-bold shadow-sm shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
+        className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-750 text-zinc-800 dark:text-white font-mono text-[10px] font-bold shadow-xs shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
         title="Right Click"
       >
         <MouseRightClickIcon className="w-3.5 h-3.5" />
@@ -199,7 +195,7 @@ export function renderKeyBadge(action: string, keyName: string) {
   if (isMiddleClick) {
     return (
       <span
-        className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-750 text-white font-mono text-[10px] font-bold shadow-sm shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
+        className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-750 text-zinc-800 dark:text-white font-mono text-[10px] font-bold shadow-xs shrink-0 inline-flex items-center justify-center min-w-[28px] h-[22px]"
         title="Middle Click"
       >
         <MouseMiddleClickIcon className="w-3.5 h-3.5" />
@@ -208,7 +204,7 @@ export function renderKeyBadge(action: string, keyName: string) {
   }
 
   return (
-    <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-750 text-white font-mono text-[10px] font-bold shadow-sm shrink-0 inline-flex items-center justify-center h-[22px]">
+    <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-750 text-zinc-800 dark:text-white font-mono text-[10px] font-bold shadow-xs shrink-0 inline-flex items-center justify-center h-[22px]">
       {String(keyName)}
     </span>
   );
@@ -217,22 +213,23 @@ export function renderKeyBadge(action: string, keyName: string) {
 function SettingRow({ label, value }: { label: string; value: string | number | null | undefined }) {
   const isValNumeric = value !== null && value !== undefined && isNumeric(value);
   return (
-    <div className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-b-0">
-      <span className="text-xs text-zinc-400 font-sans font-medium">{label}</span>
-      <span className={`text-sm text-white ${isValNumeric ? 'font-mono font-medium' : 'font-display font-bold'}`}>
-        {value !== null && value !== undefined && value !== '' ? value : <span className="text-zinc-700">—</span>}
+    <div className="flex items-center justify-between py-2.5 border-b border-zinc-200/80 dark:border-white/[0.04] last:border-b-0">
+      <span className="text-xs text-zinc-500 dark:text-zinc-400 font-sans font-medium">{label}</span>
+      <span className={`text-sm text-zinc-900 dark:text-white ${isValNumeric ? 'font-mono font-medium' : 'font-display font-bold'}`}>
+        {value !== null && value !== undefined && value !== '' ? value : <span className="text-zinc-300 dark:text-zinc-700">—</span>}
       </span>
     </div>
   );
 }
 
-function SectionHeader({ icon, title, id }: { icon: React.ReactNode; title: string; id?: string }) {
+function SectionHeader({ icon, title, id, badge }: { icon: React.ReactNode; title: string; id?: string; badge?: React.ReactNode }) {
   return (
     <div id={id} className="flex items-center gap-2.5 mb-5 scroll-mt-24">
       <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 border border-accent/20 text-accent">
         {icon}
       </div>
-      <h2 className="text-sm font-bold text-white font-display uppercase tracking-wider">{title}</h2>
+      <h2 className="text-sm font-bold text-zinc-900 dark:text-white font-display uppercase tracking-wider">{title}</h2>
+      {badge}
       <div className="flex-1 h-px bg-gradient-to-r from-border-custom to-transparent ml-2"></div>
     </div>
   );
@@ -240,8 +237,8 @@ function SectionHeader({ icon, title, id }: { icon: React.ReactNode; title: stri
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-8 text-center border border-dashed border-white/[0.06] rounded-xl bg-white/[0.01] px-4">
-      <svg className="h-5 w-5 mb-2 text-zinc-600 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <div className="flex flex-col items-center justify-center py-8 text-center border border-dashed border-zinc-200 dark:border-white/[0.06] rounded-xl bg-zinc-50/60 dark:bg-white/[0.01] px-4">
+      <svg className="h-5 w-5 mb-2 text-zinc-400 dark:text-zinc-600 opacity-60 dark:opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
         <path d="M7 11V7a5 5 0 0 1 10 0v4" />
       </svg>
@@ -259,7 +256,7 @@ function StatHighlight({ label, value, accent = false }: { label: string; value:
     return (
       <div className="bg-accent/[0.05] border border-accent/20 hover:border-accent/40 hover:bg-accent/[0.08] p-3 rounded-xl transition-all duration-300 flex flex-col gap-1">
         <span className="text-[10px] font-bold uppercase tracking-wider text-accent/80 font-sans">{label}</span>
-        <span className={`text-lg font-extrabold ${isEmpty ? 'text-zinc-700 font-display' : isValNumeric ? 'text-accent font-mono font-medium' : 'text-accent font-display'}`}>
+        <span className={`text-lg font-extrabold ${isEmpty ? 'text-zinc-400 dark:text-zinc-700 font-display' : isValNumeric ? 'text-accent font-mono font-medium' : 'text-accent font-display'}`}>
           {displayValue}
         </span>
       </div>
@@ -267,9 +264,9 @@ function StatHighlight({ label, value, accent = false }: { label: string; value:
   }
 
   return (
-    <div className="bg-[#12121A]/40 border border-border-custom hover:border-border-hover/60 p-3 rounded-xl transition-all duration-300 flex flex-col gap-1">
+    <div className="bg-zinc-100/70 dark:bg-[#12121A]/40 border border-border-custom hover:border-border-hover/60 p-3 rounded-xl transition-all duration-300 flex flex-col gap-1">
       <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 font-sans">{label}</span>
-      <span className={`text-lg font-bold ${isEmpty ? 'text-zinc-700 font-display' : isValNumeric ? 'font-mono font-medium text-white' : 'font-display text-white'}`}>
+      <span className={`text-lg font-bold ${isEmpty ? 'text-zinc-400 dark:text-zinc-700 font-display' : isValNumeric ? 'font-mono font-medium text-zinc-900 dark:text-white' : 'font-display text-zinc-900 dark:text-white'}`}>
         {displayValue}
       </span>
     </div>
@@ -328,6 +325,7 @@ export default function PlayerProfileClient({
   const [selectedGameId, setSelectedGameId] = useState<number>(settingsData[0]?.games?.id || 0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeCrosshairIndex, setActiveCrosshairIndex] = useState<number>(0);
+  const [activeKeybindTab, setActiveKeybindTab] = useState<string>('All');
 
   const activeSettings = settingsData.find(s => s.games?.id === selectedGameId) || settingsData[0] || null;
   const settingsJson = activeSettings?.settings_data || {};
@@ -377,19 +375,19 @@ export default function PlayerProfileClient({
           <button
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="w-full h-11 bg-card hover:bg-white/[0.02] border border-border-custom hover:border-border-hover rounded-xl px-4 flex items-center justify-between text-white font-display font-bold text-sm tracking-wide transition-all duration-200 cursor-pointer shadow-md select-none"
+            className="w-full h-11 bg-card hover:bg-zinc-100 dark:hover:bg-white/[0.02] border border-border-custom hover:border-border-hover rounded-xl px-4 flex items-center justify-between text-zinc-900 dark:text-white font-display font-bold text-sm tracking-wide transition-all duration-200 cursor-pointer shadow-md select-none"
           >
             <div className="flex items-center gap-2.5">
               {renderGameLogo(activeSettings?.games?.slug)}
               <span>{activeSettings?.games?.name} Settings</span>
             </div>
-            <span className="text-zinc-500 text-[10px] ml-2 font-mono transition-transform duration-200" style={{ transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+            <span className="text-zinc-400 dark:text-zinc-500 text-[10px] ml-2 font-mono transition-transform duration-200" style={{ transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
               ▼
             </span>
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute left-0 right-0 mt-2 bg-[#12121A] border border-border-custom rounded-xl shadow-2xl overflow-hidden divide-y divide-white/[0.04] z-50">
+            <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-[#12121A] border border-border-custom rounded-xl shadow-2xl overflow-hidden divide-y divide-zinc-100 dark:divide-white/[0.04] z-50">
               {settingsData.map((s) => (
                 <div
                   key={s.id}
@@ -400,7 +398,7 @@ export default function PlayerProfileClient({
                   className={`flex items-center gap-2.5 px-4 py-3.5 text-xs font-bold font-display cursor-pointer transition-colors ${
                     s.games.id === selectedGameId
                       ? 'bg-accent/15 text-accent'
-                      : 'text-zinc-300 hover:bg-white/5 hover:text-white'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'
                   }`}
                 >
                   {renderGameLogo(s.games.slug)}
@@ -423,7 +421,7 @@ export default function PlayerProfileClient({
             {/* ---- LEFT COLUMN: Devices & Controls ---- */}
             <div className="space-y-6">
               {/* MOUSE SETTINGS */}
-              <div id="mouse-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
+              <div id="mouse-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl shadow-xs">
                 <SectionHeader 
                   icon={
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -436,13 +434,13 @@ export default function PlayerProfileClient({
 
                 {/* Mouse product banner */}
                 {playerMouse && (
-                  <div className="flex items-center gap-3 bg-[#12121A]/40 border border-border-custom/50 p-2 rounded-xl mb-5 hover:border-border-hover/80 transition-all duration-200">
+                  <div className="flex items-center gap-3 bg-zinc-100/60 dark:bg-[#12121A]/40 border border-border-custom/50 p-2 rounded-xl mb-5 hover:border-border-hover/80 transition-all duration-200">
                     {playerMouse.image_url ? (
-                      <div className="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                      <div className="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-sm border border-zinc-200 dark:border-transparent">
                         <img src={playerMouse.image_url} alt={playerMouse.name} className="max-h-full max-w-full object-contain" />
                       </div>
                     ) : (
-                      <div className="w-12 h-12 rounded-lg bg-black/40 border border-zinc-805 flex items-center justify-center shrink-0 text-zinc-650 shadow-inner">
+                      <div className="w-12 h-12 rounded-lg bg-zinc-200 dark:bg-black/40 border border-zinc-300 dark:border-zinc-805 flex items-center justify-center shrink-0 text-zinc-500 dark:text-zinc-650 shadow-inner">
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                           <rect x="5" y="2" width="14" height="20" rx="7" />
                           <path d="M12 2v10M5 12h14" />
@@ -450,7 +448,7 @@ export default function PlayerProfileClient({
                       </div>
                     )}
                     <div className="min-w-0">
-                      <p className="text-xs font-extrabold text-white tracking-wide uppercase font-sans line-clamp-1">{playerMouse.name}</p>
+                      <p className="text-xs font-extrabold text-zinc-900 dark:text-white tracking-wide uppercase font-sans line-clamp-1">{playerMouse.name}</p>
                     </div>
                   </div>
                 )}
@@ -471,7 +469,7 @@ export default function PlayerProfileClient({
               </div>
 
               {/* KEYBOARD SETTINGS */}
-              <div id="keyboard-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
+              <div id="keyboard-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl shadow-xs">
                 <SectionHeader 
                   icon={
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -484,13 +482,13 @@ export default function PlayerProfileClient({
 
                 {/* Keyboard product banner */}
                 {playerKeyboard && (
-                  <div className="flex items-center gap-3 bg-[#12121A]/40 border border-border-custom/50 p-2 rounded-xl mb-5 hover:border-border-hover/80 transition-all duration-200">
+                  <div className="flex items-center gap-3 bg-zinc-100/60 dark:bg-[#12121A]/40 border border-border-custom/50 p-2 rounded-xl mb-5 hover:border-border-hover/80 transition-all duration-200">
                     {playerKeyboard.image_url ? (
-                      <div className="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                      <div className="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-sm border border-zinc-200 dark:border-transparent">
                         <img src={playerKeyboard.image_url} alt={playerKeyboard.name} className="max-h-full max-w-full object-contain" />
                       </div>
                     ) : (
-                      <div className="w-12 h-12 rounded-lg bg-black/40 border border-zinc-850 flex items-center justify-center shrink-0 text-zinc-650 shadow-inner">
+                      <div className="w-12 h-12 rounded-lg bg-zinc-200 dark:bg-black/40 border border-zinc-300 dark:border-zinc-850 flex items-center justify-center shrink-0 text-zinc-500 dark:text-zinc-650 shadow-inner">
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                           <rect x="2" y="4" width="20" height="16" rx="3" />
                           <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10" />
@@ -498,7 +496,7 @@ export default function PlayerProfileClient({
                       </div>
                     )}
                     <div className="min-w-0">
-                      <p className="text-xs font-extrabold text-white tracking-wide uppercase font-sans line-clamp-1">{playerKeyboard.name}</p>
+                      <p className="text-xs font-extrabold text-zinc-900 dark:text-white tracking-wide uppercase font-sans line-clamp-1">{playerKeyboard.name}</p>
                     </div>
                   </div>
                 )}
@@ -534,7 +532,7 @@ export default function PlayerProfileClient({
               </div>
 
               {/* CONTROLS / KEYBINDS */}
-              <div id="controls-keybinds" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
+              <div id="controls-keybinds" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl shadow-xs">
                 <SectionHeader 
                   icon={
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -542,7 +540,12 @@ export default function PlayerProfileClient({
                       <path d="M6 12h4M8 10v4M15 11h.01M18 13h.01" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   } 
-                  title="Controls / Keybinds" 
+                  title="Controls / Keybinds"
+                  badge={
+                    <span className="text-[10px] font-mono text-zinc-600 dark:text-zinc-500 bg-zinc-100 dark:bg-white/[0.04] px-2 py-0.5 rounded-full border border-zinc-200 dark:border-white/5">
+                      VALORANT
+                    </span>
+                  }
                 />
 
                 {settingsJson.keybinds && typeof settingsJson.keybinds === 'object' ? (() => {
@@ -576,116 +579,177 @@ export default function PlayerProfileClient({
                   const movementItems = getCategoryItems('Movement');
                   const abilitiesItems = getCategoryItems('Abilities');
                   const commsItems = getCategoryItems('Communication');
-                  const interfaceItems = getCategoryItems('Interface');
 
-                  const totalCount = weaponsItems.length + movementItems.length + abilitiesItems.length + commsItems.length + interfaceItems.length;
+                  const totalCount = weaponsItems.length + movementItems.length + abilitiesItems.length + commsItems.length;
                   if (totalCount === 0) {
                     return <EmptyState message="Keybind data coming soon — stay tuned!" />;
                   }
 
+                  const categoryTabs = [
+                    { id: 'All', label: 'All', count: totalCount },
+                    { id: 'Weapons', label: 'Weapons', count: weaponsItems.length },
+                    { id: 'Movement', label: 'Movement', count: movementItems.length },
+                    { id: 'Abilities', label: 'Abilities', count: abilitiesItems.length },
+                    { id: 'Communication', label: 'Comms', count: commsItems.length },
+                  ].filter(t => t.id === 'All' || t.count > 0);
+
+                  const renderItemRow = (action: string, keyName: string) => (
+                    <div
+                      key={action}
+                      className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-zinc-100/80 dark:bg-black/25 hover:bg-zinc-200/70 dark:hover:bg-black/45 border border-zinc-200/80 dark:border-white/[0.03] transition-colors"
+                    >
+                      <span className="text-[11px] text-zinc-700 dark:text-zinc-300 font-sans truncate mr-2 font-medium" title={action}>
+                        {action}
+                      </span>
+                      {renderKeyBadge(action, keyName)}
+                    </div>
+                  );
+
+                  // Split Weapons into 2 balanced columns (Primary Combat / Aim & Interaction)
+                  const weaponsCol1 = weaponsItems.slice(0, Math.ceil(weaponsItems.length / 2));
+                  const weaponsCol2 = weaponsItems.slice(Math.ceil(weaponsItems.length / 2));
+
                   return (
-                    <div className="space-y-4">
-                      {/* Main Categories in 2-column grid */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3.5 items-start">
-                        {/* Col 1: Weapons & Abilities */}
-                        <div className="space-y-3.5">
+                    <div className="space-y-3.5">
+                      {/* Category Switcher Tabs */}
+                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 px-0.5 scrollbar-none scroll-smooth">
+                        {categoryTabs.map(tab => {
+                          const isActive = activeKeybindTab === tab.id;
+                          return (
+                            <button
+                              key={tab.id}
+                              type="button"
+                              onClick={(e) => {
+                                setActiveKeybindTab(tab.id);
+                                e.currentTarget.scrollIntoView({
+                                  behavior: 'smooth',
+                                  block: 'nearest',
+                                  inline: 'nearest'
+                                });
+                              }}
+                              className={`px-3 py-1 rounded-lg text-xs font-sans whitespace-nowrap transition-all cursor-pointer flex items-center shrink-0 ${
+                                isActive
+                                  ? 'bg-accent/15 text-accent font-bold border border-accent/30 shadow-xs'
+                                  : 'bg-zinc-100 dark:bg-black/30 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200/70 dark:hover:bg-black/50 border border-zinc-200 dark:border-zinc-800/80'
+                              }`}
+                            >
+                              <span>{tab.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Tab: Weapons Only */}
+                      {activeKeybindTab === 'Weapons' && (
+                        <div className="space-y-2">
+                          <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                            Weapons & Combat
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div className="space-y-1">
+                              {weaponsCol1.map(([action, keyName]) => renderItemRow(action, keyName))}
+                            </div>
+                            <div className="space-y-1">
+                              {weaponsCol2.map(([action, keyName]) => renderItemRow(action, keyName))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Tab: Movement Only */}
+                      {activeKeybindTab === 'Movement' && (
+                        <div className="space-y-2">
+                          <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                            Movement
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {movementItems.map(([action, keyName]) => renderItemRow(action, keyName))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Tab: Abilities Only */}
+                      {activeKeybindTab === 'Abilities' && (
+                        <div className="space-y-2">
+                          <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                            Agent Abilities
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {abilitiesItems.map(([action, keyName]) => renderItemRow(action, keyName))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Tab: Communication Only */}
+                      {activeKeybindTab === 'Communication' && (
+                        <div className="space-y-2">
+                          <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                            Communication & Voice
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {commsItems.map(([action, keyName]) => renderItemRow(action, keyName))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Tab: All Categories (Balanced & Max-height Scrollable) */}
+                      {activeKeybindTab === 'All' && (
+                        <div className="space-y-4 max-h-[440px] overflow-y-auto pr-2 custom-scrollbar">
+                          {/* 1. Weapons in 2 sub-columns */}
                           {weaponsItems.length > 0 && (
                             <div className="space-y-1.5">
                               <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
                                 Weapons
                               </p>
-                              <div className="space-y-1">
-                                {weaponsItems.map(([action, keyName]) => (
-                                  <div
-                                    key={action}
-                                    className="flex items-center justify-between py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 transition-colors"
-                                  >
-                                    <span className="text-[11px] text-zinc-400 font-sans truncate mr-2">{action}</span>
-                                    {renderKeyBadge(action, keyName)}
-                                  </div>
-                                ))}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <div className="space-y-1">
+                                  {weaponsCol1.map(([action, keyName]) => renderItemRow(action, keyName))}
+                                </div>
+                                <div className="space-y-1">
+                                  {weaponsCol2.map(([action, keyName]) => renderItemRow(action, keyName))}
+                                </div>
                               </div>
                             </div>
                           )}
 
-                          {abilitiesItems.length > 0 && (
-                            <div className="space-y-1.5">
-                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
-                                Abilities
-                              </p>
-                              <div className="space-y-1">
-                                {abilitiesItems.map(([action, keyName]) => (
-                                  <div
-                                    key={action}
-                                    className="flex items-center justify-between py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 transition-colors"
-                                  >
-                                    <span className="text-[11px] text-zinc-400 font-sans truncate mr-2">{action}</span>
-                                    {renderKeyBadge(action, keyName)}
-                                  </div>
-                                ))}
+                          {/* 2. Movement on Left, Abilities + Comms on Right (Balanced 7 vs 7!) */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3.5 items-start pt-1 border-t border-zinc-200/80 dark:border-white/[0.04]">
+                            {/* Left: Movement */}
+                            {movementItems.length > 0 && (
+                              <div className="space-y-1.5">
+                                <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                                  Movement
+                                </p>
+                                <div className="space-y-1">
+                                  {movementItems.map(([action, keyName]) => renderItemRow(action, keyName))}
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </div>
+                            )}
 
-                        {/* Col 2: Movement & Communication */}
-                        <div className="space-y-3.5">
-                          {movementItems.length > 0 && (
-                            <div className="space-y-1.5">
-                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
-                                Movement
-                              </p>
-                              <div className="space-y-1">
-                                {movementItems.map(([action, keyName]) => (
-                                  <div
-                                    key={action}
-                                    className="flex items-center justify-between py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 transition-colors"
-                                  >
-                                    <span className="text-[11px] text-zinc-400 font-sans truncate mr-2">{action}</span>
-                                    {renderKeyBadge(action, keyName)}
+                            {/* Right: Abilities & Communication */}
+                            <div className="space-y-3">
+                              {abilitiesItems.length > 0 && (
+                                <div className="space-y-1.5">
+                                  <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                                    Abilities
+                                  </p>
+                                  <div className="space-y-1">
+                                    {abilitiesItems.map(([action, keyName]) => renderItemRow(action, keyName))}
                                   </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
+                                </div>
+                              )}
 
-                          {commsItems.length > 0 && (
-                            <div className="space-y-1.5">
-                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
-                                Communication
-                              </p>
-                              <div className="space-y-1">
-                                {commsItems.map(([action, keyName]) => (
-                                  <div
-                                    key={action}
-                                    className="flex items-center justify-between py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 transition-colors"
-                                  >
-                                    <span className="text-[11px] text-zinc-400 font-sans truncate mr-2">{action}</span>
-                                    {renderKeyBadge(action, keyName)}
+                              {commsItems.length > 0 && (
+                                <div className="space-y-1.5">
+                                  <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
+                                    Communication
+                                  </p>
+                                  <div className="space-y-1">
+                                    {commsItems.map(([action, keyName]) => renderItemRow(action, keyName))}
                                   </div>
-                                ))}
-                              </div>
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Interface Category as compact inline pills */}
-                      {interfaceItems.length > 0 && (
-                        <div className="pt-2 border-t border-white/[0.04] space-y-1.5">
-                          <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent border-l-2 border-accent pl-2 font-sans">
-                            Interface
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            {interfaceItems.map(([action, keyName]) => (
-                              <div
-                                key={action}
-                                className="inline-flex items-center gap-2 py-1 px-2.5 rounded-lg bg-black/20 hover:bg-black/40 border border-zinc-800/40 transition-colors"
-                              >
-                                <span className="text-[11px] text-zinc-400 font-sans">{action}</span>
-                                {renderKeyBadge(action, keyName)}
-                              </div>
-                            ))}
                           </div>
                         </div>
                       )}
@@ -700,7 +764,7 @@ export default function PlayerProfileClient({
             {/* ---- RIGHT COLUMN: Crosshair & Map ---- */}
             <div className="space-y-6">
               {/* CROSSHAIR SIMULATION */}
-              <div id="crosshair" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
+              <div id="crosshair" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl shadow-xs">
                 <SectionHeader 
                   icon={
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -733,11 +797,11 @@ export default function PlayerProfileClient({
                 {isCS2 ? (
                   <div className="space-y-1 mb-3">
                     <div className="flex items-center justify-between mb-3">
-                      <p className="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 border-l-2 border-amber-400 pl-2 font-sans">
+                      <p className="text-[10px] font-extrabold uppercase tracking-wider text-amber-500 dark:text-amber-400 border-l-2 border-amber-500 dark:border-amber-400 pl-2 font-sans">
                         {currentCrosshair.name || "CS2 Crosshair Settings"}
                       </p>
                       {crosshairsList.length > 1 && (
-                        <span className="text-[9px] font-mono text-zinc-500 bg-white/[0.04] px-2 py-0.5 rounded-full border border-white/5">
+                        <span className="text-[9px] font-mono text-zinc-600 dark:text-zinc-500 bg-zinc-100 dark:bg-white/[0.04] px-2 py-0.5 rounded-full border border-zinc-200 dark:border-white/5">
                           {activeCrosshairIndex + 1} of {crosshairsList.length}
                         </span>
                       )}
@@ -768,7 +832,7 @@ export default function PlayerProfileClient({
                         {currentCrosshair.name || "Crosshair Settings"}
                       </p>
                       {crosshairsList.length > 1 && (
-                        <span className="text-[9px] font-mono text-zinc-500 bg-white/[0.04] px-2 py-0.5 rounded-full border border-white/5">
+                        <span className="text-[9px] font-mono text-zinc-600 dark:text-zinc-500 bg-zinc-100 dark:bg-white/[0.04] px-2 py-0.5 rounded-full border border-zinc-200 dark:border-white/5">
                           {activeCrosshairIndex + 1} of {crosshairsList.length}
                         </span>
                       )}
@@ -811,13 +875,13 @@ export default function PlayerProfileClient({
                       textToCopy={currentCrosshairCode} 
                       label="Copy Share Code" 
                       successLabel="Share Code Copied!"
-                      className="flex-1 text-[10px] font-bold py-2.5 px-4 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
+                      className="flex-1 text-[10px] font-bold py-2.5 px-4 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-zinc-700 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5 shadow-xs"
                     />
                     <CopyButton 
                       textToCopy={getCS2ConsoleCommandsString(currentCrosshair)} 
                       label="Copy Commands" 
                       successLabel="Commands Copied!"
-                      className="flex-1 text-[10px] font-bold py-2.5 px-4 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-white border border-amber-500/20 hover:border-amber-500/30 transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
+                      className="flex-1 text-[10px] font-bold py-2.5 px-4 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 hover:text-amber-900 dark:hover:text-white border border-amber-500/20 hover:border-amber-500/30 transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5 shadow-xs"
                     />
                   </div>
                 ) : (
@@ -825,13 +889,13 @@ export default function PlayerProfileClient({
                     textToCopy={currentCrosshairCode} 
                     label="Copy Crosshair Code" 
                     successLabel="Crosshair Code Copied!"
-                    className="w-full text-[10px] font-bold py-2.5 px-4 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-zinc-400 hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
+                    className="w-full text-[10px] font-bold py-2.5 px-4 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-zinc-700 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white border border-border-custom hover:border-border-hover transition-all duration-200 font-mono uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5 shadow-xs"
                   />
                 )}
               </div>
 
               {/* MAP SETTINGS */}
-              <div className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl">
+              <div className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl shadow-xs">
                 <SectionHeader 
                   icon={
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -858,7 +922,7 @@ export default function PlayerProfileClient({
           {/* ================================================ */}
           {/* SECTION 3: VIDEO SETTINGS (Full Width) */}
           {/* ================================================ */}
-          <div id="video-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 sm:p-6 rounded-2xl">
+          <div id="video-settings" className="scroll-mt-24 bg-card backdrop-blur-[8px] border border-border-custom p-5 sm:p-6 rounded-2xl shadow-xs">
             <SectionHeader 
               icon={
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -872,7 +936,7 @@ export default function PlayerProfileClient({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left: General */}
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mb-3 border-b border-white/5 pb-2">Video — General</p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mb-3 border-b border-zinc-200/80 dark:border-white/5 pb-2">Video — General</p>
                 <div className="space-y-1">
                   <SettingRow label="Display Mode" value={settingsJson.display_mode || 'Fullscreen'} />
                   <SettingRow label="Resolution" value={activeSettings?.resolution} />
@@ -885,7 +949,7 @@ export default function PlayerProfileClient({
 
                 {isValorant && (
                   <>
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mt-5 mb-3 border-b border-white/5 pb-2">Accessibility</p>
+                    <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mt-5 mb-3 border-b border-zinc-200/80 dark:border-white/5 pb-2">Accessibility</p>
                     <div className="space-y-1">
                       <SettingRow label="Enemy Highlight Color" value={settingsJson.enemy_highlight_color || null} />
                     </div>
@@ -895,7 +959,7 @@ export default function PlayerProfileClient({
 
               {/* Right: Graphics Quality */}
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mb-3 border-b border-white/5 pb-2">Video — Graphics Quality</p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-accent border-l-2 border-accent pl-2 font-sans mb-3 border-b border-zinc-200/80 dark:border-white/5 pb-2">Video — Graphics Quality</p>
                 <div className="space-y-1">
                   {isValorant ? (
                     <>

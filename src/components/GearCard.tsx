@@ -91,9 +91,9 @@ export default function GearCard({ product }: GearCardProps) {
   const hasLinks = product.shopee_url || product.lazada_url || product.amazon_url;
 
   return (
-    <div className="bg-card backdrop-blur-[8px] border border-border-custom rounded-2xl flex flex-col hover:border-border-hover hover:bg-[#1A1A24]/40 transition-all duration-300 group overflow-hidden">
+    <div className="bg-white/95 dark:bg-card backdrop-blur-[8px] border border-zinc-200 dark:border-border-custom rounded-2xl flex flex-col hover:border-zinc-300 dark:hover:border-border-hover hover:bg-zinc-50 dark:hover:bg-[#1A1A24]/40 transition-all duration-300 group overflow-hidden shadow-sm dark:shadow-none">
       {/* Image area */}
-      <div className="relative w-full aspect-square bg-[#0D0D14] flex items-center justify-center p-4 border-b border-border-custom">
+      <div className="relative w-full aspect-square bg-zinc-50 dark:bg-[#0D0D14] flex items-center justify-center p-4 border-b border-zinc-200 dark:border-border-custom">
         {product.image_url ? (
           <img
             src={product.image_url}
@@ -111,7 +111,7 @@ export default function GearCard({ product }: GearCardProps) {
 
       {/* Info */}
       <div className="p-3.5 flex flex-col flex-1">
-        <h4 className="text-xs font-bold text-white font-display group-hover:text-accent transition-colors duration-300 line-clamp-2 leading-tight">
+        <h4 className="text-xs font-bold text-zinc-900 dark:text-white font-display group-hover:text-accent transition-colors duration-300 line-clamp-2 leading-tight">
           {product.name}
         </h4>
         {formattedPrice && (
@@ -148,7 +148,7 @@ export default function GearCard({ product }: GearCardProps) {
                 href={product.amazon_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 text-center text-[9px] font-semibold py-1.5 rounded-lg bg-transparent border border-white/10 text-zinc-300 hover:bg-white/5 hover:border-white/20 transition-all duration-200"
+                className="flex-1 text-center text-[9px] font-semibold py-1.5 rounded-lg bg-transparent border border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5 hover:border-zinc-300 dark:hover:border-white/20 transition-all duration-200"
               >
                 Amazon
               </a>

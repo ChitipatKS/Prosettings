@@ -145,7 +145,7 @@ export default function ProfileSidebar({ showComments = true }: { showComments?:
     <aside className="hidden xl:block w-52 shrink-0">
       <div className="sticky top-24">
         <nav className="space-y-0.5">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-600 font-mono mb-3 pl-3">
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-600 font-mono mb-3 pl-3">
             On this page
           </p>
           {sections.map(({ id, label, icon }) => {
@@ -159,7 +159,7 @@ export default function ProfileSidebar({ showComments = true }: { showComments?:
                   transition-all duration-200 cursor-pointer group
                   ${isActive
                     ? 'bg-accent/10 text-accent border-l-2 border-accent font-bold'
-                    : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.03] border-l-2 border-transparent'
+                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/[0.03] border-l-2 border-transparent'
                   }
                 `}
               >

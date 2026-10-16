@@ -73,7 +73,6 @@ export interface ParsedValorantSettings {
     Movement?: Record<string, string>;
     Abilities?: Record<string, string>;
     Communication?: Record<string, string>;
-    Interface?: Record<string, string>;
     [key: string]: Record<string, string> | undefined;
   };
 
@@ -123,10 +122,6 @@ export const DEFAULT_KEYBINDS: Record<string, Record<string, string>> = {
     'Ping': 'Z',
     'Team Push to Talk': 'V',
     'Party Push to Talk': 'U'
-  },
-  Interface: {
-    'Show Map': 'M',
-    'Show Scoreboard': 'Tab'
   }
 };
 
@@ -612,12 +607,6 @@ export function parseValorantConfigContents(
             keybinds.Communication['Party Push to Talk'] = formattedKey;
           }
 
-          // 5. Interface
-          else if (cleanName === 'showmap' || cleanName === 'togglemap' || cleanName === 'openmegamap') {
-            keybinds.Interface['Show Map'] = formattedKey;
-          } else if (cleanName === 'showscoreboard' || cleanName === 'togglescoreboard') {
-            keybinds.Interface['Show Scoreboard'] = formattedKey;
-          }
         }
       }
     } catch (e) {
@@ -627,7 +616,7 @@ export function parseValorantConfigContents(
 
   // Filter and order keybinds strictly according to requested schema
   const cleanedKeybinds: Record<string, Record<string, string>> = {};
-  const categoryOrder = ['Weapons', 'Movement', 'Abilities', 'Communication', 'Interface'];
+  const categoryOrder = ['Weapons', 'Movement', 'Abilities', 'Communication'];
 
   for (const cat of categoryOrder) {
     const rawCat = keybinds[cat];

@@ -1,48 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
-  const [authorized, setAuthorized] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { user, isAdmin, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    async function checkAdmin() {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          router.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
-          return;
-        }
+    if (isLoading) return;
 
-        const { data: profile, error } = await supabase
-          .from('user_profiles')
-          .select('is_admin')
-          .eq('id', session.user.id)
-          .maybeSingle();
-
-        if (error || !profile || !profile.is_admin) {
-          console.warn('Unauthorized admin access attempt redirected.');
-          router.push('/');
-          return;
-        }
-
-        setAuthorized(true);
-      } catch (err) {
-        console.error('Error verifying admin status:', err);
-        router.push('/');
-      } finally {
-        setLoading(false);
-      }
+    if (!user) {
+      router.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
+      return;
     }
 
-    checkAdmin();
-  }, [router]);
+    if (!isAdmin) {
+      console.warn('Unauthorized admin access attempt redirected.');
+      router.push('/');
+    }
+  }, [user, isAdmin, isLoading, router]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex-1 w-full min-h-[60vh] flex flex-col justify-center items-center space-y-4 bg-[#0A0A0F]">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-accent"></div>
@@ -51,7 +31,7 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
     );
   }
 
-  if (!authorized) return null;
+  if (!isAdmin) return null;
 
   return <>{children}</>;
 }

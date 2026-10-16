@@ -3,6 +3,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { AuthProvider } from "@/components/AuthProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,22 +31,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0A0A0F] text-[#FAFAFA] selection:bg-[#F59E0B]/30 selection:text-white font-sans">
+      <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-200 selection:bg-accent/30 font-sans">
         {/* Ambient background decoration */}
-        <div className="fixed inset-0 z-[-2] bg-[#0A0A0F]">
-          {/* Subtle noise texture */}
-          <div className="absolute inset-0 bg-[radial-gradient(#ffffff03_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
-          {/* Ambient light orbs */}
-          <div className="absolute top-[-10%] left-[50%] translate-x-[-50%] w-[600px] h-[400px] rounded-full bg-[#F59E0B] opacity-[0.03] blur-[120px] pointer-events-none"></div>
+        <div className="fixed inset-0 z-[-2] bg-background transition-colors duration-200">
+          <div className="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] dark:bg-[radial-gradient(#ffffff03_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+          <div className="absolute top-[-10%] left-[50%] translate-x-[-50%] w-[600px] h-[400px] rounded-full bg-accent opacity-[0.03] blur-[120px] pointer-events-none"></div>
         </div>
         
-        <Navbar />
-        <main className="flex-1 flex flex-col">
-          {children}
-        </main>
-        <Footer />
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <AuthProvider>
+            <Navbar />
+            <main className="flex-1 flex flex-col">
+              {children}
+            </main>
+            <Footer />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

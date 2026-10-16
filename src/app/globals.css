@@ -1,6 +1,29 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  overflow-anchor: none;
+}
+
 :root {
+  color-scheme: light;
+  --background: #F8F9FA;
+  --background-alt: #FFFFFF;
+  --foreground: #09090B;
+  --muted-bg: #F1F3F5;
+  --muted-fg: #6B7280;
+  --accent: #D97706;
+  --accent-fg: #FFFFFF;
+  --accent-muted: rgba(217, 119, 6, 0.12);
+  --border-custom: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.16);
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-solid: #FFFFFF;
+}
+
+.dark {
+  color-scheme: dark;
   --background: #0A0A0F;
   --background-alt: #12121A;
   --foreground: #FAFAFA;
@@ -26,12 +49,13 @@
   --color-accent-muted: var(--accent-muted);
   --color-border-custom: var(--border-custom);
   --color-border-hover: var(--border-hover);
+  --color-card: var(--card-bg);
   --color-card-bg: var(--card-bg);
   --color-card-solid: var(--card-solid);
   
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: var(--font-inter), system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 body {
@@ -41,10 +65,10 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom modern scrollbar matching Minimalist Dark */
+/* Custom modern scrollbar matching Minimalist Dark & Gaming Accent */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -52,10 +76,66 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted-bg);
-  border-radius: 4px;
+  background: #D1D5DB;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #232332;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-hover);
+  background: var(--accent);
+}
+
+/* Sleek custom scrollbars for cards, dialogs, and keybinds panels */
+.custom-scrollbar,
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 120, 120, 0.3) transparent;
+}
+
+.dark .custom-scrollbar,
+.dark .scrollbar-thin {
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar,
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 9999px;
+  margin: 4px 0;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-track,
+.dark .scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb,
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.45);
 }

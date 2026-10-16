@@ -241,14 +241,14 @@ export default function Home() {
 
           {/* Hero Banner Section (Clean & Detailed) */}
           <div className="text-center max-w-3xl mx-auto space-y-5 pt-8">
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight font-display">
+            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-white leading-tight font-display">
               Optimize Your Setup<br></br>
               <span className="text-accent drop-shadow-[0_0_15px_rgba(245,158,11,0.25)]">
                 Elevate Your Game
               </span>
             </h1>
             <div className="flex justify-center">
-              <p className="text-sm sm:text-base text-zinc-400 font-normal">
+              <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-normal">
                 Explore mouse sensitivity, gear setups, and hardware configurations used by elite professional players.
               </p>
             </div>
@@ -270,7 +270,7 @@ export default function Home() {
                     onChange={(e) => setGlobalSearch(e.target.value)}
                     onFocus={() => setGlobalFocused(true)}
                     placeholder="Search for Player Profiles, Teams, Real Names, and More..."
-                    className="w-full h-14 bg-background-alt border border-border-custom rounded-xl py-4 pl-12 pr-4 text-sm text-[#FAFAFA] placeholder-zinc-500 focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/25 focus:shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all duration-300"
+                    className="w-full h-14 bg-white dark:bg-background-alt border border-zinc-200 dark:border-border-custom shadow-sm dark:shadow-none rounded-xl py-4 pl-12 pr-4 text-sm text-zinc-900 dark:text-[#FAFAFA] placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/25 focus:shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all duration-300"
                   />
                   {globalLoading && (
                     <span className="absolute inset-y-0 right-0 pr-4 flex items-center text-xs text-zinc-500 font-sans tracking-wider">
@@ -281,13 +281,13 @@ export default function Home() {
 
                 {/* Smart Search Dropdown List (Aligned with input) */}
                 {globalFocused && globalSearch.trim().length >= 2 && (
-                  <div className="absolute left-0 right-0 mt-2 rounded-2xl bg-[#12121A] border border-border-custom shadow-2xl z-50 overflow-hidden py-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <div className="absolute left-0 right-0 mt-2 rounded-2xl bg-white dark:bg-[#12121A] border border-zinc-200 dark:border-border-custom shadow-xl dark:shadow-2xl z-50 overflow-hidden py-1 animate-in fade-in slide-in-from-top-1 duration-200">
                     {globalResults.length === 0 ? (
                       <div className="text-center py-6 text-zinc-500 text-xs font-sans">
                         {globalLoading ? 'Searching...' : 'No players found'}
                       </div>
                     ) : (
-                      <ul className="divide-y divide-white/5">
+                      <ul className="divide-y divide-zinc-100 dark:divide-white/5">
                         {globalResults.map((player) => (
                           <li key={player.settings_id}>
                             <button
@@ -296,10 +296,10 @@ export default function Home() {
                                 setGlobalFocused(false);
                                 router.push(`/players/${player.username}`);
                               }}
-                              className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors duration-150 text-left"
+                              className="w-full flex items-center justify-between px-4 py-3 hover:bg-zinc-50 dark:hover:bg-white/5 cursor-pointer transition-colors duration-150 text-left"
                             >
                               <div className="space-y-0.5">
-                                <span className="font-bold text-[#FAFAFA] text-xs font-display">{player.username}</span>
+                                <span className="font-bold text-zinc-900 dark:text-[#FAFAFA] text-xs font-display">{player.username}</span>
                                 <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 font-sans">
                                   {player.real_name && <span>{player.real_name}</span>}
                                   {player.real_name && player.team && <span>•</span>}
@@ -334,11 +334,11 @@ export default function Home() {
           </div>
 
           {/* Header Banner */}
-          <div id="games" className="text-center max-w-3xl mx-auto space-y-4 pt-8 border-t border-white/5">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight font-display">
+          <div id="games" className="text-center max-w-3xl mx-auto space-y-4 pt-8 border-t border-zinc-200 dark:border-white/5">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white leading-tight font-display">
               Select Your Favorite Game!
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 font-semibold tracking-wide font-sans uppercase">
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-semibold tracking-wide font-sans uppercase">
               From our selection of Popular games
             </p>
           </div>
@@ -347,9 +347,9 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
             {/* CARD 1: CS2 */}
-            <Link href="/players?game=cs2" className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
+            <Link href="/players?game=cs2" className="bg-white/95 dark:bg-card backdrop-blur-[8px] border border-zinc-200 dark:border-border-custom shadow-sm dark:shadow-none p-6 rounded-2xl flex flex-col justify-between hover:border-accent/40 dark:hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
               <div className="space-y-6">
-                <div className="relative h-44 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center">
+                <div className="relative h-44 rounded-2xl border border-zinc-200/60 dark:border-white/5 overflow-hidden flex items-center justify-center">
                   <img
                     src="/images/cs2-banner.png"
                     alt="CS2 Banner"
@@ -360,8 +360,8 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">Counter-Strike 2</h3>
-                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-400">
+                  <h3 className="text-xl font-extrabold text-zinc-900 dark:text-white font-display group-hover:text-accent transition-colors duration-300">Counter-Strike 2</h3>
+                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-600 dark:text-zinc-400">
                     <div className="flex items-center gap-2">
                       <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -380,9 +380,9 @@ export default function Home() {
             </Link>
 
             {/* CARD 2: Valorant */}
-            <Link href="/players?game=valorant" className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
+            <Link href="/players?game=valorant" className="bg-white/95 dark:bg-card backdrop-blur-[8px] border border-zinc-200 dark:border-border-custom shadow-sm dark:shadow-none p-6 rounded-2xl flex flex-col justify-between hover:border-accent/40 dark:hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
               <div className="space-y-6">
-                <div className="relative h-44 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center">
+                <div className="relative h-44 rounded-2xl border border-zinc-200/60 dark:border-white/5 overflow-hidden flex items-center justify-center">
                   <img
                     src="/images/valorant-banner.jpg"
                     alt="VALORANT Banner"
@@ -393,8 +393,8 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">VALORANT</h3>
-                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-400">
+                  <h3 className="text-xl font-extrabold text-zinc-900 dark:text-white font-display group-hover:text-accent transition-colors duration-300">VALORANT</h3>
+                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-600 dark:text-zinc-400">
                     <div className="flex items-center gap-2">
                       <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -413,9 +413,9 @@ export default function Home() {
             </Link>
 
             {/* CARD 3: Overwatch */}
-            <Link href="/players?game=overwatch" className="bg-card backdrop-blur-[8px] border border-border-custom p-6 rounded-2xl flex flex-col justify-between hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
+            <Link href="/players?game=overwatch" className="bg-white/95 dark:bg-card backdrop-blur-[8px] border border-zinc-200 dark:border-border-custom shadow-sm dark:shadow-none p-6 rounded-2xl flex flex-col justify-between hover:border-accent/40 dark:hover:border-accent/30 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] transition-all duration-300 group cursor-pointer">
               <div className="space-y-6">
-                <div className="relative h-44 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center">
+                <div className="relative h-44 rounded-2xl border border-zinc-200/60 dark:border-white/5 overflow-hidden flex items-center justify-center">
                   <img
                     src="/images/overwatch-banner.jpg"
                     alt="Overwatch Banner"
@@ -425,8 +425,8 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-xl font-extrabold text-white font-display group-hover:text-accent transition-colors duration-300">OVERWATCH</h3>
-                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-400">
+                  <h3 className="text-xl font-extrabold text-zinc-900 dark:text-white font-display group-hover:text-accent transition-colors duration-300">OVERWATCH</h3>
+                  <div className="flex flex-col gap-2 pt-2 text-xs font-sans text-zinc-600 dark:text-zinc-400">
                     <div className="flex items-center gap-2">
                       <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -445,47 +445,47 @@ export default function Home() {
             </Link>
 
             {/* CARD 4: Empty Placeholder */}
-            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
-              <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
-                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-sans">TBD</span>
-                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-sans">4</div>
+            <div className="border border-dashed border-zinc-300 dark:border-border-custom/50 bg-zinc-50/60 dark:bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-60 hover:opacity-80 transition-all duration-300 relative group">
+              <div className="relative h-44 rounded-2xl bg-zinc-100 dark:bg-black/20 border border-zinc-200 dark:border-white/5 border-dashed flex items-center justify-center overflow-hidden">
+                <span className="text-sm font-semibold tracking-wider text-zinc-400 dark:text-zinc-600 uppercase font-sans">TBD</span>
+                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center justify-center text-xs font-bold text-zinc-500 dark:text-zinc-600 font-sans shadow-sm dark:shadow-none">4</div>
               </div>
               <div className="space-y-2 mt-6">
-                <h3 className="text-lg font-bold text-zinc-600 font-display">Coming Soon</h3>
-                <p className="text-xs text-zinc-600 font-sans">Game details will be updated later</p>
+                <h3 className="text-lg font-bold text-zinc-400 dark:text-zinc-600 font-display">Coming Soon</h3>
+                <p className="text-xs text-zinc-400 dark:text-zinc-600 font-sans">Game details will be updated later</p>
               </div>
-              <div className="mt-8 pt-4 border-t border-dashed border-border-custom flex items-center justify-end">
-                <span className="text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
+              <div className="mt-8 pt-4 border-t border-dashed border-zinc-200 dark:border-border-custom flex items-center justify-end">
+                <span className="text-zinc-400 dark:text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
               </div>
             </div>
 
             {/* CARD 5: Empty Placeholder */}
-            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
-              <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
-                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-sans">TBD</span>
-                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-sans">5</div>
+            <div className="border border-dashed border-zinc-300 dark:border-border-custom/50 bg-zinc-50/60 dark:bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-60 hover:opacity-80 transition-all duration-300 relative group">
+              <div className="relative h-44 rounded-2xl bg-zinc-100 dark:bg-black/20 border border-zinc-200 dark:border-white/5 border-dashed flex items-center justify-center overflow-hidden">
+                <span className="text-sm font-semibold tracking-wider text-zinc-400 dark:text-zinc-600 uppercase font-sans">TBD</span>
+                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center justify-center text-xs font-bold text-zinc-500 dark:text-zinc-600 font-sans shadow-sm dark:shadow-none">5</div>
               </div>
               <div className="space-y-2 mt-6">
-                <h3 className="text-lg font-bold text-zinc-600 font-display">Coming Soon</h3>
-                <p className="text-xs text-zinc-600 font-sans">Game details will be updated later</p>
+                <h3 className="text-lg font-bold text-zinc-400 dark:text-zinc-600 font-display">Coming Soon</h3>
+                <p className="text-xs text-zinc-400 dark:text-zinc-600 font-sans">Game details will be updated later</p>
               </div>
-              <div className="mt-8 pt-4 border-t border-dashed border-border-custom flex items-center justify-end">
-                <span className="text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
+              <div className="mt-8 pt-4 border-t border-dashed border-zinc-200 dark:border-border-custom flex items-center justify-end">
+                <span className="text-zinc-400 dark:text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
               </div>
             </div>
 
             {/* CARD 6: Empty Placeholder */}
-            <div className="border border-dashed border-border-custom/50 bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-40 hover:opacity-60 transition-all duration-300 relative group">
-              <div className="relative h-44 rounded-2xl bg-black/20 border border-white/5 border-dashed flex items-center justify-center overflow-hidden">
-                <span className="text-sm font-semibold tracking-wider text-zinc-600 uppercase font-sans">TBD</span>
-                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-600 font-sans">6</div>
+            <div className="border border-dashed border-zinc-300 dark:border-border-custom/50 bg-zinc-50/60 dark:bg-card/5 p-6 rounded-2xl flex flex-col justify-between h-full min-h-[360px] opacity-60 hover:opacity-80 transition-all duration-300 relative group">
+              <div className="relative h-44 rounded-2xl bg-zinc-100 dark:bg-black/20 border border-zinc-200 dark:border-white/5 border-dashed flex items-center justify-center overflow-hidden">
+                <span className="text-sm font-semibold tracking-wider text-zinc-400 dark:text-zinc-600 uppercase font-sans">TBD</span>
+                <div className="absolute bottom-3 right-3 h-7 w-7 rounded-full bg-white dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center justify-center text-xs font-bold text-zinc-500 dark:text-zinc-600 font-sans shadow-sm dark:shadow-none">6</div>
               </div>
               <div className="space-y-2 mt-6">
-                <h3 className="text-lg font-bold text-zinc-600 font-display">Coming Soon</h3>
-                <p className="text-xs text-zinc-600 font-sans">Game details will be updated later</p>
+                <h3 className="text-lg font-bold text-zinc-400 dark:text-zinc-600 font-display">Coming Soon</h3>
+                <p className="text-xs text-zinc-400 dark:text-zinc-600 font-sans">Game details will be updated later</p>
               </div>
-              <div className="mt-8 pt-4 border-t border-dashed border-border-custom flex items-center justify-end">
-                <span className="text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
+              <div className="mt-8 pt-4 border-t border-dashed border-zinc-200 dark:border-border-custom flex items-center justify-end">
+                <span className="text-zinc-400 dark:text-zinc-600 text-xs font-sans font-semibold">LOCKED</span>
               </div>
             </div>
 
@@ -498,7 +498,7 @@ export default function Home() {
         <div className="space-y-8 animate-in fade-in duration-300">
 
           {/* Header & Back Button */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-custom pb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-border-custom pb-6">
             <div>
               <button
                 onClick={() => {
@@ -506,11 +506,11 @@ export default function Home() {
                   setSearch('');
                   setDebouncedSearch('');
                 }}
-                className="text-xs font-bold text-zinc-500 hover:text-white transition-colors duration-200 font-sans tracking-wider flex items-center gap-1"
+                className="text-xs font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors duration-200 font-sans tracking-wider flex items-center gap-1 cursor-pointer"
               >
                 &lt; BACK TO GAMES
               </button>
-              <h2 className="text-2xl font-extrabold text-white mt-2 font-display uppercase tracking-tight">
+              <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mt-2 font-display uppercase tracking-tight">
                 {selectedGame === 'valorant' ? 'VALORANT Pro Players' : 'CS2 Pro Players'}
               </h2>
             </div>
@@ -519,7 +519,7 @@ export default function Home() {
             <div className="relative">
               <button
                 onClick={() => setGameDropdownOpen(!gameDropdownOpen)}
-                className="h-11 w-full sm:w-56 flex items-center justify-between gap-2 px-4 rounded-xl bg-black/40 border border-border-custom text-xs font-bold text-[#FAFAFA] hover:border-border-hover transition-all duration-300"
+                className="h-11 w-full sm:w-56 flex items-center justify-between gap-2 px-4 rounded-xl bg-white dark:bg-black/40 border border-zinc-200 dark:border-border-custom text-xs font-bold text-zinc-900 dark:text-[#FAFAFA] hover:border-zinc-300 dark:hover:border-border-hover transition-all duration-300 shadow-sm dark:shadow-none cursor-pointer"
               >
                 <span className="flex items-center gap-2">
                   {selectedGame === 'valorant' && (
@@ -541,14 +541,14 @@ export default function Home() {
               {gameDropdownOpen && (
                 <>
                   <div className="fixed inset-0 z-20" onClick={() => setGameDropdownOpen(false)}></div>
-                  <ul className="absolute right-0 mt-2 w-full sm:w-56 rounded-xl bg-[#12121A] border border-border-custom shadow-xl z-30 py-1.5">
+                  <ul className="absolute right-0 mt-2 w-full sm:w-56 rounded-xl bg-white dark:bg-[#12121A] border border-zinc-200 dark:border-border-custom shadow-xl z-30 py-1.5 divide-y divide-zinc-100 dark:divide-white/5">
                     <li>
                       <button
                         onClick={() => {
                           setSelectedGame('all');
                           setGameDropdownOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2.5 text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
+                        className="w-full text-left px-4 py-2.5 text-xs font-semibold text-zinc-700 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
                       >
                         All Games (Home)
                       </button>
@@ -560,7 +560,7 @@ export default function Home() {
                           setPagination(prev => ({ ...prev, page: 1 }));
                           setGameDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2.5 text-xs font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors ${selectedGame === 'valorant' ? 'text-accent' : 'text-zinc-400'
+                        className={`w-full text-left px-4 py-2.5 text-xs font-semibold flex items-center gap-2 hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors cursor-pointer ${selectedGame === 'valorant' ? 'text-accent font-bold' : 'text-zinc-700 dark:text-zinc-400'
                           }`}
                       >
                         <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span> VALORANT
@@ -573,7 +573,7 @@ export default function Home() {
                           setPagination(prev => ({ ...prev, page: 1 }));
                           setGameDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2.5 text-xs font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors ${selectedGame === 'cs2' ? 'text-accent' : 'text-zinc-400'
+                        className={`w-full text-left px-4 py-2.5 text-xs font-semibold flex items-center gap-2 hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors cursor-pointer ${selectedGame === 'cs2' ? 'text-accent font-bold' : 'text-zinc-700 dark:text-zinc-400'
                           }`}
                       >
                         <span className="h-1.5 w-1.5 rounded-full bg-amber-500"></span> CS2
@@ -586,10 +586,10 @@ export default function Home() {
           </div>
 
           {/* Search Controls */}
-          <div className="bg-background-alt border border-border-custom p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 overflow-visible relative z-20">
+          <div className="bg-white/80 dark:bg-background-alt border border-zinc-200 dark:border-border-custom p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 overflow-visible relative z-20 shadow-sm dark:shadow-none">
             <div className="relative flex-1">
-              <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-500">
-                <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-400 dark:text-zinc-500">
+                <svg className="h-4 w-4 text-zinc-400 dark:text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </span>
@@ -598,7 +598,7 @@ export default function Home() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search pro players, real names, or teams..."
-                className="w-full h-11 bg-black/40 border border-border-custom rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:shadow-[0_0_20px_rgba(245,158,11,0.1)] focus:bg-black/60 transition-all duration-300"
+                className="w-full h-11 bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-border-custom rounded-xl py-2.5 pl-10 pr-4 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:shadow-[0_0_20px_rgba(245,158,11,0.1)] transition-all duration-300"
               />
             </div>
           </div>
@@ -608,12 +608,12 @@ export default function Home() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
                 {[...Array(8)].map((_, idx) => (
-                  <div key={idx} className="bg-card border border-border-custom h-48 rounded-2xl"></div>
+                  <div key={idx} className="bg-white/95 dark:bg-card border border-zinc-200 dark:border-border-custom h-48 rounded-2xl"></div>
                 ))}
               </div>
             ) : players.length === 0 ? (
-              <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
-                <h3 className="text-sm font-bold text-white mt-4 font-display">No players found</h3>
+              <div className="text-center py-20 bg-white/95 dark:bg-card border border-zinc-200 dark:border-border-custom rounded-2xl shadow-sm dark:shadow-none">
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white mt-4 font-display">No players found</h3>
                 <p className="text-zinc-500 text-xs mt-1 font-sans">Try another search term or change the game filter.</p>
               </div>
             ) : (
@@ -622,7 +622,7 @@ export default function Home() {
                   <Link
                     key={player.settings_id}
                     href={`/players/${player.username}`}
-                    className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl flex flex-col justify-between hover:border-border-hover hover:bg-[#1A1A24]/40 hover:scale-[1.02] transition-all duration-300 group"
+                    className="bg-white/95 dark:bg-card backdrop-blur-[8px] border border-zinc-200 dark:border-border-custom shadow-sm dark:shadow-none p-5 rounded-2xl flex flex-col justify-between hover:border-accent/40 dark:hover:border-border-hover hover:bg-zinc-50/50 dark:hover:bg-[#1A1A24]/40 hover:scale-[1.02] transition-all duration-300 group"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
@@ -644,7 +644,7 @@ export default function Home() {
                       </div>
 
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="h-10 w-10 rounded-full bg-[#1A1A24] border border-border-custom flex items-center justify-center font-bold text-accent text-sm overflow-hidden group-hover:border-accent/30 transition-all duration-300">
+                        <div className="h-10 w-10 rounded-full bg-zinc-100 dark:bg-[#1A1A24] border border-zinc-200 dark:border-border-custom flex items-center justify-center font-bold text-accent text-sm overflow-hidden group-hover:border-accent/30 transition-all duration-300">
                           {player.profile_img_url ? (
                             <img src={player.profile_img_url} alt={player.username} className="h-full w-full object-cover" />
                           ) : (
@@ -652,7 +652,7 @@ export default function Home() {
                           )}
                         </div>
                         <div className="space-y-0.5">
-                          <h3 className="font-bold text-[#FAFAFA] text-base leading-tight group-hover:text-accent transition-colors duration-300 font-display">
+                          <h3 className="font-bold text-zinc-900 dark:text-[#FAFAFA] text-base leading-tight group-hover:text-accent transition-colors duration-300 font-display">
                             {player.username}
                           </h3>
                           {player.team ? (
@@ -660,7 +660,7 @@ export default function Home() {
                               {player.team}
                             </p>
                           ) : (
-                            <p className="text-[10px] font-medium text-zinc-600 font-sans italic">
+                            <p className="text-[10px] font-medium text-zinc-500 font-sans italic">
                               No Team
                             </p>
                           )}
@@ -668,22 +668,22 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="border-t border-white/5 pt-4 space-y-2 font-sans">
+                    <div className="border-t border-zinc-100 dark:border-white/5 pt-4 space-y-2 font-sans">
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>Sensitivity</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
+                        <span className="font-semibold text-zinc-800 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-300 font-mono">
                           {player.mouse_settings.sens !== null ? player.mouse_settings.sens.toFixed(3) : '—'}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>DPI (eDPI)</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
+                        <span className="font-semibold text-zinc-800 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-300 font-mono">
                           {player.mouse_settings.dpi || '—'} ({player.mouse_settings.edpi || '—'})
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>Resolution</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
+                        <span className="font-semibold text-zinc-800 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-300 font-mono">
                           {player.video_settings.resolution || '—'}
                         </span>
                       </div>
@@ -700,7 +700,7 @@ export default function Home() {
               <button
                 onClick={() => handlePageChange(pagination.page - 1)}
                 disabled={pagination.page <= 1 || loading}
-                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans"
+                className="px-4 py-2 bg-white dark:bg-black/40 hover:bg-zinc-100 dark:hover:bg-[#1A1A24]/40 disabled:opacity-30 text-zinc-800 dark:text-[#FAFAFA] text-xs font-bold rounded border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans cursor-pointer shadow-sm dark:shadow-none"
               >
                 ← PREV
               </button>
@@ -712,7 +712,7 @@ export default function Home() {
               <button
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={pagination.page >= pagination.pages || loading}
-                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans"
+                className="px-4 py-2 bg-white dark:bg-black/40 hover:bg-zinc-100 dark:hover:bg-[#1A1A24]/40 disabled:opacity-30 text-zinc-800 dark:text-[#FAFAFA] text-xs font-bold rounded border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans cursor-pointer shadow-sm dark:shadow-none"
               >
                 NEXT →
               </button>
@@ -726,7 +726,7 @@ export default function Home() {
         <div className="space-y-8 animate-in fade-in duration-300">
 
           {/* Header & Back Button */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-custom pb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-border-custom pb-6">
             <div>
               <button
                 onClick={() => {
@@ -735,11 +735,11 @@ export default function Home() {
                   setSearchFilterGame('all');
                   setSearchFilterStatus('all');
                 }}
-                className="text-xs font-bold text-zinc-500 hover:text-white transition-colors duration-200 font-sans tracking-wider flex items-center gap-1"
+                className="text-xs font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors duration-200 font-sans tracking-wider flex items-center gap-1 cursor-pointer"
               >
                 &lt; BACK TO GAMES
               </button>
-              <h2 className="text-2xl font-extrabold text-white mt-2 font-display uppercase tracking-tight">
+              <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mt-2 font-display uppercase tracking-tight">
                 Search Results for &ldquo;{globalSearch}&rdquo;
               </h2>
             </div>
@@ -750,12 +750,12 @@ export default function Home() {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
                 {[...Array(8)].map((_, idx) => (
-                  <div key={idx} className="bg-card border border-border-custom h-48 rounded-2xl"></div>
+                  <div key={idx} className="bg-white/95 dark:bg-card border border-zinc-200 dark:border-border-custom h-48 rounded-2xl"></div>
                 ))}
               </div>
             ) : players.length === 0 ? (
-              <div className="text-center py-20 bg-card border border-border-custom rounded-2xl">
-                <h3 className="text-sm font-bold text-white mt-4 font-display">No pro players found</h3>
+              <div className="text-center py-20 bg-white/95 dark:bg-card border border-zinc-200 dark:border-border-custom rounded-2xl shadow-sm dark:shadow-none">
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white mt-4 font-display">No pro players found</h3>
                 <p className="text-zinc-500 text-xs mt-1 font-sans">Try another search term or change the filter settings.</p>
               </div>
             ) : (
@@ -764,7 +764,7 @@ export default function Home() {
                   <Link
                     key={player.settings_id}
                     href={`/players/${player.username}`}
-                    className="bg-card backdrop-blur-[8px] border border-border-custom p-5 rounded-2xl flex flex-col justify-between hover:border-border-hover hover:bg-[#1A1A24]/40 hover:scale-[1.02] transition-all duration-300 group"
+                    className="bg-white/95 dark:bg-card backdrop-blur-[8px] border border-zinc-200 dark:border-border-custom shadow-sm dark:shadow-none p-5 rounded-2xl flex flex-col justify-between hover:border-accent/40 dark:hover:border-border-hover hover:bg-zinc-50/50 dark:hover:bg-[#1A1A24]/40 hover:scale-[1.02] transition-all duration-300 group"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
@@ -786,7 +786,7 @@ export default function Home() {
                       </div>
 
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="h-10 w-10 rounded-full bg-[#1A1A24] border border-border-custom flex items-center justify-center font-bold text-accent text-sm overflow-hidden group-hover:border-accent/30 transition-all duration-300">
+                        <div className="h-10 w-10 rounded-full bg-zinc-100 dark:bg-[#1A1A24] border border-zinc-200 dark:border-border-custom flex items-center justify-center font-bold text-accent text-sm overflow-hidden group-hover:border-accent/30 transition-all duration-300">
                           {player.profile_img_url ? (
                             <img src={player.profile_img_url} alt={player.username} className="h-full w-full object-cover" />
                           ) : (
@@ -794,7 +794,7 @@ export default function Home() {
                           )}
                         </div>
                         <div className="space-y-0.5">
-                          <h3 className="font-bold text-[#FAFAFA] text-base leading-tight group-hover:text-accent transition-colors duration-300 font-display">
+                          <h3 className="font-bold text-zinc-900 dark:text-[#FAFAFA] text-base leading-tight group-hover:text-accent transition-colors duration-300 font-display">
                             {player.username}
                           </h3>
                           {player.team ? (
@@ -802,7 +802,7 @@ export default function Home() {
                               {player.team}
                             </p>
                           ) : (
-                            <p className="text-[10px] font-medium text-zinc-600 font-sans italic">
+                            <p className="text-[10px] font-medium text-zinc-500 font-sans italic">
                               No Team
                             </p>
                           )}
@@ -810,22 +810,22 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="border-t border-white/5 pt-4 space-y-2 font-sans">
+                    <div className="border-t border-zinc-100 dark:border-white/5 pt-4 space-y-2 font-sans">
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>Sensitivity</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
+                        <span className="font-semibold text-zinc-800 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-300 font-mono">
                           {player.mouse_settings.sens !== null ? player.mouse_settings.sens.toFixed(3) : '—'}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>DPI (eDPI)</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
+                        <span className="font-semibold text-zinc-800 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-300 font-mono">
                           {player.mouse_settings.dpi || '—'} ({player.mouse_settings.edpi || '—'})
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-[11px] text-zinc-500">
                         <span>Resolution</span>
-                        <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300 font-sans">
+                        <span className="font-semibold text-zinc-800 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-300 font-mono">
                           {player.video_settings.resolution || '—'}
                         </span>
                       </div>
@@ -842,7 +842,7 @@ export default function Home() {
               <button
                 onClick={() => handlePageChange(pagination.page - 1)}
                 disabled={pagination.page <= 1 || loading}
-                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans"
+                className="px-4 py-2 bg-white dark:bg-black/40 hover:bg-zinc-100 dark:hover:bg-[#1A1A24]/40 disabled:opacity-30 text-zinc-800 dark:text-[#FAFAFA] text-xs font-bold rounded border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans cursor-pointer shadow-sm dark:shadow-none"
               >
                 ← PREV
               </button>
@@ -854,7 +854,7 @@ export default function Home() {
               <button
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={pagination.page >= pagination.pages || loading}
-                className="px-4 py-2 bg-black/40 hover:bg-[#1A1A24]/40 disabled:opacity-30 text-[#FAFAFA] text-xs font-bold rounded border border-border-custom hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans"
+                className="px-4 py-2 bg-white dark:bg-black/40 hover:bg-zinc-100 dark:hover:bg-[#1A1A24]/40 disabled:opacity-30 text-zinc-800 dark:text-[#FAFAFA] text-xs font-bold rounded border border-zinc-200 dark:border-border-custom hover:border-zinc-300 dark:hover:border-border-hover transition-all duration-300 disabled:cursor-not-allowed font-sans cursor-pointer shadow-sm dark:shadow-none"
               >
                 NEXT →
               </button>

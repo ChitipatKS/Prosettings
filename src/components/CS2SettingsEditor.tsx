@@ -106,7 +106,7 @@ export default function CS2SettingsEditor({
               <label className="text-[9px] text-zinc-500 font-mono font-semibold uppercase">In-Game Role</label>
               <input
                 type="text"
-                value={csRole || ''}
+                value={csRole === 'Community Member' ? '' : (csRole || '')}
                 onChange={e => setCsRole(e.target.value)}
                 placeholder="e.g. AWPer, Rifler, Entry"
                 className="w-full h-9 bg-black/40 border border-zinc-800 rounded-xl px-3 text-xs font-mono text-white focus:outline-none focus:border-amber-500/40"
